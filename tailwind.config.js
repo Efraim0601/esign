@@ -5,9 +5,9 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        docuseal: {
+        esign: {
           'color-scheme': 'light',
-          primary: '#e4e0e1',
+          primary: '#DD3333',
           secondary: '#ef9fbc',
           accent: '#eeaf3a',
           neutral: '#291334',
