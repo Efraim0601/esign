@@ -1,20 +1,30 @@
 <div class="form-control">
   <%= f.label :role, class: 'label' %>
-  <%= f.select :role, nil, {}, class: 'base-select' do %>
-    <option value="admin"><%= t('admin') %></option>
-    <option value="editor" disabled><%= t('editor') %></option>
-    <option value="viewer" disabled><%= t('viewer') %></option>
-  <% end %>
   <% if Docuseal.multitenant? %>
+    <%= f.select :role, nil, {}, class: 'base-select' do %>
+      <option value="admin"><%= t('admin') %></option>
+      <option value="editor" disabled><%= t('editor') %></option>
+      <option value="viewer" disabled><%= t('viewer') %></option>
+    <% end %>
     <label class="label">
       <span class="label-text-alt">
         <%= t('click_here_to_learn_more_about_user_roles_and_permissions_html') %>
       </span>
     </label>
+    <a class="text-sm mt-3 px-4 py-2 bg-base-300 rounded-full block" target="_blank" href="<%= console_redirect_index_path(redir: "#{Docuseal::CONSOLE_URL}/plans") %>">
+      <%= svg_icon('info_circle', class: 'w-4 h-4 inline align-text-bottom') %>
+      <%= t('unlock_more_user_roles_with_docuseal_pro') %>
+      <span class="link font-medium"><%= t('learn_more') %></span>
+    </a>
+    <%= render 'role_descriptions_reference' %>
+  <% else %>
+    <%
+      role_options = User::ROLES.map { |r| [t(r), r] }
+      if f.object.role.present? && User::ROLES.exclude?(f.object.role)
+        role_options.unshift([t(f.object.role, default: f.object.role.to_s.tr('_', ' ').humanize), f.object.role])
+      end
+    %>
+    <%= f.select :role, role_options, {}, class: 'base-select' %>
+    <%= render 'role_descriptions_reference' %>
   <% end %>
-  <a class="text-sm mt-3 px-4 py-2 bg-base-300 rounded-full block" target="_blank" href="<%= Docuseal.multitenant? ? console_redirect_index_path(redir: "#{Docuseal::CONSOLE_URL}/plans") : "#{Docuseal::CLOUD_URL}/sign_up?#{{ redir: "#{Docuseal::CONSOLE_URL}/on_premises" }.to_query}" %>">
-    <%= svg_icon('info_circle', class: 'w-4 h-4 inline align-text-bottom') %>
-    <%= t('unlock_more_user_roles_with_docuseal_pro') %>
-    <span class="link font-medium"><%= t('learn_more') %></span>
-  </a>
 </div>

@@ -516,6 +516,12 @@ en: &en
   member: Member
   agent: Agent
   superadmin: Superadmin
+  role_permissions_help_title: What each role can do
+  role_description_admin: Full platform access — users and roles, account settings, SMTP, API keys, webhooks, branding, all templates and folders, and every submission in the account.
+  role_description_editor: Full control over documents — all templates and submissions from any colleague. Cannot change account-wide settings, manage other users, API keys, webhooks, or encrypted server integrations.
+  role_description_member: Own templates — create, edit, and delete. Can read and duplicate others’ templates and send using shared templates. Full actions only on own submissions; colleagues’ submissions are read-only (no cancel, resend, or edits on theirs).
+  role_description_agent: Send for signature using existing templates (template structure is read-only). Sees and manages only own submissions and their signers — not other users’ envelopes.
+  role_description_viewer: Read-only — browse templates, submissions, and archives. Cannot send documents, change signers, manage folders, or access administration screens.
   edit_user: Edit User
   new_user: New User
   unarchive: Unarchive
@@ -1546,6 +1552,12 @@ es: &es
   member: Miembro
   agent: Agente
   superadmin: Superadministrador
+  role_permissions_help_title: Qué hace cada rol (AFB)
+  role_description_admin: Acceso total a la plataforma — usuarios y roles, ajustes de cuenta, SMTP, clave API, webhooks, marca, todas las plantillas y carpetas, y todos los envíos de la cuenta.
+  role_description_editor: Control total de documentos — todas las plantillas y envíos (de cualquier compañero). No puede gestionar ajustes globales de cuenta, otros usuarios, claves API, webhooks ni integraciones cifradas.
+  role_description_member: Plantillas propias — crear, editar y eliminar. Puede leer y duplicar las de otros y enviar con plantillas compartidas. Acciones completas solo en sus propios envíos; los de compañeros son solo lectura (sin cancelar, reenviar ni editar).
+  role_description_agent: Envío para firma con plantillas existentes (la estructura de plantillas es solo lectura). Solo ve y gestiona sus propios envíos y firmantes — no los de otros.
+  role_description_viewer: Solo lectura — explorar plantillas, envíos y archivos. No puede enviar documentos, cambiar firmantes, gestionar carpetas ni acceder a la administración.
   edit_user: Editar usuario
   new_user: Nuevo usuario
   unarchive: Desarchivar
@@ -3601,6 +3613,12 @@ fr: &fr
   member: Membre
   agent: Agent
   superadmin: Superadmin
+  role_permissions_help_title: Rôles et responsabilités (AFB)
+  role_description_admin: Accès complet à la plateforme — utilisateurs et rôles, paramètres du compte, SMTP, clé API, webhooks, image de marque, tous les modèles et dossiers, et toutes les soumissions du compte.
+  role_description_editor: Maîtrise des documents — tous les modèles et toutes les soumissions (y compris celles des collègues). Pas de gestion des paramètres institutionnels, des autres utilisateurs, de la clé API, des webhooks ni des intégrations chiffrées.
+  role_description_member: Ses propres modèles — création, modification et suppression. Lecture et duplication des modèles des autres ; envoi à partir des modèles partagés. Actions complètes uniquement sur ses propres soumissions ; soumissions des collègues en consultation (pas d’annulation, renvoi ni modification).
+  role_description_agent: Envoi pour signature à partir des modèles existants (structure des modèles en lecture seule). Ne voit et ne gère que ses propres soumissions et leurs signataires — pas les dossiers des autres.
+  role_description_viewer: Consultation seule — parcourir modèles, soumissions et archives. Ne peut pas envoyer de documents, modifier les signataires, gérer les dossiers ni accéder à l’administration.
   edit_user: Modifier l’utilisateur
   new_user: Nouvel utilisateur
   unarchive: Désarchiver
