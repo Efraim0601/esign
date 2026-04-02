@@ -47,9 +47,8 @@
 #  fk_rails_...  (account_id => accounts.id)
 #
 class User < ApplicationRecord
-  ROLES = [
-    ADMIN_ROLE = 'admin'
-  ].freeze
+  ADMIN_ROLE = 'admin'
+  ROLES = %w[viewer agent member editor admin].freeze
 
   EMAIL_REGEXP = /[^@;,<>\s]+@[^@;,<>\s]+/
 
@@ -71,7 +70,8 @@ class User < ApplicationRecord
 
   devise :two_factor_authenticatable, :recoverable, :rememberable, :validatable, :trackable, :lockable
 
-  attribute :role, :string, default: ADMIN_ROLE
+  attribute :role, :string, default: 'agent'
+  enum :role, ROLES.to_h { |r| [r.to_sym, r] }, prefix: false, suffix: false
   attribute :uuid, :string, default: -> { SecureRandom.uuid }
 
   scope :active, -> { where(archived_at: nil) }
@@ -121,4 +121,8 @@ class User < ApplicationRecord
       email
     end
   end
+
+  def can_manage_users? = admin?
+  def can_create_templates? = admin? || editor? || member?
+  def can_send_documents? = admin? || editor? || member? || agent?
 end
