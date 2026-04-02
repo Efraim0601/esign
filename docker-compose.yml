@@ -3,6 +3,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
     build: .
     image: esign/app:local
     ports:
@@ -10,8 +12,16 @@ services:
     volumes:
       - ./docuseal:/data/docuseal
     environment:
-      - FORCE_SSL=${HOST}
+      # Only enable when TLS terminates in front of the app (e.g. Caddy). If HOST is set,
+      # do not use it as a truthy FORCE_SSL while hitting :3000 over plain HTTP — that
+      # triggers https redirects and TLS handshakes to Puma, which only speaks HTTP.
+      - FORCE_SSL=${FORCE_SSL:-false}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
+      - REDIS_URL=redis://redis:6379/0
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save "" --appendonly no
 
   postgres:
     image: postgres:18
