@@ -1,3 +1,7 @@
 <%= render 'shared/turbo_modal', title: t('edit_user') do %>
   <%= render 'form', user: @user %>
+
+  <div class="mt-6">
+    <%= render 'role_change_history' %>
+  </div>
 <% end %>

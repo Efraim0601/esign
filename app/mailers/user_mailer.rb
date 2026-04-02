@@ -13,4 +13,18 @@ class UserMailer < ApplicationMailer
            subject: I18n.t('you_are_invited_to_product_name', product_name: Docuseal.product_name))
     end
   end
+
+  def role_changed(user, old_role, new_role, changed_by)
+    @user = user
+    @old_role = old_role
+    @new_role = new_role
+    @changed_by = changed_by
+    @changed_by_user = User.find_by(id: changed_by)
+    @timestamp = Time.current
+
+    mail(
+      to: user.email,
+      subject: "Vos droits d'accès DocuSeal ont été modifiés"
+    )
+  end
 end

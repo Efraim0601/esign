@@ -21,7 +21,13 @@ class UsersController < ApplicationController
 
   def new; end
 
-  def edit; end
+  def edit
+    @role_changes =
+      RoleChangeLog.where(user_id: @user.id)
+                   .order(created_at: :desc)
+                   .limit(20)
+                   .includes(:changed_by_user)
+  end
 
   def create
     existing_user = User.accessible_by(current_ability).find_by(email: @user.email)
@@ -66,6 +72,25 @@ class UsersController < ApplicationController
     end
 
     if @user.update(attrs.except(*(current_user == @user ? %i[password otp_required_for_login role] : %i[password])))
+      if @user.saved_change_to_role?
+        old_role = @user.role_before_last_save
+        new_role = @user.role
+
+        RoleChangeLog.create!(
+          changed_by: current_user.id,
+          user_id: @user.id,
+          old_role:,
+          new_role:,
+          timestamp: Time.current
+        )
+
+        UserMailer.role_changed(@user, old_role, new_role, current_user.id).deliver_later!
+
+        # Ensure role-based permissions are re-evaluated after login.
+        # Devise :rememberable uses remember_created_at, so clearing it forces a fresh login for remembered sessions.
+        @user.forget_me!
+      end
+
       if @user.try(:pending_reconfirmation?) && @user.previous_changes.key?(:unconfirmed_email)
         SendConfirmationInstructionsJob.perform_async('user_id' => @user.id)
 

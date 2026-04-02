@@ -1,0 +1,33 @@
+<% role_labels = { 'viewer' => 'Observateur', 'agent' => 'Agent', 'member' => 'Membre', 'editor' => 'Éditeur', 'admin' => 'Administrateur' } %>
+
+<div class="space-y-2">
+  <h2 class="text-lg font-semibold"><%= t('role_change_history', default: 'Historique des modifications de rôle') %></h2>
+
+  <% if @role_changes.blank? %>
+    <p class="text-sm text-gray-600"><%= t('no_role_changes', default: 'Aucun changement de rôle pour le moment.') %></p>
+  <% else %>
+    <div class="overflow-x-auto">
+      <table class="table w-full text-sm">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Ancien rôle</th>
+            <th>Nouveau rôle</th>
+            <th>Modifié par</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @role_changes.each do |change| %>
+            <tr>
+              <td><%= change.created_at ? l(change.created_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) : (change.timestamp || change.id) %></td>
+              <td><%= role_labels[change.old_role] || change.old_role %></td>
+              <td><%= role_labels[change.new_role] || change.new_role %></td>
+              <td><%= change.changed_by_user&.friendly_name || change.changed_by %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+
