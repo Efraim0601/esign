@@ -19,7 +19,7 @@
         <tbody>
           <% @role_changes.each do |change| %>
             <tr>
-              <td><%= change.created_at ? l(change.created_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) : (change.timestamp || change.id) %></td>
+              <td><%= l((change.changed_at || change.created_at).in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) %></td>
               <td><%= role_labels[change.old_role] || change.old_role %></td>
               <td><%= role_labels[change.new_role] || change.new_role %></td>
               <td><%= change.changed_by_user&.friendly_name || change.changed_by %></td>

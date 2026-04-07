@@ -7,12 +7,12 @@ class CreateRoleChangeLogs < ActiveRecord::Migration[8.1]
       t.bigint :user_id, null: false
       t.string :old_role, null: false
       t.string :new_role, null: false
-      t.datetime :timestamp, null: false
+      t.datetime :changed_at, null: false
     end
 
     add_index :role_change_logs, :changed_by
     add_index :role_change_logs, :user_id
-    add_index :role_change_logs, :timestamp
+    add_index :role_change_logs, :changed_at
 
     add_foreign_key :role_change_logs, :users, column: :changed_by
     add_foreign_key :role_change_logs, :users, column: :user_id

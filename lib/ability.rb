@@ -31,7 +31,7 @@ class Ability
       user.account_id,
       user.id
     ]
-    other_users_in_account = ['account_id = ? AND id != ?', user.account_id, user.id]
+    other_user_in_account = ->(other) { other.is_a?(User) && other.account_id == user.account_id && other.id != user.id }
 
     # AFB RBAC restriction layer
     case user.role
@@ -45,7 +45,7 @@ class Ability
       cannot :destroy, Submission
       can :read, Submission, account_id: user.account_id
       cannot :create, User, account_id: user.account_id
-      cannot :manage, User, other_users_in_account
+      cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
       cannot :manage, AccountConfig
       cannot :manage, WebhookUrl
@@ -63,7 +63,7 @@ class Ability
       cannot :update, Template
       cannot :destroy, Template
       cannot :create, User, account_id: user.account_id
-      cannot :manage, User, other_users_in_account
+      cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
       cannot :manage, AccountConfig
       cannot :manage, WebhookUrl
@@ -81,7 +81,7 @@ class Ability
       cannot :destroy, Template, ["author_id != ?", user.id]
       cannot :bulk_send, Template
       cannot :create, User, account_id: user.account_id
-      cannot :manage, User, other_users_in_account
+      cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
       cannot :manage, AccountConfig
       cannot :manage, WebhookUrl
@@ -95,7 +95,7 @@ class Ability
 
     when 'editor'
       cannot :create, User, account_id: user.account_id
-      cannot :manage, User, other_users_in_account
+      cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
       cannot :manage, AccountConfig
       cannot :manage, WebhookUrl

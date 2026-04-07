@@ -4,7 +4,7 @@ services:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
     build: .
     image: esign/app:local
     ports:
@@ -25,6 +25,12 @@ services:
   redis:
     image: redis:7-alpine
     command: redis-server --save "" --appendonly no
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
   postgres:
     image: postgres:18

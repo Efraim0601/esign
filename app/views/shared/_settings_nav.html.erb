@@ -9,9 +9,11 @@
       <li>
         <%= link_to t('profile'), settings_profile_index_path, class: 'text-base hover:bg-base-300' %>
       </li>
-      <li>
-        <%= link_to t('account'), settings_account_path, class: 'text-base hover:bg-base-300' %>
-      </li>
+      <% if can?(:manage, current_account) %>
+        <li>
+          <%= link_to t('account'), settings_account_path, class: 'text-base hover:bg-base-300' %>
+        </li>
+      <% end %>
       <% unless Docuseal.multitenant? %>
         <% if can?(:read, EncryptedConfig.new(key: EncryptedConfig::EMAIL_SMTP_KEY, account: current_account)) && ENV['SMTP_ADDRESS'].blank? && true_user == current_user %>
           <li>
@@ -44,21 +46,21 @@
           <%= link_to t('personalization'), settings_personalization_path, class: 'text-base hover:bg-base-300' %>
         </li>
       <% end %>
-      <% if can?(:read, User) %>
+      <% if can?(:create, User.new(account: current_account)) || can?(:manage, User.new(account: current_account)) %>
         <li>
           <%= link_to t('users'), settings_users_path, class: 'text-base hover:bg-base-300' %>
         </li>
       <% end %>
       <%= render 'shared/settings_nav_extra' %>
       <% if Docuseal.demo? || !Docuseal.multitenant? %>
-        <% if can?(:read, AccessToken) %>
+        <% if can?(:manage, current_user.access_token) %>
           <li>
             <%= link_to 'API', settings_api_index_path, class: 'text-base hover:bg-base-300' %>
           </li>
         <% end %>
       <% end %>
       <% if Docuseal.demo? || !Docuseal.multitenant? || (current_user != true_user && !current_account.testing?) %>
-        <% if can?(:read, WebhookUrl) %>
+        <% if can?(:manage, WebhookUrl.new(account: current_account)) %>
           <li>
             <%= link_to 'Webhooks', settings_webhooks_path, class: 'text-base hover:bg-base-300' %>
           </li>

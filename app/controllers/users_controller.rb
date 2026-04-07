@@ -81,10 +81,14 @@ class UsersController < ApplicationController
           user_id: @user.id,
           old_role:,
           new_role:,
-          timestamp: Time.current
+          changed_at: Time.current
         )
 
-        UserMailer.role_changed(@user, old_role, new_role, current_user.id).deliver_later!
+        begin
+          UserMailer.role_changed(@user, old_role, new_role, current_user.id).deliver_later
+        rescue StandardError => e
+          Rails.logger.error("[UserRoleChange] Unable to enqueue role_changed email: #{e.class}: #{e.message}")
+        end
 
         # Ensure role-based permissions are re-evaluated after login.
         # Devise :rememberable uses remember_created_at, so clearing it forces a fresh login for remembered sessions.

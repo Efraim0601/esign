@@ -58,17 +58,20 @@ Puma::Plugin.create do
 
   def wait_for_redis!
     attempt = 0
+    max_attempts = Integer(ENV.fetch('REDIS_WAIT_ATTEMPTS', 90))
+    redis_url = ENV.fetch('REDIS_URL', nil)
 
     loop do
       attempt += 1
+      sleep [((attempt - 1) / 10.0), 2.0].min
 
-      sleep (attempt - 1) / 10.0
-
-      RedisClient.new(url: ENV.fetch('REDIS_URL', nil)).call('GET', '1')
-
+      RedisClient.new(url: redis_url).call('GET', '1')
       break
-    rescue RedisClient::CannotConnectError
-      raise('Unable to connect to redis') if attempt > 10
+    rescue RedisClient::CannotConnectError, RedisClient::ReadTimeoutError, IO::TimeoutError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+      if attempt >= max_attempts
+        raise "Unable to connect to Redis after #{max_attempts} attempts (#{redis_url.inspect}). " \
+              'Ensure the Redis service is running and on the same Docker network (avoid `--no-deps` without Redis).'
+      end
     end
   end
 end
