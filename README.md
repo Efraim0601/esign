@@ -88,6 +88,8 @@ Run the app under a custom domain over https using docker compose (make sure you
 sudo HOST=your-domain-name.com docker compose up
 ```
 
+If the app logs `could not translate host name "postgres"`, the `app` container is not on the same Docker network as PostgreSQL (for example `docker compose up --no-deps app`). Use `docker compose up -d` so `postgres` and `redis` start too, or point `DATABASE_URL` at a reachable database host.
+
 ## For Businesses
 ### Integrate seamless document signing into your web or mobile apps with DocuSeal
 

@@ -1,3 +1,5 @@
+# Requires postgres + redis on the Compose network (hostnames `postgres`, `redis`).
+# Start everything: `docker compose up -d` — do not use `--no-deps` unless you supply DB/Redis elsewhere.
 services:
   app:
     depends_on:
@@ -44,7 +46,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 15s
 
   caddy:
     image: caddy:latest
