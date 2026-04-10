@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: 'eSign <info@docuseal.com>'
+  default from: 'FirstSign <info@docuseal.com>'
   layout 'mailer'
 
   register_interceptor ActionMailerConfigsInterceptor

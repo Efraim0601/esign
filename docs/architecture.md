@@ -1,4 +1,4 @@
-# Architecture (eSign)
+# Architecture (FirstSign)
 
 ## 1) Vue d'ensemble
 Cette application est un monolithe **Ruby on Rails** qui gère :

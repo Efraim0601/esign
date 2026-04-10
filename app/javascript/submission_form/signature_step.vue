@@ -344,7 +344,7 @@ export default {
       type: Object,
       required: true
     },
-    requireSigningReason: {
+    requirFirstSigningReason: {
       type: Boolean,
       required: false,
       default: false
@@ -434,7 +434,7 @@ export default {
       return this.field.preferences?.format
     },
     withSigningReason () {
-      return this.requireSigningReason || this.field.preferences?.reasons?.length
+      return this.requirFirstSigningReason || this.field.preferences?.reasons?.length
     },
     defaultReasons () {
       return {
