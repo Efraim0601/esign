@@ -401,7 +401,7 @@
             :with-typed-signature="withTypedSignature"
             :remember-signature="rememberSignature"
             :attachments-index="attachmentsIndex"
-            :require-signing-reason="requirFirstSigningReason"
+            :require-signing-reason="requireSigningReason"
             :button-text="submitButtonText"
             :dry-run="dryRun"
             :with-disclosure="withDisclosure"
@@ -710,7 +710,7 @@ export default {
       required: false,
       default: false
     },
-    requirFirstSigningReason: {
+    requireSigningReason: {
       type: Boolean,
       required: false,
       default: false
@@ -777,7 +777,7 @@ export default {
       required: false,
       default: false
     },
-    reusFirstSignature: {
+    reuseSignature: {
       type: Boolean,
       required: false,
       default: true
@@ -1023,7 +1023,7 @@ export default {
       }, {})
     },
     previousInitialsValue () {
-      if (this.reusFirstSignature !== false) {
+      if (this.reuseSignature !== false) {
         const initialsField = this.fields.findLast
           ? this.fields.findLast((field) => field.type === 'initials' && !!this.values[field.uuid])
           : [...this.fields].reverse().find((field) => field.type === 'initials' && !!this.values[field.uuid])
@@ -1421,7 +1421,7 @@ export default {
       })
     },
     previousSignatureValueFor (field) {
-      if (this.reusFirstSignature !== false) {
+      if (this.reuseSignature !== false) {
         const signatureField = this.fields.findLast
           ? this.fields.findLast((f) => f.type === 'signature' && field.preferences?.format === f.preferences?.format && !!this.values[f.uuid])
           : [...this.fields].reverse().find((f) => f.type === 'signature' && field.preferences?.format === f.preferences?.format && !!this.values[f.uuid])

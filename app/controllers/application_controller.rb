@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   include ActiveStorage::SetCurrent
   include Pagy::Method
+  include UserSessionIntegrity
 
   check_authorization unless: :devise_controller?
 
@@ -12,6 +13,7 @@ class ApplicationController < ActionController::Base
   before_action :sign_in_for_demo, if: -> { Docuseal.demo? }
   before_action :maybe_redirect_to_setup, unless: :signed_in?
   before_action :authenticate_user!, unless: :devise_controller?
+  before_action :enforce_user_session_permission_version!, if: :signed_in?
 
   before_action :set_csp, if: -> { request.get? && !request.headers['HTTP_X_TURBO'] }
 

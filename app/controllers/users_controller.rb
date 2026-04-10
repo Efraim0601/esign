@@ -90,8 +90,9 @@ class UsersController < ApplicationController
           Rails.logger.error("[UserRoleChange] Unable to enqueue role_changed email: #{e.class}: #{e.message}")
         end
 
-        # Ensure role-based permissions are re-evaluated after login.
-        # Devise :rememberable uses remember_created_at, so clearing it forces a fresh login for remembered sessions.
+        @user.increment!(:permission_version)
+
+        # Devise :rememberable uses remember_created_at; clearing it tightens remembered sessions.
         @user.forget_me!
       end
 

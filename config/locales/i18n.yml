@@ -622,7 +622,9 @@ en: &en
   users_management: Users management
   ten_filed_types: 10 field types
   multiple_signers: Multiple signers
-  automatic_esignature: AutomaticFirstSignature
+  automatic_esignature: Automatic PDF electronic signature
+  your_session_was_refreshed_please_continue: Your access was updated; impersonation has ended.
+  your_session_was_refreshed_sign_in_again: Your access was updated. Please sign in again.
   ten_signature_request_emails_per_month: 10 signature request emails per month
   unlimited_sign_yourself: Unlimited sign yourself
   free_developer_testing_sandbox: Free developer testing sandbox
@@ -789,7 +791,7 @@ en: &en
   three_months: 3 months
   eu_data_residency: EU data residency
   please_enter_your_email_address_associated_with_the_completed_submission: Please enter your email address associated with the completed submission.
-  esignature_disclosure:FirstSignature Disclosure
+  esignature_disclosure: FirstSign disclosure
   share_link: Share link
   enable_shared_link: Enable shared link
   share_link_is_currently_disabled: Share link is currently disabled
@@ -1012,7 +1014,7 @@ en: &en
     add_recipients: 'Add recipients'
     add_recipients_description: 'Add new recipients for the document to be signed by entering their email addresses or phone numbers.'
     settings: 'Settings'
-    settings_account_description: 'With comprehensive account settings, you can customize theFirstSigning experience and invite more users.'
+    settings_account_description: 'With comprehensive account settings, you can customize the FirstSign experience and invite more users.'
     support: 'Support'
     support_description: 'You can use our self-service AI assistant or email us at support@docuseal.com if you have any questions.'
     settings_template_description: 'Use this button to access your account settings page.'
@@ -3720,6 +3722,8 @@ fr: &fr
   ten_filed_types: 10 types de champs
   multiple_signers: Plusieurs signataires
   automatic_esignature: Signature électronique automatique
+  your_session_was_refreshed_please_continue: Vos droits ont été mis à jour ; l’emprunt d’identité est terminé.
+  your_session_was_refreshed_sign_in_again: Vos droits ont été mis à jour. Veuillez vous reconnecter.
   ten_signature_request_emails_per_month: 10 e‑mails de demande de signature/mois
   unlimited_sign_yourself: Signature personnelle illimitée
   free_developer_testing_sandbox: Bac à sable de test développeur gratuit
@@ -7569,7 +7573,7 @@ nl: &nl
     add_recipients: Ontvangers toevoegen
     add_recipients_description: Voeg nieuwe ontvangers toe om het document te ondertekenen door hun e-mailadressen of telefoonnummers in te voeren.
     settings: Instellingen
-    settings_account_description: Met uitgebreide accountinstellingen kunt u deFirstSigning-ervaring aanpassen en meer gebruikers uitnodigen.
+    settings_account_description: Met uitgebreide accountinstellingen kunt u de FirstSign-ervaring aanpassen en meer gebruikers uitnodigen.
     support: Ondersteuning
     support_description: U kunt onze selfservice AI-assistent gebruiken of ons e-mailen op support@docuseal.com als u vragen heeft.
     settings_template_description: Gebruik deze knop om naar uw accountinstellingenpagina te gaan.

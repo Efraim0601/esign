@@ -92,7 +92,7 @@
           type="checkbox"
           class="toggle toggle-xs"
           :disabled="!editable || (defaultField && [true, false].includes(defaultField.required))"
-          @change="handleTogglFirstSignatureId($event.target.checked)"
+          @change="handleToggleWithSignatureId($event.target.checked)"
           @click.stop
         >
         <span>{{ t('signature_id') }}</span>
@@ -874,7 +874,7 @@ export default {
 
       this.$emit('save')
     },
-    handleTogglFirstSignatureId (value) {
+    handleToggleWithSignatureId (value) {
       this.field.preferences ||= {}
       this.field.preferences.with_signature_id = value
 

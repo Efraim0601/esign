@@ -251,7 +251,7 @@ export function App() {
     "required": false,
     "description": "Allows to specify whether the signature should be remembered for future use. Remembered signatures are stored in the signer's browser local storage and can be automatically reused to prefill signature fields in new forms for the signer when the value is set to `true`."
   },
-  "reusFirstSignature": {
+  "reuseSignature": {
     "type": "boolean",
     "required": false,
     "default": true,

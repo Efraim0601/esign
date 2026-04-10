@@ -38,7 +38,7 @@ DocuSeal is an open source platform that provides secure and efficient digital d
 - Multiple submitters per document
 - Automated emails via SMTP
 - Files storage on disk or AWS S3, Google Storage, Azure Cloud
-- Automatic PDFFirstSignature
+- Automatic PDF electronic signature
 - PDF signature verification
 - Users management
 - Mobile-optimized
