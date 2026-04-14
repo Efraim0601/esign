@@ -70,10 +70,8 @@ class Ability
       cannot :manage, Account, id: user.account_id
 
     when 'member'
-      # Template: read, create, update own, destroy own
-      can :update, Template, Abilities::TemplateConditions.collection(user).where(author_id: user.id) do |template|
-        Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
-      end
+      # Template: read, create only (cannot update any templates)
+      cannot :update, Template
       can :destroy, Template, account_id: user.account_id, author_id: user.id
       can :manage, TemplateFolder, account_id: user.account_id
       can :manage, TemplateSharing, template: { account_id: user.account_id }

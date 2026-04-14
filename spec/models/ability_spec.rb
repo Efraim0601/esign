@@ -301,7 +301,7 @@ RSpec.describe Ability do
                      templates_read_all: true,
                      templates_create: true,
                      templates_update_other: false,
-                     templates_update_own: true,
+                     templates_update_own: false,
                      templates_destroy_other: false,
                      templates_destroy_own: true,
                      templates_duplicate: true,
