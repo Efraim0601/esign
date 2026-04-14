@@ -24,9 +24,6 @@
           </label>
         <% end %>
       </div>
-      <div class="form-control pt-2">
-        <%= f.button button_title(title: t('update'), disabled_with: t('updating')), class: 'base-button' %>
-      </div>
     <% end %>
     <%= render 'email_configs' %>
     <p class="text-2xl font-bold mt-8 mb-4">
@@ -75,9 +72,6 @@
                 <%= t('dont_remember_your_current_password_click_here_to_reset_it_html') %>
               </span>
             <% end %>
-          </div>
-          <div class="form-control">
-            <%= f.button button_title(title: t('update'), disabled_with: t('updating')), class: 'base-button' %>
           </div>
         </div>
       <% end %>

@@ -35,11 +35,7 @@
           </div>
         <% end %>
       <% end %>
-      <% if can?(:update, current_account) %>
-        <div class="form-control pt-2">
-          <%= f.button button_title(title: t('update'), disabled_with: t('updating')), class: 'base-button' %>
-        </div>
-      <% end %>
+
     <% end %>
     <% if can?(:manage, AccountConfig) %>
       <div class="px-1 mt-8">
