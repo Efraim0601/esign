@@ -241,7 +241,7 @@ en: &en
   save: Save
   saving: Saving
   changes_have_been_saved: Changes have been saved.
-  unlock_with_docuseal_pro: Unlock with DocuSeal Pro
+  unlock_with_docuseal_pro: Unlock with FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Use your own certificates to sign and verify PDF files.
   upload_certificate: Upload Certificate
   name: Name
@@ -1279,7 +1279,7 @@ es: &es
   save: Guardar
   saving: Guardando
   changes_have_been_saved: Los cambios han sido guardados.
-  unlock_with_docuseal_pro: Desbloquear con DocuSeal Pro
+  unlock_with_docuseal_pro: Desbloquear con FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Usa tus propios certificados para firmar y verificar archivos PDF.
   upload_certificate: Subir certificado
   name: Nombre
@@ -2312,7 +2312,7 @@ it: &it
   save: Salva
   saving: Salvataggio in corso
   changes_have_been_saved: Le modifiche sono state salvate.
-  unlock_with_docuseal_pro: Sblocca con DocuSeal Pro
+  unlock_with_docuseal_pro: Sblocca con FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Usa i tuoi certificati per firmare e verificare i file PDF.
   upload_certificate: Carica certificato
   name: Nome
@@ -3340,7 +3340,7 @@ fr: &fr
   save: Enregistrer
   saving: Enregistrement
   changes_have_been_saved: Les modifications ont été enregistrées.
-  unlock_with_docuseal_pro: Débloquer avec DocuSeal Pro
+  unlock_with_docuseal_pro: Débloquer avec FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Utilisez vos propres certificats pour signer et vérifier des fichiers PDF.
   upload_certificate: Téléverser un certificat
   name: Nom
@@ -4383,7 +4383,7 @@ pt: &pt
   save: Salvar
   saving: Salvando
   changes_have_been_saved: As alterações foram salvas.
-  unlock_with_docuseal_pro: Desbloquear com o DocuSeal Pro
+  unlock_with_docuseal_pro: Desbloquear com o FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Use seus próprios certificados para assinar e verificar arquivos PDF.
   upload_certificate: Enviar certificado
   name: Nome
@@ -5410,7 +5410,7 @@ de: &de
   save: Speichern
   saving: Wird gespeichert
   changes_have_been_saved: Änderungen wurden gespeichert.
-  unlock_with_docuseal_pro: Mit DocuSeal Pro freischalten
+  unlock_with_docuseal_pro: Mit FirstSign Pro freischalten
   use_your_own_certificates_to_sign_and_verify_pdf_files: Verwenden Sie Ihre eigenen Zertifikate, um PDF-Dateien zu signieren und zu verifizieren.
   upload_certificate: Zertifikat hochladen
   name: Name
@@ -6826,7 +6826,7 @@ nl: &nl
   save: Opslaan
   saving: Opslaan
   changes_have_been_saved: Wijzigingen zijn opgeslagen.
-  unlock_with_docuseal_pro: Ontgrendel met DocuSeal Pro
+  unlock_with_docuseal_pro: Ontgrendel met FirstSign Pro
   use_your_own_certificates_to_sign_and_verify_pdf_files: Gebruik uw eigen certificaten om PDF-bestanden te ondertekenen en te verifiëren.
   upload_certificate: Certificaat uploaden
   name: Naam
