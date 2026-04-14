@@ -5,6 +5,12 @@
       <%= image_tag 'logo.svg', alt: 'AFB Logo', class: 'shrink-0 w-20 h-20' %>
       <span>FirstSign</span>
     </a>
+    <div class="hidden lg:flex items-center space-x-2">
+      <%= link_to t('home'), root_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(root_path)}" %>
+      <%= link_to t('templates'), templates_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(templates_path)}" %>
+      <%= link_to t('submissions'), submissions_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(submissions_path)}" %>
+      <%= link_to t('profile'), settings_profile_index_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(settings_profile_index_path)}" %>
+    </div>
     <span class="hidden sm:inline">
       <%= render 'shared/github' if request.path.starts_with?('/settings') %>
     </span>
