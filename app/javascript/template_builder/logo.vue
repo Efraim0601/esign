@@ -1,5 +1,5 @@
 <template>
-  <img src="/logo.svg" alt="AFB Logo" height="40" width="40" />
+  <img src="/public/logo.svg" alt="AFB Logo" height="40" width="40" />
 </template>
 
 <script>
