@@ -33,10 +33,10 @@ module PdfIcons
   end
 
   def logo_data
-    @logo_data ||= PATH.join('logo.png').read
+    @logo_data ||= Rails.root.join('public', 'logo.png').read
   end
 
   def stamp_logo_data
-    @stamp_logo_data ||= PATH.join('stamp-logo.png').read
+    @stamp_logo_data ||= Rails.root.join('public', 'logo.png').read
   end
 end
