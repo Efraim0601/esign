@@ -3181,7 +3181,7 @@ fr: &fr
   docuseal_trusted_signature: Signature de confiance DocuSeal
   hello_name: Bonjour %{name}
   you_are_invited_to_product_name: Vous êtes invité à %{product_name}
-  you_have_been_invited_to_account_name_product_name_please_sign_up_using_the_link_below_: 'Vous avez été invité à %{account_name} %{product_name}. Veuillez vous inscrire en utilisant le lien ci-dessous :'
+  your_role: Votre rôle
   sent_using_product_name_in_testing_mode_html: Envoyé avec <a href="%{product_url}">%{product_name}</a> en mode test
   sent_using_product_name_free_document_signing_html: Envoyé avec <a href="%{product_url}">%{product_name}</a> signature de documents gratuite.
   sent_with_docuseal_pro_html: Envoyé avec <a href="%{product_url}">DocuSeal Pro</a>
@@ -3608,10 +3608,15 @@ fr: &fr
   draw: Dessiner
   upload_signature: Téléverser la signature
   integration: Intégration
-  admin: Administrateur
+  roles:
+    admin: Administrateur
+    editor: Éditeur
+    member: Membre
+    agent: Agent
+    viewer: Observateur
   tenant_admin: Administrateur locataire
   editor: Éditeur
-  viewer: Lecteur
+  viewer: Observateur
   member: Membre
   agent: Agent
   superadmin: Superadmin
@@ -3804,6 +3809,12 @@ fr: &fr
   submitter_cannot_be_updated: Le soumissionnaire ne peut pas être mis à jour.
   at_least_one_field_must_be_filled: Au moins un champ doit être rempli.
   archived_users: Utilisateurs archivés
+  active: Actifs
+  archived: Archivés
+  deactivate: Désactiver
+  reactivate: Réactiver
+  all: Tous
+  user_has_been_reactivated: L'utilisateur a été réactivé.
   embedding_users: Utilisateurs d’embedding
   view_embedding_users: Voir les utilisateurs d’embedding
   key: Clé

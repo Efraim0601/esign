@@ -94,7 +94,7 @@
         href="https://www.docuseal.com/start"
         target="_blank"
         class="underline"
-      >eSign</a> - {{ t('open_source_documents_software') }}
+      >FirstSign</a> - {{ t('open_source_documents_software') }}
     </div>
   </div>
 </template>

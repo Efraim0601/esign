@@ -38,6 +38,11 @@
         </div>
       <% end %>
       <%= render 'role_select', f: %>
+      <% if user.role.present? %>
+        <div class="mt-2">
+          <%= render 'shared/role_badge', role: user.role %>
+        </div>
+      <% end %>
     <% end %>
     <% if local_assigns[:extra_fields_html].present? %>
       <%= local_assigns[:extra_fields_html] %>

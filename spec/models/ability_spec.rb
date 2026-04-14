@@ -3,11 +3,8 @@
 RSpec.describe Ability do
   let(:account) { create(:account) }
 
-  let(:template_owned) { create(:template, account:, author: user, folder: create(:template_folder, account:, author: user)) }
-  let(:template_other) do
-    other_author = create(:user, account:, role: 'admin')
-    create(:template, account:, author: other_author, folder: create(:template_folder, account:, author: other_author))
-  end
+  let(:private_template) { create(:template, account:, author: user, private: true) }
+  let(:private_template_other) { create(:template, account:, author: other_author, private: true) }
 
   let(:submission_owned) { create(:submission, template: template_owned, created_by_user: user) }
   let(:submission_other) do
@@ -417,6 +414,43 @@ RSpec.describe Ability do
                      audit_trail: true,
                      submissions_history: true,
                      export_activity_log: true
+  end
+
+  describe 'private templates' do
+    let(:other_author) { create(:user, account:, role: 'editor') }
+    let(:private_template) { create(:template, account:, author: user, private: true) }
+    let(:private_template_other) { create(:template, account:, author: other_author, private: true) }
+
+    context 'when user is editor' do
+      let(:user) { create(:user, account:, role: 'editor') }
+      let(:ability) { described_class.new(user) }
+
+      it 'can read own private template' do
+        expect_can(:read, private_template)
+      end
+
+      it 'cannot read other private template' do
+        expect_cannot(:read, private_template_other)
+      end
+    end
+
+    context 'when user is admin' do
+      let(:user) { create(:user, account:, role: 'admin') }
+      let(:ability) { described_class.new(user) }
+
+      it 'can read any private template' do
+        expect_can(:read, private_template_other)
+      end
+    end
+
+    context 'when user is member' do
+      let(:user) { create(:user, account:, role: 'member') }
+      let(:ability) { described_class.new(user) }
+
+      it 'cannot read other private template' do
+        expect_cannot(:read, private_template_other)
+      end
+    end
   end
 end
 

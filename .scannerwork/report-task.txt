@@ -1,0 +1,6 @@
+projectKey=eSing
+serverUrl=http://localhost:9000
+serverVersion=26.3.0.120487
+dashboardUrl=http://localhost:9000/dashboard?id=eSing
+ceTaskId=255ac18b-ae2a-4528-bf0b-0af57c003b1a
+ceTaskUrl=http://localhost:9000/api/ce/task?id=255ac18b-ae2a-4528-bf0b-0af57c003b1a

@@ -259,6 +259,39 @@ describe 'Submission API' do
     end
   end
 
+  describe 'POST /templates/:template_id/submissions' do
+    let(:user) { create(:user, account:) }
+    let(:template) { create(:template, account:, author: user) }
+
+    before do
+      sign_in user
+    end
+
+    context 'with invalid data causing RecordInvalid' do
+      it 'renders turbo_stream error and logs the error' do
+        allow_any_instance_of(Template).to receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(template))
+
+        post template_submissions_path(template), params: { save_message: '1', subject: 'Test' }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include('turbo-stream')
+        expect(response.body).to include('submitters_error')
+      end
+    end
+
+    context 'with unexpected error' do
+      it 'renders turbo_stream error with generic message and logs' do
+        allow(Submissions).to receive(:create_from_emails).and_raise(StandardError.new('Test error'))
+
+        post template_submissions_path(template), params: { emails: ['test@example.com'] }
+
+        expect(response).to have_http_status(:internal_server_error)
+        expect(response.body).to include('turbo-stream')
+        expect(response.body).to include('An unexpected error occurred')
+      end
+    end
+  end
+
   private
 
   def index_submission_body(submission)

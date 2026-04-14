@@ -7,6 +7,9 @@ module Abilities
     def collection(user, ability: nil)
       templates = Template.where(account_id: user.account_id)
 
+      # Filter private templates: only author or admin can see them
+      templates = templates.where('private = false OR author_id = ? OR ? = ?', user.id, user.role, 'admin')
+
       return templates unless user.account.testing?
 
       shared_ids =
@@ -19,6 +22,10 @@ module Abilities
     def entity(template, user:, ability: nil)
       return true if template.account_id.blank?
       return true if template.account_id == user.account_id
+
+      # Private templates are only accessible by author or admin
+      return false if template.private? && template.author_id != user.id && user.role != 'admin'
+
       return false unless user.account.linked_account_account
       return false if template.template_sharings.to_a.blank?
 

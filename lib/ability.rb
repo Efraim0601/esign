@@ -4,16 +4,13 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    can %i[read create update], Template, Abilities::TemplateConditions.collection(user) do |template|
+    can %i[read create], Template, Abilities::TemplateConditions.collection(user) do |template|
       Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
     end
 
     can :destroy, Template, account_id: user.account_id
     can :manage, TemplateFolder, account_id: user.account_id
     can :manage, TemplateSharing, template: { account_id: user.account_id }
-    can :manage, Submission, account_id: user.account_id
-    can :manage, Submitter, account_id: user.account_id
-    can :manage, User, account_id: user.account_id
     can :manage, EncryptedConfig, account_id: user.account_id
     can :manage, EncryptedUserConfig, user_id: user.id
     can :manage, AccountConfig, account_id: user.account_id
@@ -25,25 +22,19 @@ class Ability
 
     can :manage, :mcp
 
-    not_own_submission = ['account_id = ? AND created_by_user_id IS DISTINCT FROM ?', user.account_id, user.id]
-    submitter_on_foreign_submission = [
-      'submission_id IN (SELECT id FROM submissions WHERE account_id = ? AND created_by_user_id IS DISTINCT FROM ?)',
-      user.account_id,
-      user.id
-    ]
     other_user_in_account = ->(other) { other.is_a?(User) && other.account_id == user.account_id && other.id != user.id }
 
     # AFB RBAC restriction layer
     case user.role
     when 'viewer'
-      cannot :create, Template
-      cannot :bulk_send, Template
-      cannot :update, Template
-      cannot :destroy, Template
-      cannot :create, Submission
-      cannot :update, Submission
-      cannot :destroy, Submission
+      # Template: read only
+      # Submission: read only
       can :read, Submission, account_id: user.account_id
+      # Submitter: read only
+      can :read, Submitter, account_id: user.account_id
+      # User: read own, no manage others
+      can :read, User, account_id: user.account_id
+      can :update, User, id: user.id
       cannot :create, User, account_id: user.account_id
       cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
@@ -54,14 +45,22 @@ class Ability
       cannot :manage, :mcp
       cannot :manage, TemplateFolder, account_id: user.account_id
       cannot :manage, TemplateSharing, template: { account_id: user.account_id }
-      cannot :manage, Submitter, account_id: user.account_id
       cannot :manage, Account, id: user.account_id
 
     when 'agent'
-      cannot :create, Template
-      cannot :bulk_send, Template
-      cannot :update, Template
-      cannot :destroy, Template
+      # Template: read only
+      # Submission: read own, create, update own, etc.
+      can :read, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :create, Submission, account_id: user.account_id
+      can :update, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :destroy, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :cancel, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :resend, Submission, account_id: user.account_id, created_by_user_id: user.id
+      # Submitter: manage own submissions' submitters
+      can %i[create update destroy], Submitter, submission: { account_id: user.account_id, created_by_user_id: user.id }
+      # User: read own, no manage others
+      can :read, User, account_id: user.account_id
+      can :update, User, id: user.id
       cannot :create, User, account_id: user.account_id
       cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
@@ -69,17 +68,28 @@ class Ability
       cannot :manage, WebhookUrl
       cannot :manage, AccessToken
       cannot :manage, Account, id: user.account_id
-      cannot :read, Submission, not_own_submission
-      cannot :update, Submission, not_own_submission
-      cannot :destroy, Submission, not_own_submission
-      cannot :cancel, Submission, not_own_submission
-      cannot :resend, Submission, not_own_submission
-      cannot %i[create update destroy], Submitter, submitter_on_foreign_submission
 
     when 'member'
-      cannot :update, Template, ["author_id != ?", user.id]
-      cannot :destroy, Template, ["author_id != ?", user.id]
+      # Template: read, create, update own, destroy own
+      can :update, Template, Abilities::TemplateConditions.collection(user).where(author_id: user.id) do |template|
+        Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
+      end
+      can :destroy, Template, account_id: user.account_id, author_id: user.id
+      can :manage, TemplateFolder, account_id: user.account_id
+      can :manage, TemplateSharing, template: { account_id: user.account_id }
       cannot :bulk_send, Template
+      # Submission: read all, create, update own, etc.
+      can :read, Submission, account_id: user.account_id
+      can :create, Submission, account_id: user.account_id
+      can :update, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :destroy, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :cancel, Submission, account_id: user.account_id, created_by_user_id: user.id
+      can :resend, Submission, account_id: user.account_id, created_by_user_id: user.id
+      # Submitter: manage own submissions' submitters
+      can %i[create update destroy], Submitter, submission: { account_id: user.account_id, created_by_user_id: user.id }
+      # User: read own, no manage others
+      can :read, User, account_id: user.account_id
+      can :update, User, id: user.id
       cannot :create, User, account_id: user.account_id
       cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
@@ -87,13 +97,21 @@ class Ability
       cannot :manage, WebhookUrl
       cannot :manage, AccessToken
       cannot :manage, Account, id: user.account_id
-      cannot :update, Submission, not_own_submission
-      cannot :destroy, Submission, not_own_submission
-      cannot :cancel, Submission, not_own_submission
-      cannot :resend, Submission, not_own_submission
-      cannot %i[create update destroy], Submitter, submitter_on_foreign_submission
 
     when 'editor'
+      # Template: manage all
+      can :update, Template, Abilities::TemplateConditions.collection(user) do |template|
+        Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
+      end
+      can :manage, TemplateFolder, account_id: user.account_id
+      can :manage, TemplateSharing, template: { account_id: user.account_id }
+      # Submission: manage all
+      can :manage, Submission, account_id: user.account_id
+      # Submitter: manage all
+      can :manage, Submitter, account_id: user.account_id
+      # User: read own, no manage others
+      can :read, User, account_id: user.account_id
+      can :update, User, id: user.id
       cannot :create, User, account_id: user.account_id
       cannot :manage, User, &other_user_in_account
       cannot :manage, EncryptedConfig
@@ -105,7 +123,14 @@ class Ability
 
     when 'admin'
       # admin keeps all existing permissions — no restrictions
-      nil
+      can :update, Template, Abilities::TemplateConditions.collection(user) do |template|
+        Abilities::TemplateConditions.entity(template, user:, ability: 'manage')
+      end
+      can :manage, TemplateFolder, account_id: user.account_id
+      can :manage, TemplateSharing, template: { account_id: user.account_id }
+      can :manage, Submission, account_id: user.account_id
+      can :manage, Submitter, account_id: user.account_id
+      can :manage, User, account_id: user.account_id
     end
   end
 end

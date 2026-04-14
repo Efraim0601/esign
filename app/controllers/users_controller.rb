@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  load_and_authorize_resource :user, only: %i[index edit update destroy]
+  load_and_authorize_resource :user, only: %i[index edit update destroy reactivate]
 
   before_action :build_user, only: %i[new create]
   authorize_resource :user, only: %i[new create]
@@ -15,6 +15,8 @@ class UsersController < ApplicationController
       else
         @users.active.where.not(role: 'integration')
       end
+
+    @users = @users.where(role: params[:role]) if params[:role].present?
 
     @pagy, @users = pagy(@users.preload(account: :account_accesses).where(account: current_account).order(id: :desc))
   end
@@ -117,6 +119,12 @@ class UsersController < ApplicationController
     @user.update!(archived_at: Time.current)
 
     redirect_back fallback_location: settings_users_path, notice: I18n.t('user_has_been_removed')
+  end
+
+  def reactivate
+    @user.update!(archived_at: nil)
+
+    redirect_back fallback_location: settings_users_path, notice: I18n.t('user_has_been_reactivated')
   end
 
   private

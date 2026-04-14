@@ -36,7 +36,7 @@ RSpec.describe SendFormDeclinedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook'
+          'User-Agent' => 'AFB.com Webhook'
         }
       ).once
     end
@@ -54,7 +54,7 @@ RSpec.describe SendFormDeclinedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook',
+          'User-Agent' => 'AFB.com Webhook',
           'X-Secret-Header' => 'secret_value'
         }
       ).once

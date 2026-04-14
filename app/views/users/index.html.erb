@@ -13,6 +13,18 @@
       </h1>
       <div class="flex flex-col md:flex-row gap-y-2 gap-x-4 md:items-center">
         <% if params[:status].blank? %>
+          <form method="get" class="flex items-center space-x-2">
+            <label for="role" class="text-sm font-medium"><%= t('role') %>:</label>
+            <select name="role" id="role" onchange="this.form.submit()" class="select select-bordered select-sm">
+              <option value=""><%= t('all') %></option>
+              <option value="admin" <%= 'selected' if params[:role] == 'admin' %>><%= t('admin') %></option>
+              <option value="editor" <%= 'selected' if params[:role] == 'editor' %>><%= t('editor') %></option>
+              <option value="agent" <%= 'selected' if params[:role] == 'agent' %>><%= t('agent') %></option>
+              <option value="member" <%= 'selected' if params[:role] == 'member' %>><%= t('member') %></option>
+              <option value="viewer" <%= 'selected' if params[:role] == 'viewer' %>><%= t('viewer') %></option>
+            </select>
+            <%= hidden_field_tag :status, params[:status] if params[:status].present? %>
+          </form>
           <% if can?(:create, User.new(account: current_account)) %>
             <%= render 'users/extra_buttons' %>
             <% if content_for(:add_user_button) %>
@@ -33,6 +45,10 @@
           <% end %>
         <% end %>
       </div>
+    </div>
+    <div class="tabs tabs-boxed mb-4">
+      <a href="<%= users_path(params.permit(:role).merge(status: nil)) %>" class="<%= 'tab-active' if params[:status].blank? %> tab"><%= t('active') %></a>
+      <a href="<%= users_path(params.permit(:role).merge(status: 'archived')) %>" class="<%= 'tab-active' if params[:status] == 'archived' %> tab"><%= t('archived') %></a>
     </div>
     <div class="overflow-x-auto">
       <table class="table w-full table-lg rounded-b-none overflow-hidden">
@@ -70,9 +86,7 @@
                 <% end %>
               </td>
               <td>
-                <span class="badge badge-info badge-outline whitespace-nowrap">
-                  <%= t(user.role) %>
-                </span>
+                <%= render 'shared/role_badge', role: user.role %>
               </td>
               <td>
                 <%= user.current_sign_in_at ? l(user.current_sign_in_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) : '-' %>
@@ -83,14 +97,13 @@
                     <%= t('edit') %>
                   <% end %>
                 <% end %>
-                <% if params[:status] != 'archived' && can?(:destroy, user) && user != current_user %>
-                  <%= button_to user_path(user), method: :delete, class: 'btn btn-outline btn-error btn-xs', title: t('remove'), data: { turbo_confirm: t('are_you_sure_') } do %>
-                    <%= t('remove') %>
+                <% if user.archived_at.blank? && can?(:destroy, user) && user != current_user %>
+                  <%= button_to user_path(user), method: :delete, class: 'btn btn-outline btn-error btn-xs', title: t('deactivate'), data: { turbo_confirm: t('are_you_sure_') } do %>
+                    <%= t('deactivate') %>
                   <% end %>
-                <% end %>
-                <% if params[:status] == 'archived' && can?(:create, user) && user != current_user && user.archived_at? %>
-                  <%= button_to user_path(user), method: :put, params: { user: { archived_at: nil } }, class: 'btn btn-outline btn-xs', title: t('unarchive'), data: { turbo_confirm: t('are_you_sure_') } do %>
-                    <%= t('unarchive') %>
+                <% elsif user.archived_at? && can?(:update, user) && user != current_user %>
+                  <%= button_to reactivate_user_path(user), method: :patch, class: 'btn btn-outline btn-success btn-xs', title: t('reactivate'), data: { turbo_confirm: t('are_you_sure_') } do %>
+                    <%= t('reactivate') %>
                   <% end %>
                 <% end %>
               </td>

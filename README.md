@@ -1,10 +1,10 @@
 <h1 align="center" style="border-bottom: none">
   <div>
-    <a href="https://www.docuseal.com">
-      <img  alt="DocuSeal" src="https://github.com/user-attachments/assets/38b45682-ffa4-4919-abde-d2d422325c44" width="80" />
+    <a href="https://www.afb.fr">
+      <img  alt="AFB" src="https://github.com/user-attachments/assets/38b45682-ffa4-4919-abde-d2d422325c44" width="80" />
       <br>
     </a>
-    DocuSeal
+    AFB Document Signing
   </div>
 </h1>
 <h3 align="center">

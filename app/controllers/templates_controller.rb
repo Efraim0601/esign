@@ -62,6 +62,8 @@ class TemplatesController < ApplicationController
   end
 
   def update
+    authorize!(:update, @template)
+
     @template.assign_attributes(template_params)
 
     is_name_changed = @template.name_changed?
@@ -97,6 +99,7 @@ class TemplatesController < ApplicationController
   def template_params
     params.require(:template).permit(
       :name,
+      :private,
       { schema: [[:attachment_uuid, :google_drive_file_id, :name, :dynamic,
                   { conditions: [%i[field_uuid value action operation]] }]],
         submitters: [%i[name uuid is_requester linked_to_uuid invite_via_field_uuid

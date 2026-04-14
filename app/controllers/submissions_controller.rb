@@ -38,33 +38,47 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    save_template_message(@template, params) if params[:save_message] == '1'
+    ActiveRecord::Base.transaction do
+      save_template_message(@template, params) if params[:save_message] == '1'
 
-    [params.delete(:subject), params.delete(:body)] if params[:is_custom_message] != '1'
+      [params.delete(:subject), params.delete(:body)] if params[:is_custom_message] != '1'
 
-    submissions =
-      if params[:emails].present?
-        Submissions.create_from_emails(template: @template,
-                                       user: current_user,
-                                       source: :invite,
-                                       mark_as_sent: params[:send_email] == '1',
-                                       emails: params[:emails],
-                                       params: params.merge('send_completed_email' => true))
-      else
-        create_submissions(@template, submissions_params, params)
-      end
+      submissions =
+        if params[:emails].present?
+          Submissions.create_from_emails(template: @template,
+                                         user: current_user,
+                                         source: :invite,
+                                         mark_as_sent: params[:send_email] == '1',
+                                         emails: params[:emails],
+                                         params: params.merge('send_completed_email' => true))
+        else
+          create_submissions(@template, submissions_params, params)
+        end
 
-    WebhookUrls.enqueue_events(submissions, 'submission.created')
+      WebhookUrls.enqueue_events(submissions, 'submission.created')
 
-    Submissions.send_signature_requests(submissions)
+      Submissions.send_signature_requests(submissions)
 
-    SearchEntries.enqueue_reindex(submissions)
+      SearchEntries.enqueue_reindex(submissions)
 
-    redirect_to template_path(@template), notice: I18n.t('new_recipients_have_been_added')
+      redirect_to template_path(@template), notice: I18n.t('new_recipients_have_been_added')
+    end
   rescue Submissions::CreateFromSubmitters::BaseError => e
     render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
                                                                  locals: { error: e.message }),
            status: :unprocessable_content
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error("Submission creation failed: #{e.message}")
+    Rollbar.error(e) if defined?(Rollbar)
+    render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
+                                                                 locals: { error: e.message }),
+           status: :unprocessable_content
+  rescue StandardError => e
+    Rails.logger.error("Unexpected error during submission creation: #{e.message}")
+    Rollbar.error(e) if defined?(Rollbar)
+    render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
+                                                                 locals: { error: 'An unexpected error occurred. Please try again.' }),
+           status: :internal_server_error
   end
 
   def destroy

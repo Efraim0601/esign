@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   resources :enquiries, only: %i[create]
   resources :users, only: %i[new create edit update destroy] do
     resource :send_reset_password, only: %i[update], controller: 'users_send_reset_password'
+    member do
+      patch :reactivate
+    end
   end
   resource :user_signature, only: %i[edit update destroy]
   resource :user_initials, only: %i[edit update destroy]

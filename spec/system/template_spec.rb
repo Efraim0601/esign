@@ -232,4 +232,22 @@ RSpec.describe 'Template' do
       end
     end
   end
+
+  context 'when user is agent' do
+    let!(:user) { create(:user, account:, role: 'agent') }
+    let!(:template) { create(:template, account:, author: create(:user, account:), folder: create(:template_folder, account:, author: create(:user, account:))) }
+
+    before do
+      sign_in(user)
+      visit template_path(template)
+    end
+
+    it 'shows the template name but cannot edit it inline' do
+      expect(page).to have_content(template.name)
+      expect(page).to have_selector('h1', text: template.name)
+      expect(page).not_to have_selector('h1[contenteditable="true"]')
+      expect(page).not_to have_link('Edit')
+      expect(page).to have_link('Preview')
+    end
+  end
 end
