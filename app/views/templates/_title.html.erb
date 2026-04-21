@@ -1,7 +1,12 @@
 <div class="flex flex-col items-start md:flex-row space-y-2 md:space-y-0 md:space-x-2 md:justify-between md:items-start mb-6 md:mb-3">
   <div class="relative flex items-start justify-between w-full space-x-0">
     <div>
-      <div id="template_title" class="flex">
+      <div id="template_title" class="flex items-center">
+        <history-back class="mr-2 shrink-0">
+          <%= link_to root_path, class: 'btn btn-ghost btn-sm px-2 -ml-2', title: t('back') do %>
+            <%= svg_icon('arrow_left', class: 'w-6 h-6 stroke-2') %>
+          <% end %>
+        </history-back>
         <h1 class="text-3xl md:text-[2em] font-semibold" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;" <%= 'contenteditable="true"' if can?(:update, template) %>>
           <% template.name.split(/(_)/).each do |item| %><%= item %><wbr><% end %>
           <% if template.archived_at? %>

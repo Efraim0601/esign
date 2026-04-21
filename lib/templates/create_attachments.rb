@@ -121,7 +121,58 @@ module Templates
         return [handle_pdf_or_image(template, file, file.read, params, extract_fields:), []]
       end
 
+      if DOCUMENT_CONTENT_TYPES.include?(file.content_type) ||
+         DOCUMENT_EXTENSIONS.include?(File.extname(file.original_filename.to_s).downcase)
+        return [handle_office_document(template, file, params, extract_fields:), []]
+      end
+
       raise InvalidFileType, "#{file.content_type}/#{dynamic}"
+    end
+
+    def handle_office_document(template, file, params, extract_fields:)
+      pdf_data = convert_office_to_pdf(file)
+      pdf_filename = "#{File.basename(file.original_filename.to_s, '.*')}.pdf"
+
+      pdf_tempfile = Tempfile.new(['converted', '.pdf'], binmode: true)
+      pdf_tempfile.write(pdf_data)
+      pdf_tempfile.rewind
+
+      pdf_uploaded = ActionDispatch::Http::UploadedFile.new(
+        tempfile: pdf_tempfile,
+        filename: pdf_filename,
+        type: PDF_CONTENT_TYPE
+      )
+
+      handle_pdf_or_image(template, pdf_uploaded, pdf_data, params, extract_fields:)
+    ensure
+      pdf_tempfile&.close
+      pdf_tempfile&.unlink
+    end
+
+    def convert_office_to_pdf(file)
+      ext = File.extname(file.original_filename.to_s).downcase
+      ext = '.docx' if ext.empty?
+
+      input = Tempfile.new(['input', ext], binmode: true)
+      input.write(file.tempfile ? file.tempfile.tap(&:rewind).read : file.read)
+      input.close
+
+      output_dir = Dir.mktmpdir('office2pdf')
+
+      ok = system('soffice', '--headless', '--norestore', '--nolockcheck',
+                  '--convert-to', 'pdf', '--outdir', output_dir, input.path,
+                  out: File::NULL, err: File::NULL)
+
+      raise InvalidFileType, 'office_conversion_failed' unless ok
+
+      pdf_path = Dir.glob(File.join(output_dir, '*.pdf')).first
+      raise InvalidFileType, 'office_conversion_failed' if pdf_path.nil?
+
+      File.binread(pdf_path)
+    ensure
+      input&.close
+      input&.unlink
+      FileUtils.rm_rf(output_dir) if output_dir
     end
   end
 end

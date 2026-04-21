@@ -122,7 +122,7 @@ export default {
     acceptFileTypes: {
       type: String,
       required: false,
-      default: 'image/*, application/pdf, application/zip, application/json'
+      default: 'image/*, application/pdf, application/zip, application/json, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, .doc, .docx'
     }
   },
   emits: ['success', 'error', 'loading', 'click-google-drive'],

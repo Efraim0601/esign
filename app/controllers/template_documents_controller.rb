@@ -35,5 +35,8 @@ class TemplateDocumentsController < ApplicationController
     }
   rescue Templates::CreateAttachments::PdfEncrypted
     render json: { error: 'PDF encrypted', status: 'pdf_encrypted' }, status: :unprocessable_content
+  rescue Templates::CreateAttachments::InvalidFileType => e
+    status = e.message.to_s.include?('office_conversion_failed') ? 'office_conversion_failed' : 'invalid_file_type'
+    render json: { error: I18n.t('unable_to_update_file'), status: }, status: :unprocessable_content
   end
 end
