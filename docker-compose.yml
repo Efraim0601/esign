@@ -55,8 +55,8 @@ services:
     command: caddy reverse-proxy --from $HOST --to app:3000
     ports:
       - 8087:80
-      - 443:443
-      - 443:443/udp
+      - 8443:443
+      - 8443:443/udp
     volumes:
       - ./caddy:/data/caddy
     environment:
