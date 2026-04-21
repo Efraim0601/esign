@@ -18,6 +18,7 @@ services:
       # do not use it as a truthy FORCE_SSL while hitting :3000 over plain HTTP — that
       # triggers https redirects and TLS handshakes to Puma, which only speaks HTTP.
       - FORCE_SSL=${FORCE_SSL:-false}
+      - APP_URL=${APP_URL}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
       - REDIS_URL=redis://redis:6379/0
       # Default admin (self-hosted): created on first boot if absent. Change after deploy.
