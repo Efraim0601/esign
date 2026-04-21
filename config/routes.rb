@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   resources :submissions, only: %i[show destroy] do
     resources :unarchive, only: %i[create], controller: 'submissions_unarchive'
     resources :events, only: %i[index], controller: 'submission_events'
+    resource :chain_link, only: %i[create destroy], controller: 'submissions_chain_link'
   end
   resources :submitters, only: %i[edit update]
   resources :console_redirect, only: %i[index]
@@ -151,6 +152,9 @@ Rails.application.routes.draw do
     resources :invite, only: %i[create], controller: 'submit_form_invite'
     get :completed
   end
+
+  get  'c/:slug', to: 'chain_submit#new',    as: :chain_submit
+  post 'c/:slug', to: 'chain_submit#create', as: :chain_submit_resolve
 
   resources :submit_form_draw_signature, only: %i[show], path: 'p', param: 'slug'
 

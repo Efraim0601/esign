@@ -4,11 +4,33 @@
     <p><%= link_to nil, submit_form_url(slug: @submitter.slug, t: SubmissionEvents.build_tracking_param(@submitter, 'click_email'), host: @custom_domain || ENV.fetch('EMAIL_HOST', Docuseal.default_url_options[:host])) %></p>
   <% end %>
 <% else %>
-  <p><%= t('hi_there') %>,</p>
-  <p><%= I18n.t(@submitter.with_signature_fields? ? :you_have_been_invited_to_sign_the_name : :you_have_been_invited_to_submit_the_name_form, name: @submitter.submission.name || @submitter.submission.template.name) %></p>
-  <p><%= link_to I18n.t(@submitter.with_signature_fields? ? :review_and_sign : :review_and_submit), submit_form_url(slug: @submitter.slug, t: SubmissionEvents.build_tracking_param(@submitter, 'click_email'), host: @custom_domain || ENV.fetch('EMAIL_HOST', Docuseal.default_url_options[:host])) %></p>
+  <% document_name = @submitter.submission.name || @submitter.submission.template.name %>
+  <% sender = @submitter.submission.created_by_user || @submitter.submission.template.author %>
+  <% role = @submitter.submission.template_submitters&.find { |s| s['uuid'] == @submitter.uuid }&.dig('name') %>
+  <% sign_url = submit_form_url(slug: @submitter.slug, t: SubmissionEvents.build_tracking_param(@submitter, 'click_email'), host: @custom_domain || ENV.fetch('EMAIL_HOST', Docuseal.default_url_options[:host])) %>
+  <p><%= t('hello_name', name: (@submitter.name.presence || @submitter.email)) %>,</p>
+  <p>
+    <% if sender&.full_name.present? %>
+      <%= sanitize(t(@submitter.with_signature_fields? ? 'sender_invites_you_to_sign_html' : 'sender_invites_you_to_submit_html', sender: sender.full_name, name: document_name), tags: %w[strong]) %>
+    <% else %>
+      <%= I18n.t(@submitter.with_signature_fields? ? :you_have_been_invited_to_sign_the_name : :you_have_been_invited_to_submit_the_name_form, name: document_name) %>
+    <% end %>
+  </p>
+  <% if role.present? %>
+    <p><%= sanitize(t('your_role_on_this_document_html', role: role), tags: %w[strong]) %></p>
+  <% end %>
+  <% if @submitter.submission.expire_at.present? %>
+    <p><%= sanitize(t('please_complete_before_html', due: l(@submitter.submission.expire_at.in_time_zone(@current_account.timezone), format: :long)), tags: %w[strong]) %></p>
+  <% end %>
+  <p style="margin:24px 0;">
+    <a href="<%= sign_url %>" style="background:#1d4ed8;color:#ffffff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;display:inline-block;">
+      <%= I18n.t(@submitter.with_signature_fields? ? :review_and_sign : :review_and_submit) %>
+    </a>
+  </p>
+  <p style="font-size:12px;color:#555;"><%= t('or_copy_and_paste_this_link') %><br><%= sign_url %></p>
+  <p style="font-size:12px;color:#555;"><em><%= t('this_link_is_personal_do_not_share') %></em></p>
   <p><%= t('please_contact_us_by_replying_to_this_email_if_you_have_any_questions') %></p>
   <p>
-  <%= t('thanks') %>,<br><%= @current_account.name %>
+    <%= t('thanks') %>,<br><%= @current_account.name %>
   </p>
 <% end %>

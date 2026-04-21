@@ -215,10 +215,10 @@ class SubmitterMailer < ApplicationMailer
   def build_invite_subject(subject, email_config, submitter)
     if email_config || subject
       ReplaceEmailVariables.call(subject || email_config.value['subject'], submitter:)
-    elsif submitter.with_signature_fields?
-      I18n.t(:you_are_invited_to_sign_a_document)
     else
-      I18n.t(:you_are_invited_to_submit_a_form)
+      document_name = submitter.submission.name || submitter.submission.template.name
+      key = submitter.with_signature_fields? ? :you_have_been_invited_to_sign_the_name : :you_have_been_invited_to_submit_the_name_form
+      I18n.t(key, name: document_name)
     end
   end
 

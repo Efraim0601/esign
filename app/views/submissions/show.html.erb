@@ -72,6 +72,19 @@
       <% elsif @submission.submitters.to_a.size == 1 && !@submission.expired? && !@submission.submitters.to_a.first.declined_at? && !@submission.archived_at? && !@submission.template&.archived_at? %>
         <%= render 'shared/clipboard_copy', text: submit_form_url(slug: @submission.submitters.to_a.first.slug, host: form_link_host), class: 'base-button', icon_class: 'w-6 h-6 text-white', copy_title: t('copy_share_link'), copied_title: t('copied_to_clipboard') %>
       <% end %>
+      <% if signed_in? && can?(:update, @submission) && @submission.submitters.to_a.size > 1 && !is_all_completed && !@submission.archived_at? && !@submission.template&.archived_at? && !@submission.expired? %>
+        <% if @submission.preferences['chain_link_enabled'] == true %>
+          <%= render 'shared/clipboard_copy', text: chain_submit_url(slug: @submission.slug, host: form_link_host), class: 'base-button', icon_class: 'w-6 h-6 text-white', copy_title: t('copy_chain_link'), copied_title: t('copied_to_clipboard') %>
+          <%= button_to submission_chain_link_path(@submission), method: :delete, class: 'btn btn-ghost btn-sm', title: t('chain_link_disabled_notice'), form: { data: { turbo_confirm: t('chain_link_disabled_notice') } } do %>
+            <%= svg_icon('x', class: 'w-5 h-5') %>
+          <% end %>
+        <% else %>
+          <%= button_to submission_chain_link_path(@submission), class: 'white-button' do %>
+            <%= svg_icon('link', class: 'w-6 h-6') %>
+            <span class="hidden md:inline"><%= t('chain_link_enabled_label') %></span>
+          <% end %>
+        <% end %>
+      <% end %>
     </div>
   </div>
   <div class="flex md:max-h-[calc(100vh-60px)]">

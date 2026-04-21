@@ -539,7 +539,7 @@ export default {
       }, {})
     },
     skipTypes () {
-      return ['heading', 'datenow', 'strikethrough']
+      return ['heading', 'strikethrough']
     },
     fieldIconsSorted () {
       if (this.fieldTypes.length) {

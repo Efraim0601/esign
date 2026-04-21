@@ -96,6 +96,24 @@ en: &en
   review_and_sign: Review and Sign
   review_and_submit: Review and Submit
   please_contact_us_by_replying_to_this_email_if_you_have_any_questions: "Please contact us by replying to this email if you have any questions."
+  hello_name: "Hello %{name}"
+  sender_invites_you_to_sign_html: '<strong>%{sender}</strong> invites you to sign the document <strong>%{name}</strong>.'
+  sender_invites_you_to_submit_html: '<strong>%{sender}</strong> invites you to complete the form <strong>%{name}</strong>.'
+  your_role_on_this_document_html: 'Your role on this document: <strong>%{role}</strong>.'
+  please_complete_before_html: 'Please complete your signature before <strong>%{due}</strong>.'
+  or_copy_and_paste_this_link: "Or copy and paste this link into your browser:"
+  this_link_is_personal_do_not_share: "This link is personal: do not share it, it allows you to sign in your name."
+  signed_copy_attached: "A signed copy of the document is attached to this email."
+  continue: Continue
+  chain_submit_title: Sign the document
+  chain_submit_description: Enter your email address to access your signing area.
+  chain_submit_footer_note: Only the email addresses invited by the sender can access this document.
+  chain_email_not_found: No signer matches this email address. Please check the email you use.
+  chain_awaiting_message: "Thanks! A previous signer must complete before it is your turn. You will be notified by email."
+  chain_link_enabled_label: Share a single signing link for all signers (auto-detect by email)
+  chain_link_enabled_notice: Chain link enabled. Anyone invited can now use the shared link.
+  chain_link_disabled_notice: Chain link disabled.
+  copy_chain_link: Copy chain link
   submitter_invitation_sms_body_sign: '{account.name} has invited you to sign a document: {submitter.link}'
   verification_code_sms_body: 'Verification code: {code}'
   you_are_invited_to_submit_a_form: 'You are invited to submit a form'
@@ -3196,6 +3214,24 @@ fr: &fr
   review_and_sign: Examiner et signer
   review_and_submit: Examiner et soumettre
   please_contact_us_by_replying_to_this_email_if_you_have_any_questions: Veuillez nous contacter en répondant à cet e‑mail si vous avez des questions.
+  hello_name: "Bonjour %{name}"
+  sender_invites_you_to_sign_html: '<strong>%{sender}</strong> vous invite à signer le document <strong>%{name}</strong>.'
+  sender_invites_you_to_submit_html: '<strong>%{sender}</strong> vous invite à compléter le formulaire <strong>%{name}</strong>.'
+  your_role_on_this_document_html: 'Votre rôle sur ce document : <strong>%{role}</strong>.'
+  please_complete_before_html: 'Merci de signer avant le <strong>%{due}</strong>.'
+  or_copy_and_paste_this_link: "Ou copiez ce lien dans votre navigateur :"
+  this_link_is_personal_do_not_share: "Ce lien est personnel : ne le partagez pas, il permet de signer en votre nom."
+  signed_copy_attached: "Un exemplaire signé du document est joint à cet e-mail."
+  continue: Continuer
+  chain_submit_title: Signer le document
+  chain_submit_description: Entrez votre adresse e-mail pour accéder à votre espace de signature.
+  chain_submit_footer_note: Seules les adresses invitées par l'expéditeur peuvent accéder à ce document.
+  chain_email_not_found: Aucun signataire ne correspond à cette adresse. Vérifiez l'e-mail utilisé.
+  chain_awaiting_message: "Merci ! Un précédent signataire doit valider avant que ce soit votre tour. Vous serez prévenu par e-mail."
+  chain_link_enabled_label: Partager un lien unique de signature pour tous les signataires (détection automatique par e-mail)
+  chain_link_enabled_notice: Lien unique activé. Toutes les personnes invitées peuvent désormais utiliser le lien partagé.
+  chain_link_disabled_notice: Lien unique désactivé.
+  copy_chain_link: Copier le lien unique
   submitter_invitation_sms_body_sign: "{account.name} vous a invité à signer un document : {submitter.link}"
   verification_code_sms_body: 'Code de vérification : {code}'
   you_are_invited_to_submit_a_form: Vous êtes invité à soumettre un formulaire
