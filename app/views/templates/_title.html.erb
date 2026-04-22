@@ -67,6 +67,18 @@
     <% if !template.archived_at? && can?(:destroy, template) %>
       <%= button_to button_title(title: t('archive'), disabled_with: t('archiving'), title_class: 'inline', icon: svg_icon('archive', class: 'w-6 h-6')), template_path(template), class: 'btn btn-outline btn-sm w-full', form_class: 'flex-1', method: :delete, data: { turbo_confirm: t('are_you_sure_') } %>
     <% end %>
+    <% if can?(:destroy, template) && (current_user.id == template.author_id || current_user.role == 'admin') %>
+      <%= button_to template_path(template, permanently: true),
+                    method: :delete,
+                    class: 'btn btn-outline btn-sm btn-error w-full',
+                    form_class: 'flex-1',
+                    data: { turbo_confirm: 'Supprimer définitivement ce modèle ? Toutes les soumissions associées seront également détruites. Cette action est irréversible.' } do %>
+        <span class="flex items-center justify-center space-x-2">
+          <%= svg_icon('trash', class: 'w-6 h-6') %>
+          <span>Supprimer</span>
+        </span>
+      <% end %>
+    <% end %>
     <% if can?(:create, current_account.templates.new(author: current_user)) %>
       <%= link_to new_template_clone_path(template), class: 'btn btn-outline btn-sm flex-1', data: { turbo_frame: :modal } do %>
         <span class="flex items-center justify-center space-x-2">
