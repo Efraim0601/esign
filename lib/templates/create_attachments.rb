@@ -167,7 +167,8 @@ module Templates
       stdout_log = Tempfile.new(['soffice-out', '.log'])
       stderr_log = Tempfile.new(['soffice-err', '.log'])
 
-      ok = system('soffice',
+      ok = system({ 'LD_PRELOAD' => nil, 'OPENSSL_CONF' => nil },
+                  'soffice',
                   "-env:UserInstallation=file://#{user_profile}",
                   '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
                   '--convert-to', 'pdf', '--outdir', output_dir, input.path,
