@@ -62,7 +62,7 @@ module Docuseal
   end
 
   def advanced_formats?
-    multitenant?
+    true
   end
 
   def demo?
