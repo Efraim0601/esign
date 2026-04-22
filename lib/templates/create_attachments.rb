@@ -167,7 +167,11 @@ module Templates
       stdout_log = Tempfile.new(['soffice-out', '.log'])
       stderr_log = Tempfile.new(['soffice-err', '.log'])
 
-      ok = system('env', '-u', 'LD_PRELOAD', '-u', 'OPENSSL_CONF',
+      ok = system('env', '-i',
+                  'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                  'HOME=/tmp',
+                  'LANG=C.UTF-8',
+                  'LC_ALL=C.UTF-8',
                   'soffice',
                   "-env:UserInstallation=file://#{user_profile}",
                   '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
