@@ -1,0 +1,76 @@
+<%= render 'shared/turbo_modal', title: 'Importer des utilisateurs' do %>
+  <% if flash[:alert].present? %>
+    <div class="alert alert-error mb-4">
+      <%= svg_icon('x_circle', class: 'w-6 h-6') %>
+      <span><%= flash[:alert] %></span>
+    </div>
+  <% end %>
+
+  <%= form_with url: users_imports_path, method: :post, multipart: true, local: true, data: { turbo: false }, class: 'space-y-4' do |f| %>
+    <div>
+      <label class="label" for="bulk_import_file">
+        <span class="label-text font-semibold">Fichier Excel (.xlsx) ou CSV</span>
+      </label>
+      <input id="bulk_import_file" type="file" name="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required class="file-input file-input-bordered w-full">
+    </div>
+
+    <div class="alert bg-base-200">
+      <div class="text-sm">
+        <p class="font-semibold mb-2">Format attendu — la première ligne doit contenir les en-têtes :</p>
+        <div class="overflow-x-auto">
+          <table class="table table-xs">
+            <thead>
+              <tr>
+                <th>email</th>
+                <th>first_name</th>
+                <th>last_name</th>
+                <th>role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>jean.dupont@afbdei.com</td>
+                <td>Jean</td>
+                <td>Dupont</td>
+                <td>admin</td>
+              </tr>
+              <tr>
+                <td>marie.kouam@afbdei.com</td>
+                <td>Marie</td>
+                <td>Kouam</td>
+                <td>editor</td>
+              </tr>
+              <tr>
+                <td>paul.ngono@afbdei.com</td>
+                <td>Paul</td>
+                <td>Ngono</td>
+                <td>member</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2">
+          <span class="font-semibold">Rôles acceptés :</span>
+          <code>admin</code>, <code>editor</code> / <code>éditeur</code>,
+          <code>member</code> / <code>membre</code>, <code>agent</code>,
+          <code>viewer</code> / <code>observateur</code>.
+        </p>
+        <p class="mt-2 text-xs opacity-75">
+          Les utilisateurs déjà existants (même email) sont ignorés. Un email d'invitation est envoyé à chaque nouveau compte.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <%= link_to 'Annuler', settings_users_path, class: 'btn btn-ghost' %>
+      <button type="submit" class="btn btn-primary">
+        <%= svg_icon('upload', class: 'w-5 h-5') %>
+        <span>Importer</span>
+      </button>
+    </div>
+
+    <p class="text-xs text-center opacity-70">
+      L'import peut prendre jusqu'à 1 minute pour 1 000 lignes. Ne fermez pas la page.
+    </p>
+  <% end %>
+<% end %>
