@@ -133,7 +133,8 @@ module Templates
       pdf_data = convert_office_to_pdf(file)
       pdf_filename = "#{File.basename(file.original_filename.to_s, '.*')}.pdf"
 
-      pdf_tempfile = Tempfile.new(['converted', '.pdf'], binmode: true)
+      pdf_tempfile = Tempfile.new(['converted', '.pdf'])
+      pdf_tempfile.binmode
       pdf_tempfile.write(pdf_data)
       pdf_tempfile.rewind
 
@@ -145,34 +146,49 @@ module Templates
 
       handle_pdf_or_image(template, pdf_uploaded, pdf_data, params, extract_fields:)
     ensure
-      pdf_tempfile&.close
-      pdf_tempfile&.unlink
+      pdf_tempfile&.close!
     end
 
     def convert_office_to_pdf(file)
       ext = File.extname(file.original_filename.to_s).downcase
       ext = '.docx' if ext.empty?
 
-      input = Tempfile.new(['input', ext], binmode: true)
-      input.write(file.tempfile ? file.tempfile.tap(&:rewind).read : file.read)
+      input = Tempfile.new(['input', ext])
+      input.binmode
+
+      source = file.tempfile || file
+      source.rewind if source.respond_to?(:rewind)
+      IO.copy_stream(source, input)
       input.close
 
       output_dir = Dir.mktmpdir('office2pdf')
+      user_profile = Dir.mktmpdir('soffice-profile')
 
-      ok = system('soffice', '--headless', '--norestore', '--nolockcheck',
+      stdout_log = Tempfile.new(['soffice-out', '.log'])
+      stderr_log = Tempfile.new(['soffice-err', '.log'])
+
+      ok = system('soffice',
+                  "-env:UserInstallation=file://#{user_profile}",
+                  '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
                   '--convert-to', 'pdf', '--outdir', output_dir, input.path,
-                  out: File::NULL, err: File::NULL)
+                  out: stdout_log.path, err: stderr_log.path)
 
-      raise InvalidFileType, 'office_conversion_failed' unless ok
+      unless ok
+        stderr = File.read(stderr_log.path).to_s.strip
+        stdout = File.read(stdout_log.path).to_s.strip
+        raise InvalidFileType, "office_conversion_failed: #{stderr.presence || stdout.presence || 'soffice exited with non-zero status'}"
+      end
 
       pdf_path = Dir.glob(File.join(output_dir, '*.pdf')).first
-      raise InvalidFileType, 'office_conversion_failed' if pdf_path.nil?
+      raise InvalidFileType, 'office_conversion_failed: no output pdf' if pdf_path.nil?
 
       File.binread(pdf_path)
     ensure
-      input&.close
-      input&.unlink
+      input&.close!
+      stdout_log&.close!
+      stderr_log&.close!
       FileUtils.rm_rf(output_dir) if output_dir
+      FileUtils.rm_rf(user_profile) if user_profile
     end
   end
 end
