@@ -80,6 +80,8 @@ const en = {
   current_date: 'Current date',
   save: 'Save',
   cancel: 'Cancel',
+  abandon: 'Abandon',
+  confirm_abandon_template: 'Are you sure you want to abandon this template? It will be permanently deleted.',
   any: 'Any',
   drawn: 'Drawn',
   drawn_or_typed: 'Drawn or Typed',
@@ -214,7 +216,9 @@ const en = {
   align_bottom: 'Align Bottom',
   fields_selected: '{count} Fields Selected',
   field_added: '{count} Field Added',
-  fields_added: '{count} Fields Added'
+  fields_added: '{count} Fields Added',
+  abandon: 'Abandon',
+  confirm_abandon_template: 'Abandon this template? It will be permanently deleted.'
 }
 
 const es = {
@@ -956,6 +960,8 @@ const fr = {
   current_date: 'Date du jour',
   save: 'Enregistrer',
   cancel: 'Annuler',
+  abandon: 'Abandonner',
+  confirm_abandon_template: 'Voulez-vous vraiment abandonner ce modèle ? Il sera définitivement supprimé.',
   any: "N'importe lequel",
   drawn: 'Dessiné',
   drawn_or_typed: 'Dessiné ou tapé',
@@ -1090,7 +1096,9 @@ const fr = {
   align_bottom: 'Aligner en bas',
   fields_selected: '{count} Champs Sélectionnés',
   field_added: '{count} Champ Ajouté',
-  fields_added: '{count} Champs Ajoutés'
+  fields_added: '{count} Champs Ajoutés',
+  abandon: 'Abandonner',
+  confirm_abandon_template: 'Abandonner ce modèle ? Il sera supprimé définitivement.'
 }
 
 const de = {

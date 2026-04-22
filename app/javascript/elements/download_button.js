@@ -17,9 +17,24 @@ export default targetable(class extends HTMLElement {
 
     this.toggleState()
 
-    fetch(this.dataset.src).then(async (response) => {
-      if (response.ok) {
+    fetch(this.dataset.src, { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error('Download request failed', response.status, response.statusText, this.dataset.src)
+          alert(`Failed to download files (HTTP ${response.status})`)
+          this.toggleState()
+          return
+        }
+
         const urls = await response.json()
+
+        if (!Array.isArray(urls) || urls.length === 0) {
+          console.error('Download response had no URLs', urls)
+          alert('No files available to download yet.')
+          this.toggleState()
+          return
+        }
+
         const isMobileSafariIos = 'ontouchstart' in window && navigator.maxTouchPoints > 0 && /AppleWebKit/i.test(navigator.userAgent)
         const isSafariIos = isMobileSafariIos || /iPhone|iPad|iPod/i.test(navigator.userAgent)
 
@@ -28,16 +43,20 @@ export default targetable(class extends HTMLElement {
         } else {
           this.downloadUrls(urls)
         }
-      } else {
-        alert('Failed to download files')
-      }
-    })
+      })
+      .catch((error) => {
+        console.error('Download error', error)
+        alert(`Failed to download files: ${error.message}`)
+        this.toggleState()
+      })
   }
 
   downloadUrls (urls) {
     const fileRequests = urls.map((url) => {
       return () => {
-        return fetch(url).then(async (resp) => {
+        return fetch(url, { credentials: 'same-origin' }).then(async (resp) => {
+          if (!resp.ok) throw new Error(`HTTP ${resp.status} on ${url}`)
+
           const blobUrl = URL.createObjectURL(await resp.blob())
           const link = document.createElement('a')
 
@@ -54,14 +73,17 @@ export default targetable(class extends HTMLElement {
     fileRequests.reduce(
       (prevPromise, request) => prevPromise.then(() => request()),
       Promise.resolve()
-    ).finally(() => {
+    ).catch((error) => {
+      console.error('Download error', error)
+      alert(`Failed to download files: ${error.message}`)
+    }).finally(() => {
       this.toggleState()
     })
   }
 
   downloadSafariIos (urls) {
     const fileRequests = urls.map((url) => {
-      return fetch(url).then(async (resp) => {
+      return fetch(url, { credentials: 'same-origin' }).then(async (resp) => {
         const blob = await resp.blob()
         const blobUrl = URL.createObjectURL(blob.slice(0, blob.size, 'application/octet-stream'))
         const link = document.createElement('a')

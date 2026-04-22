@@ -78,9 +78,12 @@ class TemplatesController < ApplicationController
   end
 
   def destroy
+    template_removed = false
+
     notice =
       if params[:permanently].in?(['true', true])
         @template.destroy!
+        template_removed = true
 
         I18n.t('template_has_been_removed')
       else
@@ -91,7 +94,11 @@ class TemplatesController < ApplicationController
         I18n.t('template_has_been_archived')
       end
 
-    redirect_back(fallback_location: root_path, notice:)
+    if template_removed
+      redirect_to root_path, notice:
+    else
+      redirect_back(fallback_location: root_path, notice:)
+    end
   end
 
   private
