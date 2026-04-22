@@ -7,6 +7,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      gotenberg:
+        condition: service_started
     build: .
     image: esign/app:local
     ports:
@@ -21,9 +23,17 @@ services:
       - APP_URL=${APP_URL}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
       - REDIS_URL=redis://redis:6379/0
+      - GOTENBERG_URL=http://gotenberg:3000
       # Default admin (self-hosted): created on first boot if absent. Change after deploy.
       - DEFAULT_ADMIN_EMAIL=${DEFAULT_ADMIN_EMAIL:-admin@afb.com}
       - DEFAULT_ADMIN_PASSWORD=${DEFAULT_ADMIN_PASSWORD:-admin}
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    command:
+      - "gotenberg"
+      - "--api-port=3000"
+      - "--libreoffice-restart-after=10"
 
   redis:
     image: redis:7-alpine

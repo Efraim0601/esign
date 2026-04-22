@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'net/http'
+require 'uri'
+require 'securerandom'
+
 module Templates
   module CreateAttachments
     PDF_CONTENT_TYPE = 'application/pdf'
@@ -150,58 +154,39 @@ module Templates
     end
 
     def convert_office_to_pdf(file)
-      ext = File.extname(file.original_filename.to_s).downcase
-      ext = '.docx' if ext.empty?
-
-      input = Tempfile.new(['input', ext])
-      input.binmode
+      gotenberg_url = ENV.fetch('GOTENBERG_URL', 'http://gotenberg:3000')
+      uri = URI.join(gotenberg_url, '/forms/libreoffice/convert')
 
       source = file.tempfile || file
       source.rewind if source.respond_to?(:rewind)
-      IO.copy_stream(source, input)
-      input.close
+      filename = file.original_filename.to_s.presence || 'document.docx'
 
-      output_dir = Dir.mktmpdir('office2pdf')
-      user_profile = Dir.mktmpdir('soffice-profile')
+      boundary = "----esign-boundary-#{SecureRandom.hex(16)}"
+      body = +''
+      body << "--#{boundary}\r\n"
+      body << %(Content-Disposition: form-data; name="files"; filename="#{filename}"\r\n)
+      body << "Content-Type: application/octet-stream\r\n\r\n"
+      body << source.read.to_s
+      body << "\r\n--#{boundary}--\r\n"
 
-      stdout_log = Tempfile.new(['soffice-out', '.log'])
-      stderr_log = Tempfile.new(['soffice-err', '.log'])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.read_timeout = 180
+      http.open_timeout = 10
 
-      clean_env = {
-        'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'HOME' => '/tmp',
-        'LANG' => 'C.UTF-8',
-        'LC_ALL' => 'C.UTF-8',
-        'LD_LIBRARY_PATH' => '/usr/lib/libreoffice/program'
-      }
+      req = Net::HTTP::Post.new(uri.request_uri)
+      req['Content-Type'] = "multipart/form-data; boundary=#{boundary}"
+      req.body = body
 
-      pid = Process.spawn(clean_env,
-                          '/usr/bin/soffice',
-                          "-env:UserInstallation=file://#{user_profile}",
-                          '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
-                          '--convert-to', 'pdf', '--outdir', output_dir, input.path,
-                          unsetenv_others: true,
-                          out: stdout_log.path, err: stderr_log.path,
-                          close_others: true)
-      _, status = Process.waitpid2(pid)
-      ok = status.success?
+      resp = http.request(req)
 
-      unless ok
-        stderr = File.read(stderr_log.path).to_s.strip
-        stdout = File.read(stdout_log.path).to_s.strip
-        raise InvalidFileType, "office_conversion_failed: #{stderr.presence || stdout.presence || 'soffice exited with non-zero status'}"
+      unless resp.is_a?(Net::HTTPSuccess)
+        detail = resp.body.to_s[0, 500]
+        raise InvalidFileType, "office_conversion_failed: HTTP #{resp.code} #{detail}"
       end
 
-      pdf_path = Dir.glob(File.join(output_dir, '*.pdf')).first
-      raise InvalidFileType, 'office_conversion_failed: no output pdf' if pdf_path.nil?
-
-      File.binread(pdf_path)
-    ensure
-      input&.close!
-      stdout_log&.close!
-      stderr_log&.close!
-      FileUtils.rm_rf(output_dir) if output_dir
-      FileUtils.rm_rf(user_profile) if user_profile
+      resp.body
+    rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Net::OpenTimeout, Net::ReadTimeout => e
+      raise InvalidFileType, "office_conversion_unreachable: #{e.class} #{e.message}"
     end
   end
 end
