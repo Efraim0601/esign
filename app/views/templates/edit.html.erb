@@ -8,14 +8,12 @@
 <% end %>
 <div class="flex items-center justify-between mb-4 gap-2 flex-wrap">
   <% if current_user.role.in?(%w[admin editor member]) %>
-    <div class="form-control">
-      <%= form_for @template, url: template_path(@template), method: :patch, html: { class: 'inline' } do |f| %>
-        <label class="label cursor-pointer">
-          <span class="label-text mr-2"><%= t('private') %></span>
-          <%= f.check_box :private, class: 'toggle toggle-primary' %>
-        </label>
-      <% end %>
-    </div>
+    <%= form_for @template, url: template_path(@template), method: :patch, html: { class: 'inline-flex' } do |f| %>
+      <label class="inline-flex items-center gap-2 cursor-pointer">
+        <span class="label-text"><%= t('private') %></span>
+        <%= f.check_box :private, class: 'toggle toggle-primary' %>
+      </label>
+    <% end %>
   <% end %>
   <% if can?(:destroy, @template) && @template.submissions.none? %>
     <%= button_to template_path(@template, permanently: true),
