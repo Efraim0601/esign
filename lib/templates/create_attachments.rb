@@ -162,12 +162,12 @@ module Templates
       filename = file.original_filename.to_s.presence || 'document.docx'
 
       boundary = "----esign-boundary-#{SecureRandom.hex(16)}"
-      body = +''
-      body << "--#{boundary}\r\n"
-      body << %(Content-Disposition: form-data; name="files"; filename="#{filename}"\r\n)
-      body << "Content-Type: application/octet-stream\r\n\r\n"
-      body << source.read.to_s
-      body << "\r\n--#{boundary}--\r\n"
+      body = String.new(encoding: Encoding::ASCII_8BIT)
+      body << "--#{boundary}\r\n".b
+      body << %(Content-Disposition: form-data; name="files"; filename="#{filename}"\r\n).b
+      body << "Content-Type: application/octet-stream\r\n\r\n".b
+      body << source.read.to_s.b
+      body << "\r\n--#{boundary}--\r\n".b
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = 180
