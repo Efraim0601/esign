@@ -167,16 +167,24 @@ module Templates
       stdout_log = Tempfile.new(['soffice-out', '.log'])
       stderr_log = Tempfile.new(['soffice-err', '.log'])
 
-      ok = system('env', '-i',
-                  'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-                  'HOME=/tmp',
-                  'LANG=C.UTF-8',
-                  'LC_ALL=C.UTF-8',
-                  'soffice',
-                  "-env:UserInstallation=file://#{user_profile}",
-                  '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
-                  '--convert-to', 'pdf', '--outdir', output_dir, input.path,
-                  out: stdout_log.path, err: stderr_log.path)
+      clean_env = {
+        'PATH' => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        'HOME' => '/tmp',
+        'LANG' => 'C.UTF-8',
+        'LC_ALL' => 'C.UTF-8',
+        'LD_LIBRARY_PATH' => '/usr/lib/libreoffice/program'
+      }
+
+      pid = Process.spawn(clean_env,
+                          '/usr/bin/soffice',
+                          "-env:UserInstallation=file://#{user_profile}",
+                          '--headless', '--norestore', '--nolockcheck', '--nodefault', '--nofirststartwizard',
+                          '--convert-to', 'pdf', '--outdir', output_dir, input.path,
+                          unsetenv_others: true,
+                          out: stdout_log.path, err: stderr_log.path,
+                          close_others: true)
+      _, status = Process.waitpid2(pid)
+      ok = status.success?
 
       unless ok
         stderr = File.read(stderr_log.path).to_s.strip
