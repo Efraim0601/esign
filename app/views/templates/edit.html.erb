@@ -6,25 +6,32 @@
     <%= button_to nil, user_configs_path, method: :post, params: { user_config: { key: UserConfig::SHOW_APP_TOUR, value: true } }, class: 'hidden', id: 'start_tour_button' %>
   <% end %>
 <% end %>
-<div class="flex items-center justify-between mb-4 gap-2 flex-wrap">
-  <% if current_user.role.in?(%w[admin editor member]) %>
-    <%= form_for @template, url: template_path(@template), method: :patch, html: { class: 'inline-flex' } do |f| %>
-      <label class="inline-flex items-center gap-2 cursor-pointer">
-        <span class="label-text"><%= t('private') %></span>
-        <%= f.check_box :private, class: 'toggle toggle-primary' %>
-      </label>
-    <% end %>
-  <% end %>
-  <% if can?(:destroy, @template) && @template.submissions.none? %>
-    <%= button_to template_path(@template, permanently: true),
-                  method: :delete,
-                  class: 'btn btn-outline btn-sm btn-error ml-auto',
-                  data: { turbo_confirm: 'Abandonner la création de ce modèle ? Cette action est irréversible.' } do %>
-      <span class="flex items-center space-x-2">
-        <%= svg_icon('x', class: 'w-5 h-5') %>
-        <span>Abandonner</span>
-      </span>
-    <% end %>
-  <% end %>
-</div>
+<% if current_user.role.in?(%w[admin editor member]) %>
+  <teleport-into data-target="#fields_list_container" data-position="prepend">
+    <div class="mb-3">
+      <%= form_for @template, url: template_path(@template), method: :patch, html: { class: 'block' } do |f| %>
+        <label class="flex items-center justify-between gap-2 cursor-pointer rounded-md border border-base-300 px-3 py-2 hover:border-base-content/30">
+          <span class="label-text font-medium"><%= t('private') %></span>
+          <%= f.check_box :private, class: 'toggle toggle-primary toggle-sm' %>
+        </label>
+      <% end %>
+    </div>
+  </teleport-into>
+<% end %>
+<% if can?(:destroy, @template) && @template.submissions.none? %>
+  <teleport-into data-target="#fields_list_container" data-position="append">
+    <div class="mt-4 pt-3 border-t border-base-300">
+      <%= button_to template_path(@template, permanently: true),
+                    method: :delete,
+                    class: 'btn btn-outline btn-sm btn-error w-full',
+                    form: { class: 'w-full' },
+                    data: { turbo_confirm: 'Abandonner la création de ce modèle ? Cette action est irréversible.' } do %>
+        <span class="flex items-center justify-center space-x-2">
+          <%= svg_icon('x', class: 'w-5 h-5') %>
+          <span>Abandonner</span>
+        </span>
+      <% end %>
+    </div>
+  </teleport-into>
+<% end %>
 <template-builder class="grid" data-template="<%= @template_data %>" data-custom-fields="<%= (current_account.account_configs.find_or_initialize_by(key: AccountConfig::TEMPLATE_CUSTOM_FIELDS_KEY).value || []).to_json %>" data-with-sign-yourself-button="<%= !@template.archived_at? %>" data-with-fields-detection="true" data-with-send-button="<%= !@template.archived_at? && can?(:create, @template.submissions.new(account: current_account)) %>" data-locale="<%= I18n.locale %>" data-show-tour-start-form="<%= @show_tour_start_form %>"></template-builder>

@@ -55,6 +55,7 @@ import OpenModal from './elements/open_modal'
 import BarChart from './elements/bar_chart'
 import FieldCondition from './elements/field_condition'
 import HistoryBack from './elements/history_back'
+import TeleportInto from './elements/teleport_into'
 
 import * as TurboInstantClick from './lib/turbo_instant_click'
 
@@ -148,6 +149,7 @@ safeRegisterElement('open-modal', OpenModal)
 safeRegisterElement('bar-chart', BarChart)
 safeRegisterElement('field-condition', FieldCondition)
 safeRegisterElement('history-back', HistoryBack)
+safeRegisterElement('teleport-into', TeleportInto)
 
 safeRegisterElement('template-builder', class extends HTMLElement {
   connectedCallback () {
