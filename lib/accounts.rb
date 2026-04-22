@@ -158,7 +158,15 @@ module Accounts
         EncryptedConfig.find_by(key: EncryptedConfig::ESIGN_CERTS_KEY)&.value || {}
       end
 
-    default_pkcs = GenerateCertificate.load_pkcs(cert_data)
+    default_pkcs =
+      if cert_data['cert'].present?
+        begin
+          GenerateCertificate.load_pkcs(cert_data)
+        rescue StandardError => e
+          Rails.logger.warn("[load_trusted_certs] default cert unusable: #{e.class} #{e.message}")
+          nil
+        end
+      end
 
     custom_certs = cert_data.fetch('custom', []).filter_map do |e|
       next if e['data'].blank?
@@ -166,11 +174,15 @@ module Accounts
       OpenSSL::PKCS12.new(Base64.urlsafe_decode64(e['data']), e['password'].to_s)
     end
 
-    [default_pkcs.certificate,
-     *default_pkcs.ca_certs,
-     *custom_certs.map(&:certificate),
-     *custom_certs.flat_map(&:ca_certs).compact,
-     *Docuseal.trusted_certs]
+    trusted = []
+    if default_pkcs
+      trusted << default_pkcs.certificate
+      trusted.concat(Array(default_pkcs.ca_certs))
+    end
+    trusted.concat(custom_certs.map(&:certificate))
+    trusted.concat(custom_certs.flat_map(&:ca_certs).compact)
+    trusted.concat(Array(Docuseal.trusted_certs))
+    trusted
   end
 
   def can_send_emails?(_account, **_params)
