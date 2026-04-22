@@ -10,9 +10,6 @@
       <%= link_to t('templates'), templates_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(templates_path)}" %>
       <%= link_to t('submissions'), submissions_path, class: "btn btn-ghost btn-sm #{'btn-active' if current_page?(submissions_path)}" %>
     </div>
-    <span class="hidden sm:inline">
-      <%= render 'shared/github' if request.path.starts_with?('/settings') %>
-    </span>
   </div>
   <% if signed_in? %>
     <div class="space-x-4 flex items-center">
@@ -20,9 +17,6 @@
         <a href="https://docuseal.com/sign_up" class="btn btn-neutral btn-sm btn-outline inline-flex items-center justify-center" style="height: 37px">
           <%= t('sign_up') %>
         </a>
-        <span class="hidden sm:inline">
-          <%= render 'shared/github_button' %>
-        </span>
       <% else %>
         <div class="flex items-center justify-center space-x-4 mr-1">
           <%= render 'shared/navbar_buttons' %>
