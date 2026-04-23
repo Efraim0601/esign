@@ -27,7 +27,9 @@ class Ability
     # AFB RBAC restriction layer
     case user.role
     when 'viewer'
-      # Template: read only
+      # Template: read only (no update, no destroy)
+      cannot :update, Template
+      cannot :destroy, Template
       # Submission: read only
       can :read, Submission, account_id: user.account_id
       # Submitter: read only
@@ -48,7 +50,9 @@ class Ability
       cannot :manage, Account, id: user.account_id
 
     when 'agent'
-      # Template: read only
+      # Template: read only (no update, no destroy)
+      cannot :update, Template
+      cannot :destroy, Template
       # Submission: read own, create, update own, etc.
       can :read, Submission, account_id: user.account_id, created_by_user_id: user.id
       can :create, Submission, account_id: user.account_id
@@ -70,8 +74,9 @@ class Ability
       cannot :manage, Account, id: user.account_id
 
     when 'member'
-      # Template: read, create only (cannot update any templates)
+      # Template: read, create only. Cannot update any. Destroy only own.
       cannot :update, Template
+      cannot :destroy, Template
       can :destroy, Template, account_id: user.account_id, author_id: user.id
       can :manage, TemplateFolder, account_id: user.account_id
       can :manage, TemplateSharing, template: { account_id: user.account_id }
