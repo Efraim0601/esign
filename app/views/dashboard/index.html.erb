@@ -1,0 +1,69 @@
+<% user_config = current_user.user_configs.find_or_initialize_by(key: UserConfig::SHOW_APP_TOUR) %>
+<% show_tour_card = current_user == true_user && (user_config.new_record? || user_config.value) %>
+<div class="text-center mb-8">
+  <h1 class="text-3xl md:text-4xl font-bold"><%= t('welcome_to_firstsign') %></h1>
+  <p class="text-base-content/70 mt-2"><%= t('firstsign_subtitle') %></p>
+</div>
+<%= form_for '', url: templates_upload_path, id: form_id = SecureRandom.uuid, method: :post, class: 'block', html: { enctype: 'multipart/form-data' } do %>
+  <input type="hidden" name="form_id" value="<%= form_id %>">
+  <button type="submit" class="hidden"></button>
+  <file-dropzone data-submit-on-upload="true" class="w-full">
+    <label for="file_dropzone_input" class="w-full block h-64 relative hover:bg-base-200/30 rounded-2xl border-2 border-base-300 border-dashed" data-target="file-dropzone.area">
+      <div class="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center p-2 pointer-events-none">
+        <div class="flex flex-col items-center text-center">
+          <span data-target="file-dropzone.icon" class="flex flex-col items-center">
+            <span>
+              <%= svg_icon('cloud_upload', class: 'w-14 h-14') %>
+            </span>
+            <div class="font-medium text-lg mb-1 mt-2">
+              <%= t('upload_a_new_document') %>
+            </div>
+            <div class="text-sm text-base-content/70">
+              <%= t('click_to_upload_or_drag_and_drop_html') %>
+            </div>
+          </span>
+          <span data-target="file-dropzone.loading" class="flex flex-col items-center hidden">
+            <%= svg_icon('loader', class: 'w-14 h-14 animate-spin') %>
+            <div class="font-medium text-lg mb-1 mt-2">
+              <%= t('uploading') %>...
+            </div>
+          </span>
+        </div>
+        <input id="file_dropzone_input" name="files[]" class="hidden" data-action="change:file-dropzone#onSelectFiles" data-target="file-dropzone.input" type="file" accept="image/*, application/pdf, application/zip, application/json<%= ", #{Templates::CreateAttachments::DOCUMENT_EXTENSIONS.join(', ')}" if Docuseal.advanced_formats? %>" multiple>
+      </div>
+    </label>
+  </file-dropzone>
+<% end %>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+  <% if show_tour_card %>
+    <%= link_to templates_path(tour: 'true'), class: 'bg-base-200 hover:bg-base-300 rounded-2xl p-4 md:p-5 flex items-center gap-4 border border-base-300' do %>
+      <span class="w-12 h-12 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
+        <%= svg_icon('player_play', class: 'w-6 h-6') %>
+      </span>
+      <span class="flex flex-col">
+        <span class="font-medium"><%= t('start_tour') %></span>
+        <span class="text-sm text-base-content/70"><%= t('start_a_quick_tour_to_learn_how_to_create_an_send_your_first_document') %></span>
+      </span>
+    <% end %>
+  <% end %>
+  <%= link_to templates_path, class: "bg-base-200 hover:bg-base-300 rounded-2xl p-4 md:p-5 flex items-center gap-4 border border-base-300 #{'md:col-span-2' unless show_tour_card}" do %>
+    <span class="w-12 h-12 rounded-full bg-base-300 flex items-center justify-center shrink-0">
+      <%= svg_icon('file_text', class: 'w-6 h-6') %>
+    </span>
+    <span class="flex flex-col">
+      <span class="font-medium"><%= t('browse_templates') %></span>
+      <span class="text-sm text-base-content/70"><%= t('browse_templates_description') %></span>
+    </span>
+  <% end %>
+</div>
+<% if @recent_submissions.present? %>
+  <div class="mt-8">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold"><%= t('recent_activity') %></h2>
+      <%= link_to t('view_all'), submissions_path, class: 'link text-sm' %>
+    </div>
+    <div class="space-y-3">
+      <%= render partial: 'templates/submission', collection: @recent_submissions, locals: { with_template: true } %>
+    </div>
+  </div>
+<% end %>

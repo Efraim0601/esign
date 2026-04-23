@@ -10,11 +10,13 @@ class DashboardController < ApplicationController
   skip_authorization_check
 
   def index
-    if cookies.permanent[:dashboard_view] == 'submissions'
-      SubmissionsDashboardController.dispatch(:index, request, response)
-    else
-      TemplatesDashboardController.dispatch(:index, request, response)
-    end
+    @recent_submissions =
+      Submission.accessible_by(current_ability)
+                .where(archived_at: nil)
+                .order(id: :desc)
+                .limit(3)
+                .preload(:template_accesses, :created_by_user,
+                         template: :author, submitters: :start_form_submission_events)
   end
 
   private

@@ -8,7 +8,7 @@ class TemplatesDashboardController < ApplicationController
   TEMPLATES_PER_PAGE = 12
   FOLDERS_PER_PAGE = 18
 
-  helper_method :selected_order
+  helper_method :selected_order, :selected_view_mode
 
   def index
     @template_folders =
@@ -29,6 +29,16 @@ class TemplatesDashboardController < ApplicationController
       @template_folders = @template_folders.reject { |e| e.name == TemplateFolder::DEFAULT_NAME }
       @templates = filter_templates(@templates).preload(:author, :template_accesses)
       @templates = Templates::Order.call(@templates, current_user, selected_order)
+
+      if selected_view_mode == 'list'
+        # Scalar subquery to expose submissions_count without a per-row N+1.
+        # Only applied in list mode so grid mode stays unchanged.
+        @templates = @templates.select(
+          'templates.*, (SELECT COUNT(*) FROM submissions ' \
+          'WHERE submissions.template_id = templates.id ' \
+          'AND submissions.archived_at IS NULL) AS submissions_count'
+        )
+      end
 
       limit =
         if @template_folders.size < 4
@@ -77,6 +87,10 @@ class TemplatesDashboardController < ApplicationController
       else
         cookies.permanent[:dashboard_templates_order]
       end
+  end
+
+  def selected_view_mode
+    @selected_view_mode ||= cookies.permanent[:templates_view_mode] == 'list' ? 'list' : 'grid'
   end
 
   def load_related_submissions
