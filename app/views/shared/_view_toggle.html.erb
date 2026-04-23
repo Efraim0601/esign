@@ -1,4 +1,4 @@
-<form action="<%= local_assigns[:url] %>" method="get" class="bg-base-200 px-1.5 rounded-xl py-1 whitespace-nowrap inline-flex">
+<form action="<%= local_assigns[:url] %>" method="get"<%= " id=\"#{local_assigns[:id]}\"".html_safe if local_assigns[:id] %> class="bg-base-200 px-1.5 rounded-xl py-1 whitespace-nowrap inline-flex">
   <% request.query_parameters.except(:controller, :action).each do |key, value| %>
     <input type="hidden" name="<%= key %>" value="<%= value %>">
   <% end %>

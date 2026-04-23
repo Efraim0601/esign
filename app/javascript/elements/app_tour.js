@@ -115,12 +115,12 @@ export default class extends HTMLElement {
   }
 
   showDashboardTour () {
-    this.driverObj.setSteps([
+    const steps = [
       {
-        element: '#templates_submissions_toggle',
+        element: '#templates_view_toggle',
         popover: {
-          title: this.I18n.template_and_submissions,
-          description: this.I18n.template_and_submissions_description,
+          title: this.I18n.grid_list_view,
+          description: this.I18n.grid_list_view_description,
           side: 'right',
           align: 'start'
         }
@@ -141,8 +141,11 @@ export default class extends HTMLElement {
         },
         onHighlightStarted: () => {}
       }
-    ])
+    ].filter((step) => document.querySelector(step.element))
 
+    if (steps.length === 0) return
+
+    this.driverObj.setSteps(steps)
     this.driverObj.drive()
   }
 

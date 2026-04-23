@@ -1010,42 +1010,42 @@ en: &en
     start: Start
     previous: Previous
     next: Next
-    template_and_submissions: 'Templates and Submissions'
-    template_and_submissions_description: "You can select the view that best suits your workflow. Choose the 'Templates' view to create reusable document templates, or the 'Submissions' view to sign individual documents or review the status of each signature request."
-    upload_a_pdf_file: 'Upload a PDF file'
-    upload_a_pdf_file_description: 'Upload a PDF document to create a signing form template.'
+    grid_list_view: 'Grid or list view'
+    grid_list_view_description: 'Switch between a card grid and a compact table view of your templates. Your choice is remembered between visits.'
+    upload_a_pdf_file: 'Upload a document'
+    upload_a_pdf_file_description: 'Drop a PDF or DOCX file here. FirstSign converts it into a signable template, detects form fields automatically, and opens the editor so you can place signature and data fields where they belong.'
     select_a_signer_party: 'Select a signer party'
-    select_a_signer_party_description: 'This dropdown allows you to select a signing party role or add a new party to the document if it requires 2 or more signatures.'
+    select_a_signer_party_description: 'Pick the party (signer, approver, witness…) this field is assigned to. Add a new party if the document needs several people to sign.'
     available_parties: 'Available parties'
-    available_parties_description: 'This list contains all available parties with their role names. Once selected, you can add and configure fields for the signer party.'
+    available_parties_description: 'All parties defined on the document appear here. Select one to add fields that will be filled or signed by that party.'
     available_field_types: 'Available field types'
-    available_field_types_description: 'This section contains all available field types that can be added to the document for data input or signature collection.'
+    available_field_types_description: 'Drag any of these fields onto the document: text inputs, signatures, dates, checkboxes, dropdowns, initials, attachments and more.'
     text_input_field: 'Text input field'
-    text_input_field_description: 'This field allows users to enter text-based information, such as names or emails.'
+    text_input_field_description: 'The signer types free text into this field — name, account number, reference, note, etc.'
     signature_field: 'Signature field'
-    signature_field_description: 'This field is used to collect signatures from the signers.'
+    signature_field_description: 'Where the signer will draw, type, or upload their signature. Required by default.'
     added_fields: 'Added fields'
-    added_fields_description: 'This list displays all fields added to the document. You can reorder, edit, or remove them.'
+    added_fields_description: 'All fields placed on the document appear in this list. Reorder by drag, click to jump to a field, or delete from here.'
     open_field_settings: 'Open field settings'
-    open_field_settings_description: 'On the right, next to the field name, there is a settings icon that opens the field settings.'
+    open_field_settings_description: 'The gear icon next to the field name opens the detailed settings for that field.'
     field_settings: 'Field settings'
-    field_settings_description: 'Each field can be customized through settings to meet your requirements, such as adjusting the font size, making it a required field, or adding a description.'
+    field_settings_description: 'Fine-tune each field: make it required, set a default value, restrict the input format, add a description shown to the signer, etc.'
     send_document: 'Send document for signing'
-    send_document_description: 'Before sending the document for signing, you can configure recipients, add their email addresses or phone numbers, and customize the email content.'
+    send_document_description: 'Before sending, enter the signers (email or phone), set a signing order if several people must sign, and customize the invitation email they receive.'
     sign_yourself: 'Sign the document yourself'
-    sign_yourself_description: 'This button allows you to add your signature to the documents that require your signature.'
+    sign_yourself_description: 'Opens the signing form directly — useful when you are one of the signers and want to sign without leaving FirstSign.'
     copy_and_share_link: 'Copy & share link'
-    copy_and_share_link_description: 'Copy this link to share the document. Anyone with the link can sign it after entering their email.'
+    copy_and_share_link_description: 'Copy this link and send it by email or chat. Anyone who opens the link can sign after identifying themselves.'
     sign_the_document: 'Sign the document'
-    sign_the_document_description: 'If you are one of the signers, this button allows you to sign the document.'
+    sign_the_document_description: 'If you are one of the signers, this button opens the signing form for this document.'
     send_for_signing: 'Send for signing'
     add_recipients: 'Add recipients'
-    add_recipients_description: 'Add new recipients for the document to be signed by entering their email addresses or phone numbers.'
+    add_recipients_description: 'Enter the email addresses or phone numbers of the people who need to sign. You can require them to sign in a specific order.'
     settings: 'Settings'
-    settings_account_description: 'With comprehensive account settings, you can customize the FirstSign experience and invite more users.'
+    settings_account_description: 'Manage your profile, change your password, invite teammates and configure your FirstSign account.'
     support: 'Support'
-    support_description: 'You can use our self-service AI assistant or email us at support@docuseal.com if you have any questions.'
-    settings_template_description: 'Use this button to access your account settings page.'
+    support_description: 'Contact your FirstSign administrator at Afriland First Bank if you need help or run into an issue.'
+    settings_template_description: 'Opens your account settings — profile, users, integrations and workspace preferences.'
   doorkeeper:
     scopes:
       write: Update your data
@@ -2043,8 +2043,8 @@ es: &es
     start: Comenzar
     previous: Anterior
     next: Siguiente
-    template_and_submissions: 'Plantillas y Envíos'
-    template_and_submissions_description: "Puedes seleccionar la vista que mejor se adapte a tu flujo de trabajo. Elige la vista 'Plantillas' para crear plantillas reutilizables de documentos, o la vista 'Envíos' para firmar documentos individuales o revisar el estado de cada solicitud de firma."
+    grid_list_view: 'Plantillas y Envíos'
+    grid_list_view_description: "Puedes seleccionar la vista que mejor se adapte a tu flujo de trabajo. Elige la vista 'Plantillas' para crear plantillas reutilizables de documentos, o la vista 'Envíos' para firmar documentos individuales o revisar el estado de cada solicitud de firma."
     upload_a_pdf_file: 'Subir un archivo PDF'
     upload_a_pdf_file_description: 'Sube un documento PDF para crear una plantilla de formulario de firma.'
     select_a_signer_party: 'Seleccionar parte firmante'
@@ -3071,8 +3071,8 @@ it: &it
     start: Inizia
     previous: Precedente
     next: Successivo
-    template_and_submissions: 'Modelli e Invii'
-    template_and_submissions_description: "Puoi selezionare la visualizzazione più adatta al tuo flusso di lavoro. Scegli la visualizzazione 'Modelli' per creare modelli di documenti riutilizzabili o 'Invii' per firmare documenti singoli o controllare lo stato di ciascuna richiesta di firma."
+    grid_list_view: 'Modelli e Invii'
+    grid_list_view_description: "Puoi selezionare la visualizzazione più adatta al tuo flusso di lavoro. Scegli la visualizzazione 'Modelli' per creare modelli di documenti riutilizzabili o 'Invii' per firmare documenti singoli o controllare lo stato di ciascuna richiesta di firma."
     upload_a_pdf_file: 'Carica un file PDF'
     upload_a_pdf_file_description: 'Carica un documento PDF per creare un modello di modulo di firma.'
     select_a_signer_party: 'Seleziona una parte firmataria'
@@ -4142,42 +4142,42 @@ fr: &fr
     start: Démarrer
     previous: Précédent
     next: Suivant
-    template_and_submissions: Modèles et Soumissions
-    template_and_submissions_description: Choisissez la vue qui convient à votre flux de travail. La vue « Modèles » permet de créer des modèles réutilisables, la vue « Soumissions » de signer des documents individuels ou de suivre chaque demande de signature.
-    upload_a_pdf_file: Téléverser un fichier PDF
-    upload_a_pdf_file_description: Téléversez un document PDF pour créer un modèle de signature.
+    grid_list_view: Vue grille ou liste
+    grid_list_view_description: Basculez entre l’affichage en cartes (grille) et un tableau compact (liste) pour parcourir vos modèles. Votre préférence est mémorisée pour les prochaines visites.
+    upload_a_pdf_file: Téléverser un document
+    upload_a_pdf_file_description: Déposez un fichier PDF ou DOCX ici. FirstSign le convertit en modèle signable, détecte automatiquement les champs du document et ouvre l’éditeur pour que vous puissiez placer les signatures et les autres champs aux bons endroits.
     select_a_signer_party: Sélectionner une partie signataire
-    select_a_signer_party_description: Ce menu permet de choisir un rôle signataire ou d’ajouter une nouvelle partie si le document requiert 2 signatures ou plus.
+    select_a_signer_party_description: Choisissez la partie (signataire, approbateur, témoin…) à qui ce champ est attribué. Ajoutez une nouvelle partie si le document nécessite plusieurs intervenants.
     available_parties: Parties disponibles
-    available_parties_description: Cette liste contient toutes les parties disponibles avec leurs rôles. Une fois sélectionnée, vous pourrez ajouter et configurer les champs pour cette partie.
+    available_parties_description: Toutes les parties définies sur le document apparaissent ici. Sélectionnez-en une pour ajouter les champs qu’elle devra remplir ou signer.
     available_field_types: Types de champs disponibles
-    available_field_types_description: Cette section contient tous les types de champs qui peuvent être ajoutés au document pour la saisie de données ou la collecte de signatures.
+    available_field_types_description: "Glissez l’un de ces champs sur le document : texte, signature, date, case à cocher, liste déroulante, paraphe, pièce jointe, et plus encore."
     text_input_field: Champ de saisie texte
-    text_input_field_description: Permet d’entrer des informations textuelles, comme des noms ou des e‑mails.
+    text_input_field_description: Le signataire y saisit du texte libre — nom, numéro de compte, référence, observation, etc.
     signature_field: Champ de signature
-    signature_field_description: Utilisé pour collecter les signatures des signataires.
+    signature_field_description: Emplacement où le signataire dessinera, tapera ou téléversera sa signature. Obligatoire par défaut.
     added_fields: Champs ajoutés
-    added_fields_description: Liste des champs ajoutés au document. Vous pouvez les réorganiser, les modifier ou les supprimer.
+    added_fields_description: Tous les champs placés sur le document apparaissent dans cette liste. Glissez pour les réordonner, cliquez pour vous positionner dessus, ou supprimez-les d’ici.
     open_field_settings: Ouvrir les paramètres du champ
-    open_field_settings_description: Un icône de paramètres à droite du nom du champ permet d’ouvrir ses paramètres.
+    open_field_settings_description: L’icône d’engrenage à droite du nom du champ ouvre ses paramètres détaillés.
     field_settings: Paramètres du champ
-    field_settings_description: Chaque champ peut être personnalisé (taille de police, caractère obligatoire, description, etc.).
+    field_settings_description: "Personnalisez chaque champ : rendu obligatoire, valeur par défaut, format de saisie, description affichée au signataire, etc."
     send_document: Envoyer le document pour signature
-    send_document_description: Avant l’envoi, vous pouvez configurer les destinataires, saisir leurs e‑mails ou numéros de téléphone et personnaliser le contenu de l’e‑mail.
+    send_document_description: Avant l’envoi, renseignez les signataires (e-mail ou téléphone), définissez un ordre de signature si plusieurs personnes doivent signer, et personnalisez l’e-mail d’invitation qui leur sera adressé.
     sign_yourself: Signer le document soi‑même
-    sign_yourself_description: Ce bouton permet d’ajouter votre signature aux documents qui la requièrent.
+    sign_yourself_description: Ouvre directement le formulaire de signature — pratique quand vous êtes l’un des signataires et voulez signer sans quitter FirstSign.
     copy_and_share_link: Copier et partager le lien
-    copy_and_share_link_description: Copiez ce lien pour partager le document. Toute personne ayant le lien peut le signer après avoir saisi son e‑mail.
+    copy_and_share_link_description: Copiez ce lien et transmettez-le par e-mail ou messagerie. Toute personne qui l’ouvre peut signer après s’être identifiée.
     sign_the_document: Signer le document
-    sign_the_document_description: Si vous êtes l’un des signataires, ce bouton vous permet de signer le document.
+    sign_the_document_description: Si vous êtes l’un des signataires du document, ce bouton ouvre le formulaire de signature.
     send_for_signing: Envoyer pour signature
     add_recipients: Ajouter des destinataires
-    add_recipients_description: Ajoutez de nouveaux destinataires en entrant leurs adresses e‑mail ou numéros de téléphone.
+    add_recipients_description: Saisissez les adresses e-mail ou numéros de téléphone des personnes qui doivent signer. Vous pouvez exiger qu’elles signent dans un ordre précis.
     settings: Paramètres
-    settings_account_description: Des paramètres de compte complets pour personnaliser l’expérience de signature et inviter d’autres utilisateurs.
+    settings_account_description: Gérez votre profil, changez votre mot de passe, invitez de nouveaux utilisateurs et configurez votre compte FirstSign.
     support: Support
-    support_description: Utilisez notre assistant IA en libre‑service ou contactez‑nous à support@docuseal.com pour toute question.
-    settings_template_description: Utilisez ce bouton pour accéder à la page des paramètres de votre compte.
+    support_description: Contactez l’administrateur FirstSign d’Afriland First Bank si vous avez besoin d’aide ou rencontrez un problème.
+    settings_template_description: Ouvre les paramètres de votre compte — profil, utilisateurs, intégrations et préférences d’espace de travail.
   doorkeeper:
     scopes:
       write: Mettre à jour vos données
@@ -5169,8 +5169,8 @@ pt: &pt
     start: Iniciar
     previous: Anterior
     next: Próximo
-    template_and_submissions: 'Modelos e Submissões'
-    template_and_submissions_description: "Você pode selecionar a visualização que melhor se adapta ao seu fluxo de trabalho. Escolha a visualização 'Modelos' para criar modelos reutilizáveis de documentos ou 'Submissões' para assinar documentos individuais ou verificar o status de cada solicitação de assinatura."
+    grid_list_view: 'Modelos e Submissões'
+    grid_list_view_description: "Você pode selecionar a visualização que melhor se adapta ao seu fluxo de trabalho. Escolha a visualização 'Modelos' para criar modelos reutilizáveis de documentos ou 'Submissões' para assinar documentos individuais ou verificar o status de cada solicitação de assinatura."
     upload_a_pdf_file: 'Enviar um arquivo PDF'
     upload_a_pdf_file_description: 'Envie um documento PDF para criar um modelo de formulário de assinatura.'
     select_a_signer_party: 'Selecionar parte assinante'
@@ -6196,8 +6196,8 @@ de: &de
     start: Start
     previous: Zurück
     next: Weiter
-    template_and_submissions: 'Vorlagen und Einreichungen'
-    template_and_submissions_description: "Sie können die Ansicht wählen, die am besten zu Ihrem Arbeitsablauf passt. Wählen Sie die Ansicht 'Vorlagen', um wiederverwendbare Dokumentvorlagen zu erstellen, oder 'Einreichungen', um einzelne Dokumente zu unterschreiben oder den Status jeder Signaturanfrage zu überprüfen."
+    grid_list_view: 'Vorlagen und Einreichungen'
+    grid_list_view_description: "Sie können die Ansicht wählen, die am besten zu Ihrem Arbeitsablauf passt. Wählen Sie die Ansicht 'Vorlagen', um wiederverwendbare Dokumentvorlagen zu erstellen, oder 'Einreichungen', um einzelne Dokumente zu unterschreiben oder den Status jeder Signaturanfrage zu überprüfen."
     upload_a_pdf_file: 'PDF-Datei hochladen'
     upload_a_pdf_file_description: 'Laden Sie ein PDF-Dokument hoch, um eine Vorlage für ein Signaturformular zu erstellen.'
     select_a_signer_party: 'Unterzeichner-Partei auswählen'
@@ -7608,8 +7608,8 @@ nl: &nl
     start: Starten
     previous: Vorige
     next: Volgende
-    template_and_submissions: Sjablonen en inzendingen
-    template_and_submissions_description: U kunt de weergave kiezen die het beste past bij uw workflow. Kies de weergave 'Sjablonen' om herbruikbare documentsjablonen te maken, of de weergave 'Inzendingen' om afzonderlijke documenten te ondertekenen of de status van elk ondertekenverzoek te bekijken.
+    grid_list_view: Sjablonen en inzendingen
+    grid_list_view_description: U kunt de weergave kiezen die het beste past bij uw workflow. Kies de weergave 'Sjablonen' om herbruikbare documentsjablonen te maken, of de weergave 'Inzendingen' om afzonderlijke documenten te ondertekenen of de status van elk ondertekenverzoek te bekijken.
     upload_a_pdf_file: Upload een PDF-bestand
     upload_a_pdf_file_description: Upload een PDF-document om een sjabloon voor een ondertekeningsformulier te maken.
     select_a_signer_party: Selecteer een ondertekenende partij
