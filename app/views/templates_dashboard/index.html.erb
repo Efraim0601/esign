@@ -15,7 +15,7 @@
     <div class="flex items-center flex-grow min-w-0">
       <% if has_archived || @pagy.count.nil? || @pagy.count > 0 || @template_folders.present? %>
         <div class="mr-2">
-          <%= render 'templates_dashboard/view_toggle', selected: selected_view_mode %>
+          <%= render 'shared/view_toggle', selected: selected_view_mode, url: templates_path, cookie_key: 'templates_view_mode' %>
         </div>
       <% end %>
       <h1 class="text-2xl truncate md:text-3xl sm:text-4xl font-bold md:block <%= 'hidden' if params[:q].present? %>">

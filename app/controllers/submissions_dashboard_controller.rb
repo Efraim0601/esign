@@ -3,6 +3,8 @@
 class SubmissionsDashboardController < ApplicationController
   load_and_authorize_resource :submission, parent: false
 
+  helper_method :selected_view_mode
+
   def index
     @submissions = @submissions.left_joins(:template)
 
@@ -20,5 +22,11 @@ class SubmissionsDashboardController < ApplicationController
                    end
 
     @pagy, @submissions = pagy_auto(@submissions.preload(submitters: :start_form_submission_events))
+  end
+
+  private
+
+  def selected_view_mode
+    @selected_view_mode ||= cookies.permanent[:submissions_view_mode] == 'list' ? 'list' : 'grid'
   end
 end

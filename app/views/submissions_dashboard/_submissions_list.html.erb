@@ -1,0 +1,101 @@
+<%
+  icon_palette = [
+    { bg: 'bg-red-100',     fg: 'text-red-700' },
+    { bg: 'bg-blue-100',    fg: 'text-blue-700' },
+    { bg: 'bg-amber-100',   fg: 'text-amber-700' },
+    { bg: 'bg-emerald-100', fg: 'text-emerald-700' },
+    { bg: 'bg-violet-100',  fg: 'text-violet-700' },
+    { bg: 'bg-sky-100',     fg: 'text-sky-700' }
+  ]
+  status_badges = { 'awaiting' => 'badge-info', 'sent' => 'badge-info', 'completed' => 'badge-success', 'opened' => 'badge-warning', 'declined' => 'badge-error' }
+%>
+<div class="overflow-x-auto rounded-2xl border border-base-300">
+  <table class="table table-zebra w-full">
+    <thead class="bg-base-200 text-xs uppercase text-base-content/70">
+      <tr>
+        <th scope="col" class="w-10"></th>
+        <th scope="col"><%= t('column_template') %></th>
+        <th scope="col"><%= t('status') %></th>
+        <th scope="col" class="hidden md:table-cell"><%= t('signers') %></th>
+        <th scope="col" class="hidden md:table-cell"><%= t('created_at') %></th>
+        <th scope="col" class="text-right"><%= t('column_actions') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% submissions.each_with_index do |submission, idx| %>
+        <%
+          template = submission.template
+          submitters = (submission.template_submitters || template&.submitters || []).filter_map { |item| submission.submitters.find { |e| e.uuid == item['uuid'] } }
+          is_completed = submitters.any? && submitters.all?(&:completed_at?)
+          latest_completed = submitters.select(&:completed_at?).max_by(&:completed_at)
+          has_declined = submitters.any?(&:declined_at?)
+          status_label, badge_class =
+            if submission.expired? && !is_completed
+              [t('expired'), 'badge-error']
+            elsif has_declined
+              [t('declined'), 'badge-error']
+            elsif is_completed
+              [t(latest_completed.status), status_badges[latest_completed.status]]
+            else
+              first = submitters.first
+              first ? [t(first.status), status_badges[first.status]] : [t('awaiting'), 'badge-info']
+            end
+          palette = icon_palette[idx % icon_palette.size]
+          row_target = submission_path(submission)
+        %>
+        <tr class="hover cursor-pointer" onclick="if (event.target.closest('a, button, form, label')) return; window.location='<%= row_target %>'">
+          <td>
+            <span class="w-8 h-8 rounded-md flex items-center justify-center <%= palette[:bg] %> <%= palette[:fg] %>">
+              <%= svg_icon('file_text', class: 'w-4 h-4') %>
+            </span>
+          </td>
+          <td>
+            <%= link_to row_target, class: 'font-medium text-base-content hover:underline break-all' do %>
+              <% (submission.name || template&.name || submission.id.to_s).split(/(_)/).each do |item| %><%= item %><wbr><% end %>
+            <% end %>
+          </td>
+          <td>
+            <span class="badge <%= badge_class %> bg-opacity-50 uppercase text-xs font-semibold">
+              <%= status_label %>
+            </span>
+          </td>
+          <td class="hidden md:table-cell text-sm text-base-content/70">
+            <% if submitters.size == 1 %>
+              <% s = submitters.first %>
+              <span class="break-all"><%= s.name || s.email || s.phone %></span>
+            <% elsif submitters.size > 1 %>
+              <%= submitters.size %> <%= t('signers').downcase %>
+            <% else %>
+              —
+            <% end %>
+          </td>
+          <td class="hidden md:table-cell text-sm text-base-content/70 whitespace-nowrap">
+            <%= l(submission.created_at.in_time_zone(current_account.timezone), format: :short, locale: current_account.locale) %>
+          </td>
+          <td>
+            <div class="flex items-center justify-end gap-1">
+              <% if is_completed && latest_completed %>
+                <span class="tooltip tooltip-left" data-tip="<%= t('download') %>">
+                  <download-button data-src="<%= submitter_download_index_path(latest_completed.slug) %>" class="btn btn-ghost btn-xs btn-square">
+                    <span data-target="download-button.defaultButton"><%= svg_icon('download', class: 'w-4 h-4') %></span>
+                    <span class="hidden" data-target="download-button.loadingButton"><%= svg_icon('loader', class: 'w-4 h-4 animate-spin') %></span>
+                  </download-button>
+                </span>
+              <% end %>
+              <span class="tooltip tooltip-left" data-tip="<%= t('view') %>">
+                <a href="<%= row_target %>" class="btn btn-ghost btn-xs btn-square">
+                  <%= svg_icon('arrow_up_right', class: 'w-4 h-4') %>
+                </a>
+              </span>
+              <% if !submission.archived_at? && !template&.archived_at? && can?(:destroy, submission) %>
+                <span class="tooltip tooltip-left" data-tip="<%= t('archive') %>">
+                  <%= button_to button_title(title: nil, disabled_with: nil, icon: svg_icon('archive', class: 'w-4 h-4'), icon_disabled: svg_icon('loader', class: 'w-4 h-4 animate-spin')), submission_path(submission), class: 'btn btn-ghost btn-xs btn-square', form: { class: 'flex' }, title: t('archive'), method: :delete %>
+                </span>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

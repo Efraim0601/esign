@@ -1,13 +1,13 @@
-<form action="<%= templates_path %>" method="get" id="templates_view_toggle" class="bg-base-200 px-1.5 rounded-xl py-1 whitespace-nowrap inline-flex">
+<form action="<%= local_assigns[:url] %>" method="get" class="bg-base-200 px-1.5 rounded-xl py-1 whitespace-nowrap inline-flex">
   <% request.query_parameters.except(:controller, :action).each do |key, value| %>
     <input type="hidden" name="<%= key %>" value="<%= value %>">
   <% end %>
-  <toggle-cookies data-value="grid" data-key="templates_view_mode" class="sm:tooltip tooltip-top" data-tip="<%= t('grid_view') %>">
+  <toggle-cookies data-value="grid" data-key="<%= local_assigns[:cookie_key] %>" class="sm:tooltip tooltip-top" data-tip="<%= t('grid_view') %>">
     <button type="submit" class="<%= local_assigns[:selected] == 'list' ? 'btn !border !rounded-lg btn-square !p-0 !btn-sm !h-8 !w-9' : 'btn btn-neutral !rounded-lg btn-square !p-0 hover:text-neutral-300 !btn-sm !h-8 !w-9 disabled:btn-neutral' %>">
       <%= svg_icon('layout_grid', class: 'w-5 h-5 stroke-2') %>
     </button>
   </toggle-cookies>
-  <toggle-cookies data-value="list" data-key="templates_view_mode" class="sm:tooltip tooltip-top" data-tip="<%= t('list_view') %>">
+  <toggle-cookies data-value="list" data-key="<%= local_assigns[:cookie_key] %>" class="sm:tooltip tooltip-top" data-tip="<%= t('list_view') %>">
     <button type="submit" class="<%= local_assigns[:selected] == 'list' ? 'btn btn-neutral !rounded-lg btn-square !p-0 hover:text-neutral-300 !btn-sm !h-8 !w-9 disabled:btn-neutral' : 'btn !border !rounded-lg btn-square !p-0 !btn-sm !h-8 !w-9' %>">
       <%= svg_icon('layout_list', class: 'w-5 h-5 stroke-2') %>
     </button>

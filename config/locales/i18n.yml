@@ -8,6 +8,7 @@ en: &en
   grid_view: Grid view
   list_view: List view
   column_actions: Actions
+  column_template: Template
   language_en: English
   language_en-US: English (US)
   language_en-GB: English (UK)
@@ -3152,6 +3153,7 @@ fr: &fr
   grid_view: Vue grille
   list_view: Vue liste
   column_actions: Actions
+  column_template: Modèle
   knowledge_based_authentication: Authentification basée sur la connaissance
   kba_field: KBA
   passed: Réussi
