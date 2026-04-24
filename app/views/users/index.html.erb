@@ -47,8 +47,8 @@
       </div>
     </div>
     <div class="tabs tabs-boxed mb-4">
-      <a href="<%= users_path(params.permit(:role).merge(status: nil)) %>" class="<%= 'tab-active' if params[:status].blank? %> tab"><%= t('active') %></a>
-      <a href="<%= users_path(params.permit(:role).merge(status: 'archived')) %>" class="<%= 'tab-active' if params[:status] == 'archived' %> tab"><%= t('archived') %></a>
+      <a href="<%= settings_users_path(params.permit(:role)) %>" class="<%= 'tab-active' if params[:status].blank? %> tab"><%= t('active') %></a>
+      <a href="<%= settings_archived_users_path %>" class="<%= 'tab-active' if params[:status] == 'archived' %> tab"><%= t('archived') %></a>
     </div>
     <div class="overflow-x-auto">
       <table class="table w-full table-lg rounded-b-none overflow-hidden">
