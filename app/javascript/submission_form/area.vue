@@ -504,7 +504,7 @@ export default {
     },
     displayValue () {
       if (this.modelValue === '{{name}}') {
-        return this.submitter?.name || ''
+        return this.submitter?.name || this.submitter?.email || this.submitter?.phone || ''
       }
 
       return this.modelValue

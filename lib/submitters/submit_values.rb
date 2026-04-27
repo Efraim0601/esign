@@ -89,7 +89,7 @@ module Submitters
       submitter.values = submitter.values.transform_values do |v|
         case v
         when '{{date}}' then Time.current.in_time_zone(submitter.account.timezone).to_date.to_s
-        when '{{name}}' then submitter.name.to_s
+        when '{{name}}' then submitter_display_name(submitter)
         else v
         end
       end
@@ -247,12 +247,20 @@ module Submitters
       return if value.blank?
       return if submitter.blank?
 
+      return submitter_display_name(submitter) if value == '{{name}}'
+
       role = submitter.submission.template_submitters.find { |e| e['uuid'] == submitter.uuid }['name']
 
       replace_default_variables(value,
                                 submitter.attributes.merge('role' => role),
                                 submitter.submission,
                                 with_time:)
+    end
+
+    def submitter_display_name(submitter)
+      return '' if submitter.blank?
+
+      submitter.name.presence || submitter.email.presence || submitter.phone.to_s
     end
 
     def maybe_remove_condition_values(submitter, required_field_uuids_acc: nil)
