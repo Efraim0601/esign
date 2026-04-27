@@ -36,6 +36,7 @@ en: &en
   max_file_size: 'Max file size: %{size}'
   signer_name: Signer Name
   signer_name_field: Signer Name Field
+  please_complete_your_profile_before_signing: Please complete your profile (first name and last name) before signing this document.
   billing: Billing
   hi_there: Hi there
   templates_that_require_email_or_phone_2fa_cannot_be_used_via_a_shared_link: Templates that require email or phone 2FA cannot be used via a shared link.
@@ -1098,6 +1099,7 @@ es: &es
   max_file_size: 'Tamaño máximo del archivo: %{size}'
   signer_name: Nombre del firmante
   signer_name_field: Campo nombre del firmante
+  please_complete_your_profile_before_signing: Por favor, completa tu perfil (nombre y apellido) antes de firmar este documento.
   use_direct_file_attachment_links_in_the_documents: Usar enlaces directos de archivos adjuntos en los documentos
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Haz clic aquí</label> para enviar un correo electrónico de restablecimiento de contraseña.'
   enabled: Habilitado
@@ -2134,6 +2136,7 @@ it: &it
   max_file_size: 'Dimensione massima del file: %{size}'
   signer_name: Nome del firmatario
   signer_name_field: Campo nome del firmatario
+  please_complete_your_profile_before_signing: Per favore, completa il tuo profilo (nome e cognome) prima di firmare questo documento.
   use_direct_file_attachment_links_in_the_documents: Usa i link diretti per gli allegati nei documenti
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Clicca qui</label> per inviare una email per reimpostare la password.'
   enabled: Abilitato
@@ -3175,6 +3178,7 @@ fr: &fr
   max_file_size: 'Taille maximale du fichier : %{size}'
   signer_name: Nom du signataire
   signer_name_field: Champ nom du signataire
+  please_complete_your_profile_before_signing: Veuillez compléter votre profil (nom et prénom) avant de signer ce document.
   use_direct_file_attachment_links_in_the_documents: Utiliser des liens directs de pièces jointes dans les documents
   click_here_to_send_a_reset_password_email_html: <label class="link" for="resend_password_button">Cliquez ici</label> pour envoyer un e-mail de réinitialisation du mot de passe.
   enabled: Activé
@@ -4239,6 +4243,7 @@ pt: &pt
   max_file_size: 'Tamanho máximo do arquivo: %{size}'
   signer_name: Nome do signatário
   signer_name_field: Campo nome do signatário
+  please_complete_your_profile_before_signing: Por favor, complete seu perfil (nome e sobrenome) antes de assinar este documento.
   use_direct_file_attachment_links_in_the_documents: Usar links diretos de anexos de arquivos nos documentos
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Clique aqui</label> para enviar um e-mail de redefinição de senha.'
   enabled: Ativado
@@ -5269,6 +5274,7 @@ de: &de
   max_file_size: 'Maximale Dateigröße: %{size}'
   signer_name: Name des Unterzeichners
   signer_name_field: Feld Name des Unterzeichners
+  please_complete_your_profile_before_signing: Bitte vervollständigen Sie Ihr Profil (Vor- und Nachname), bevor Sie dieses Dokument unterzeichnen.
   hi_there: Hallo
   pro: Pro
   thanks: Danke
@@ -6687,6 +6693,7 @@ nl: &nl
   max_file_size: 'Maximale bestandsgrootte: %{size}'
   signer_name: Naam ondertekenaar
   signer_name_field: Veld naam ondertekenaar
+  please_complete_your_profile_before_signing: Vul uw profiel (voornaam en achternaam) in voordat u dit document ondertekent.
   hi_there: Hallo
   pro: Pro
   thanks: Bedankt

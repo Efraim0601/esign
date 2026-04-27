@@ -10,6 +10,7 @@ class StartFormController < ApplicationController
   before_action :maybe_redirect_com, only: %i[show completed]
   before_action :load_resubmit_submitter, only: :update
   before_action :load_template
+  before_action :require_full_name_for_signer_name_field, only: :show
   before_action :authorize_start!, only: :update
 
   COOKIES_TTL = 12.hours
@@ -87,6 +88,15 @@ class StartFormController < ApplicationController
   end
 
   private
+
+  def require_full_name_for_signer_name_field
+    return unless current_user
+    return if current_user.full_name.present?
+    return unless @template.fields.any? { |f| f['default_value'] == '{{name}}' }
+
+    redirect_to settings_profile_index_path,
+                alert: I18n.t('please_complete_your_profile_before_signing')
+  end
 
   def enqueue_new_submitter_jobs(submitter)
     WebhookUrls.enqueue_events(submitter.submission, 'submission.created')
