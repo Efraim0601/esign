@@ -260,7 +260,16 @@ module Submitters
     def submitter_display_name(submitter)
       return '' if submitter.blank?
 
-      submitter.name.presence || submitter.email.presence || submitter.phone.to_s
+      submitter.name.presence ||
+        lookup_user_full_name(submitter) ||
+        submitter.email.presence ||
+        submitter.phone.to_s
+    end
+
+    def lookup_user_full_name(submitter)
+      return if submitter.email.blank?
+
+      submitter.account.users.find_by(email: submitter.email.downcase)&.full_name.presence
     end
 
     def maybe_remove_condition_values(submitter, required_field_uuids_acc: nil)
