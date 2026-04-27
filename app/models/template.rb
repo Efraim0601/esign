@@ -88,6 +88,12 @@ class Template < ApplicationRecord
     folder.full_name
   end
 
+  def link_form_fields
+    base = preferences.fetch('link_form_fields', ['email'])
+
+    fields.any? { |f| f['default_value'] == '{{name}}' } ? (['name'] | base) : base
+  end
+
   private
 
   def maybe_set_default_folder

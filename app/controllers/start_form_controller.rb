@@ -74,7 +74,7 @@ class StartFormController < ApplicationController
       attrs[:email] = Submissions.normalize_email(attrs[:email])
     end
 
-    required_fields = @template.preferences.fetch('link_form_fields', ['email'])
+    required_fields = @template.link_form_fields
 
     required_params = required_fields.index_with { |key| submitter_params[key] }
 
@@ -117,7 +117,7 @@ class StartFormController < ApplicationController
   end
 
   def find_or_initialize_submitter(template, submitter_params)
-    required_fields = template.preferences.fetch('link_form_fields', ['email'])
+    required_fields = template.link_form_fields
 
     required_params = required_fields.index_with { |key| submitter_params[key] }
 

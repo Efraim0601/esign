@@ -35,7 +35,7 @@
             <div class="text-sm"><%= @error_message %></div>
           </div>
         <% end %>
-        <% link_form_fields = @template.preferences.fetch('link_form_fields', ['email']) %>
+        <% link_form_fields = @template.link_form_fields %>
         <% multiple_fields = link_form_fields.size > 1 %>
         <% if link_form_fields.include?('name') %>
           <div dir="auto" class="form-control !mt-0">
