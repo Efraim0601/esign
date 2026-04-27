@@ -23,6 +23,7 @@ module Templates
 
     ANNOTATIONS_SIZE_LIMIT = 6.megabytes
     MAX_ZIP_SIZE = 100.megabytes
+    MAX_FILE_SIZE = 100.megabytes
     InvalidFileType = Class.new(StandardError)
     PdfEncrypted = Class.new(StandardError)
 

@@ -21,6 +21,9 @@
             <div class="text-sm text-base-content/70">
               <%= t('click_to_upload_or_drag_and_drop_html') %>
             </div>
+            <div class="text-xs text-base-content/60 mt-1">
+              <%= t('max_file_size', size: number_to_human_size(Templates::CreateAttachments::MAX_FILE_SIZE)) %>
+            </div>
           </span>
           <span data-target="file-dropzone.loading" class="flex flex-col items-center hidden">
             <%= svg_icon('loader', class: 'w-14 h-14 animate-spin') %>

@@ -8,6 +8,9 @@
         <div class="font-medium mb-1">
           <%= t('upload_a_new_document') %>
         </div>
+        <div class="text-xs text-base-content/60">
+          <%= t('max_file_size', size: number_to_human_size(Templates::CreateAttachments::MAX_FILE_SIZE)) %>
+        </div>
       </span>
       <span class="flex flex-col items-center hidden" data-target="dashboard-dropzone.fileDropzoneLoading">
         <%= svg_icon('loader', class: 'w-9 h-9 animate-spin') %>

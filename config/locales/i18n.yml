@@ -33,6 +33,7 @@ en: &en
   add_from_google_drive: Add from Google Drive
   or_add_from: Or add from
   upload_a_new_document: Upload a New Document
+  max_file_size: 'Max file size: %{size}'
   billing: Billing
   hi_there: Hi there
   templates_that_require_email_or_phone_2fa_cannot_be_used_via_a_shared_link: Templates that require email or phone 2FA cannot be used via a shared link.
@@ -1092,6 +1093,7 @@ es: &es
   add_from_google_drive: Agregar desde Google Drive
   or_add_from: O agregar desde
   upload_a_new_document: Subir nuevo documento
+  max_file_size: 'Tamaño máximo del archivo: %{size}'
   use_direct_file_attachment_links_in_the_documents: Usar enlaces directos de archivos adjuntos en los documentos
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Haz clic aquí</label> para enviar un correo electrónico de restablecimiento de contraseña.'
   enabled: Habilitado
@@ -2125,6 +2127,7 @@ it: &it
   add_from_google_drive: Aggiungi da Google Drive
   or_add_from: Oppure aggiungi da
   upload_a_new_document: Carica nuovo documento
+  max_file_size: 'Dimensione massima del file: %{size}'
   use_direct_file_attachment_links_in_the_documents: Usa i link diretti per gli allegati nei documenti
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Clicca qui</label> per inviare una email per reimpostare la password.'
   enabled: Abilitato
@@ -3163,6 +3166,7 @@ fr: &fr
   add_from_google_drive: Ajouter depuis Google Drive
   or_add_from: Ou ajouter depuis
   upload_a_new_document: Téléverser un nouveau document
+  max_file_size: 'Taille maximale du fichier : %{size}'
   use_direct_file_attachment_links_in_the_documents: Utiliser des liens directs de pièces jointes dans les documents
   click_here_to_send_a_reset_password_email_html: <label class="link" for="resend_password_button">Cliquez ici</label> pour envoyer un e-mail de réinitialisation du mot de passe.
   enabled: Activé
@@ -4224,6 +4228,7 @@ pt: &pt
   add_from_google_drive: Adicionar do Google Drive
   or_add_from: Ou adicionar de
   upload_a_new_document: Enviar novo documento
+  max_file_size: 'Tamanho máximo do arquivo: %{size}'
   use_direct_file_attachment_links_in_the_documents: Usar links diretos de anexos de arquivos nos documentos
   click_here_to_send_a_reset_password_email_html: '<label class="link" for="resend_password_button">Clique aqui</label> para enviar um e-mail de redefinição de senha.'
   enabled: Ativado
@@ -5251,6 +5256,7 @@ de: &de
   add_from_google_drive: Aus Google Drive hinzufügen
   or_add_from: Oder hinzufügen aus
   upload_a_new_document: Neues Dokument hochladen
+  max_file_size: 'Maximale Dateigröße: %{size}'
   hi_there: Hallo
   pro: Pro
   thanks: Danke
@@ -6666,6 +6672,7 @@ nl: &nl
   add_from_google_drive: Toevoegen vanuit Google Drive
   or_add_from: Of toevoegen vanuit
   upload_a_new_document: Nieuw document uploaden
+  max_file_size: 'Maximale bestandsgrootte: %{size}'
   hi_there: Hallo
   pro: Pro
   thanks: Bedankt
