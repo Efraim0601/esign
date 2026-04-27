@@ -139,6 +139,11 @@
             >
               {{ t('signing_date') }}
             </span>
+            <span
+              v-else-if="field.default_value === '{{name}}'"
+            >
+              {{ t('signer_name') }}
+            </span>
             <div
               v-else-if="field.type === 'cells' && field.default_value"
               class="w-full flex"

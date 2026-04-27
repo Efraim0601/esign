@@ -93,6 +93,7 @@
       <% end %>
     </div>
   <% else %>
+    <% value = local_assigns[:submitter]&.name.to_s if value == '{{name}}' %>
     <autosize-field></autosize-field>
     <div class="flex w-full px-0.5 whitespace-pre-wrap <%= valign == 'top' ? 'items-start' : (valign == 'bottom' ? 'items-end' : 'items-center') %>">
       <div class="w-full"><%= Array.wrap(value).join(', ') %></div>

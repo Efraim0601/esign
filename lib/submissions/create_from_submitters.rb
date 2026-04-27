@@ -407,7 +407,11 @@ module Submissions
       end
 
       submitter.values = submitter.values.transform_values do |v|
-        v == '{{date}}' ? Time.current.in_time_zone(submitter.submission.account.timezone).to_date.to_s : v
+        case v
+        when '{{date}}' then Time.current.in_time_zone(submitter.submission.account.timezone).to_date.to_s
+        when '{{name}}' then submitter.name.to_s
+        else v
+        end
       end
 
       submitter

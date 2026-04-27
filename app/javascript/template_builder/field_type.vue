@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { IconTextSize, IconWritingSign, IconCalendarEvent, IconPhoto, IconCheckbox, IconPaperclip, IconSelect, IconCircleDot, IconChecks, IconColumns3, IconPhoneCheck, IconLetterCaseUpper, IconCreditCard, IconRubberStamp, IconSquareNumber1, IconHeading, IconId, IconCalendarCheck, IconStrikethrough, IconUserScan } from '@tabler/icons-vue'
+import { IconTextSize, IconWritingSign, IconCalendarEvent, IconPhoto, IconCheckbox, IconPaperclip, IconSelect, IconCircleDot, IconChecks, IconColumns3, IconPhoneCheck, IconLetterCaseUpper, IconCreditCard, IconRubberStamp, IconSquareNumber1, IconHeading, IconId, IconCalendarCheck, IconStrikethrough, IconUserScan, IconUser } from '@tabler/icons-vue'
 
 export default {
   name: 'FiledTypeDropdown',
@@ -98,6 +98,7 @@ export default {
       return {
         heading: this.t('heading'),
         strikethrough: this.t('strikeout'),
+        signername: this.t('signer_name'),
         text: this.t('text'),
         signature: this.t('signature'),
         initials: this.t('initials'),
@@ -120,6 +121,7 @@ export default {
     },
     fieldLabels () {
       return {
+        signername: this.t('signer_name_field'),
         text: this.t('text_field'),
         signature: this.t('signature_field'),
         initials: this.t('initials_field'),
@@ -143,6 +145,7 @@ export default {
       return {
         heading: IconHeading,
         strikethrough: IconStrikethrough,
+        signername: IconUser,
         text: IconTextSize,
         signature: IconWritingSign,
         initials: IconLetterCaseUpper,

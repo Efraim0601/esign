@@ -270,7 +270,7 @@
         v-else
         class="whitespace-pre-wrap"
         :class="{ 'w-full': field.preferences?.align }"
-      >{{ modelValue }}</span>
+      >{{ displayValue }}</span>
     </div>
   </div>
 </template>
@@ -501,6 +501,13 @@ export default {
     },
     locale () {
       return Intl.DateTimeFormat().resolvedOptions()?.locale
+    },
+    displayValue () {
+      if (this.modelValue === '{{name}}') {
+        return this.submitter?.name || ''
+      }
+
+      return this.modelValue
     },
     formattedDate () {
       if (this.field.type === 'date' && this.modelValue) {

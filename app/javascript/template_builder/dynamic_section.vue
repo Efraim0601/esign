@@ -183,6 +183,7 @@ export default {
         image: { width: '200px', height: '100px' },
         date: { width: '100px', height: this.defaultHeight },
         datenow: { width: '100px', height: this.defaultHeight },
+        signername: { width: '160px', height: this.defaultHeight },
         text: { width: '120px', height: this.defaultHeight },
         cells: { width: '120px', height: this.defaultHeight },
         file: { width: '120px', height: this.defaultHeight },
@@ -840,6 +841,12 @@ export default {
         newField.type = 'date'
         newField.readonly = true
         newField.default_value = '{{date}}'
+      }
+
+      if (fieldType === 'signername') {
+        newField.type = 'text'
+        newField.readonly = true
+        newField.default_value = '{{name}}'
       }
 
       if (['stamp', 'heading', 'strikethrough'].includes(fieldType)) {

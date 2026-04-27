@@ -44,6 +44,7 @@ class SubmittersResubmitController < ApplicationController
     submitter.submission.template_fields.each do |field|
       next if field['submitter_uuid'] != submitter.uuid
       next if field['default_value'] == '{{date}}'
+      next if field['default_value'] == '{{name}}'
       next if field['type'] == 'stamp'
       next if field['type'] == 'signature'
       next if field.dig('preferences', 'formula').present?

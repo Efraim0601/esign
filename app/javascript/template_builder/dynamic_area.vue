@@ -28,6 +28,9 @@
       <template v-if="field.default_value === '{{date}}'">
         {{ t('signing_date') }}
       </template>
+      <template v-else-if="field.default_value === '{{name}}'">
+        {{ t('signer_name') }}
+      </template>
       <template v-else>
         {{ field.default_value }}
       </template>

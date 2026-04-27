@@ -1519,6 +1519,12 @@ export default {
         field.default_value = '{{date}}'
       }
 
+      if (type === 'signername') {
+        field.type = 'text'
+        field.readonly = true
+        field.default_value = '{{name}}'
+      }
+
       if (type === 'date') {
         field.preferences = {
           format: this.defaultDateFormat
@@ -2204,6 +2210,12 @@ export default {
           field.type = 'date'
           field.readonly = true
           field.default_value = '{{date}}'
+        }
+
+        if (field.type === 'signername') {
+          field.type = 'text'
+          field.readonly = true
+          field.default_value = '{{name}}'
         }
 
         if (['stamp', 'heading', 'strikethrough'].includes(field.type)) {
