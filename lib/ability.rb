@@ -50,9 +50,11 @@ class Ability
       cannot :manage, Account, id: user.account_id
 
     when 'agent'
-      # Template: read only (no update, no destroy)
+      # Template: read all, update/destroy only own templates
       cannot :update, Template
       cannot :destroy, Template
+      can :update, Template, account_id: user.account_id, author_id: user.id
+      can :destroy, Template, account_id: user.account_id, author_id: user.id
       # Submission: read own, create, update own, etc.
       can :read, Submission, account_id: user.account_id, created_by_user_id: user.id
       can :create, Submission, account_id: user.account_id
@@ -74,9 +76,10 @@ class Ability
       cannot :manage, Account, id: user.account_id
 
     when 'member'
-      # Template: read, create only. Cannot update any. Destroy only own.
+      # Template: read all, create, update/destroy only own templates.
       cannot :update, Template
       cannot :destroy, Template
+      can :update, Template, account_id: user.account_id, author_id: user.id
       can :destroy, Template, account_id: user.account_id, author_id: user.id
       can :manage, TemplateFolder, account_id: user.account_id
       can :manage, TemplateSharing, template: { account_id: user.account_id }
