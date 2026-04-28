@@ -2755,7 +2755,7 @@ export default {
 
           const dynamicDocumentSaves = dynamicDocumentRefs.map((ref) => ref.saveBody())
 
-          Promise.all([this.save(), ...dynamicDocumentSaves]).then(() => {
+          Promise.all([this.save({ publish: true }), ...dynamicDocumentSaves]).then(() => {
             window.Turbo.visit(`/templates/${this.template.id}`)
           }).finally(() => {
             this.isSaving = false
@@ -2972,14 +2972,14 @@ export default {
         }, 1000)
       })
     },
-    save ({ force } = { force: false }) {
+    save ({ force, publish } = { force: false, publish: false }) {
       this.pendingFieldAttachmentUuids = []
 
       if (this.onChange) {
         this.onChange(this.template)
       }
 
-      if (!this.autosave && !force) {
+      if (!this.autosave && !force && !publish) {
         return Promise.resolve({})
       }
 
@@ -3000,7 +3000,8 @@ export default {
             submitters: this.template.submitters,
             fields: this.template.fields,
             variables_schema: this.template.variables_schema
-          }
+          },
+          publish: publish ? true : undefined
         }),
         headers: { 'Content-Type': 'application/json' }
       }).then(() => {

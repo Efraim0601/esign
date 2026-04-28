@@ -46,6 +46,7 @@ class TemplatesUploadsController < ApplicationController
     template.author = current_user
     template.folder = TemplateFolders.find_or_create_by_name(current_user, params[:folder_name])
     template.name = File.basename((url_params || params)[:files].first.original_filename, '.*')
+    template.preferences = (template.preferences || {}).merge('is_draft' => true)
 
     Templates.maybe_assign_access(template)
 

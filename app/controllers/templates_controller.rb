@@ -66,6 +66,10 @@ class TemplatesController < ApplicationController
 
     @template.assign_attributes(template_params)
 
+    if params[:publish] == true || params[:publish] == 'true'
+      @template.preferences = (@template.preferences || {}).except('is_draft')
+    end
+
     is_name_changed = @template.name_changed?
 
     @template.save!

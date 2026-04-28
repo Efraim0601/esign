@@ -79,6 +79,7 @@ class Template < ApplicationRecord
 
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
+  scope :published, -> { where("preferences NOT LIKE ?", '%"is_draft":true%') }
 
   def application_key
     external_id

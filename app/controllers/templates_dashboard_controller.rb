@@ -56,7 +56,7 @@ class TemplatesDashboardController < ApplicationController
   private
 
   def filter_templates(templates)
-    rel = templates.active
+    rel = templates.active.published
 
     if params[:q].blank?
       if Docuseal.multitenant? ? current_account.testing? : current_account.linked_account_account
