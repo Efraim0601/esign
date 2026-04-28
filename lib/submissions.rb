@@ -90,7 +90,10 @@ module Submissions
 
     expire_at = params[:expire_at].presence || Templates.build_default_expire_at(template)
 
-    parse_emails(emails, user).uniq.map do |email|
+    parsed_emails = parse_emails(emails, user).uniq
+    submitter_name = parsed_emails.size == 1 ? params.dig(:submission, :name).presence : nil
+
+    parsed_emails.map do |email|
       submission = template.submissions.new(created_by_user: user,
                                             account_id: user.account_id,
                                             source:,
@@ -98,6 +101,7 @@ module Submissions
                                             template_submitters: template.submitters)
 
       submission.submitters.new(email: normalize_email(email),
+                                name: submitter_name,
                                 uuid: template.submitters.first['uuid'],
                                 account_id: user.account_id,
                                 preferences:,

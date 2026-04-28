@@ -22,7 +22,8 @@
       </submitter-item>
     </div>
   <% elsif submitters.size == 1 %>
-    <submitter-item class="form-control">
+    <% item = submitters.first %>
+    <submitter-item class="form-control space-y-2">
       <emails-textarea data-bulk-enabled="<%= Docuseal.demo? || !Docuseal.multitenant? || can?(:manage, :bulk_send) %>" data-limit="<%= Docuseal.multitenant? ? (can?(:manage, :bulk_send) ? 40 : 1) : nil %>">
         <submitters-autocomplete data-field="email" class="block relative">
           <autoresize-textarea>
@@ -30,6 +31,9 @@
           </autoresize-textarea>
         </submitters-autocomplete>
       </emails-textarea>
+      <submitters-autocomplete data-field="name">
+        <%= tag.input type: 'text', name: 'submission[name]', autocomplete: 'off', class: 'base-input !h-10 w-full', placeholder: "#{t('name')} (#{t('optional')})", value: params[:selfsign] || item['is_requester'] ? current_user&.full_name : '' %>
+      </submitters-autocomplete>
     </submitter-item>
   <% else %>
     <dynamic-list class="space-y-4">
