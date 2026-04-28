@@ -47,7 +47,7 @@
             </div>
             <div class="grid md:grid-cols-2 gap-4">
               <% submitters.each_with_index do |item, index| %>
-                <submitter-item class="form-control">
+                <submitter-item class="form-control space-y-2">
                   <label class="label pt-0 pb-1">
                     <span class="label-text"> <%= item['name'] %></span>
                   </label>
@@ -55,6 +55,11 @@
                   <submitters-autocomplete data-field="email">
                     <linked-input data-target-id="<%= "email_#{item['linked_to_uuid']}" if item['linked_to_uuid'].present? %>">
                       <%= tag.input type: 'email', multiple: true, name: 'submission[1][submitters][][email]', autocomplete: 'off', class: 'base-input !h-10 w-full', placeholder: t('email'), required: index.zero? || template.preferences['require_all_submitters'], value: item['email'].presence || ((params[:selfsign] && index.zero?) || item['is_requester'] ? current_user.email : ''), id: "email_#{item['uuid']}" %>
+                    </linked-input>
+                  </submitters-autocomplete>
+                  <submitters-autocomplete data-field="name">
+                    <linked-input data-target-id="<%= "name_#{item['linked_to_uuid']}" if item['linked_to_uuid'].present? %>">
+                      <%= tag.input type: 'text', name: 'submission[1][submitters][][name]', autocomplete: 'off', class: 'base-input !h-10 w-full', placeholder: "#{t('name')} (#{t('optional')})", value: ((params[:selfsign] && index.zero?) || item['is_requester'] ? current_user&.full_name : ''), id: "name_#{item['uuid']}", dir: 'auto' %>
                     </linked-input>
                   </submitters-autocomplete>
                 </submitter-item>
