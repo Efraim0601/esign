@@ -88,15 +88,6 @@
         <div class="truncate uppercase">
           ID: {{ signature.uuid }}
         </div>
-        <div>
-          <span v-if="values[field.preferences?.reason_field_uuid]">{{ t('reason') }}: </span>{{ values[field.preferences?.reason_field_uuid] || t('digitally_signed_by') }} {{ submitter.name }}
-          <template v-if="submitter.email">
-            &lt;{{ submitter.email }}&gt;
-          </template>
-        </div>
-        <div>
-          {{ new Date(signature.created_at).toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZoneName: 'short' }) }}
-        </div>
       </div>
     </div>
     <img

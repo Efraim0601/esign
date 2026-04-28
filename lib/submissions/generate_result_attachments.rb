@@ -318,26 +318,6 @@ module Submissions
                 raise
               end
 
-            reason_value = submitter.values[field.dig('preferences', 'reason_field_uuid')].presence
-
-            reason_string =
-              I18n.with_locale(locale) do
-                timezone = submitter.account.timezone
-                timezone = submitter.timezone || submitter.account.timezone if with_submitter_timezone
-
-                time_format = with_timestamp_seconds ? :detailed : :long
-
-                if with_signature_id_reason || field.dig('preferences', 'reasons').present?
-                  "#{"#{I18n.t('reason')}: " if reason_value}#{reason_value || I18n.t('digitally_signed_by')} " \
-                    "#{submitter.name}#{" <#{submitter.email}>" if submitter.email.present?}\n" \
-                    "#{I18n.l(attachment.created_at.in_time_zone(timezone), format: time_format)} " \
-                    "#{TimeUtils.timezone_abbr(timezone, attachment.created_at)}"
-                else
-                  "#{I18n.l(attachment.created_at.in_time_zone(timezone), format: time_format)} " \
-                    "#{TimeUtils.timezone_abbr(timezone, attachment.created_at)}"
-                end
-              end
-
             base_font_size = (font_size / 1.8).to_i
 
             result = nil
@@ -346,6 +326,8 @@ module Submissions
             area_y = area['y'] * height
             area_w = area['w'] * width
             area_h = area['h'] * height
+
+            id_string = "ID: #{attachment.uuid}".upcase
 
             if area_h.positive? && (area_w.to_f / area_h) > 4.5
               half_width = area_w / 2.0
@@ -359,24 +341,8 @@ module Submissions
 
               canvas.image(io, at: [image_x, image_y], width: image_width, height: image_height)
 
-              id_string = "ID: #{attachment.uuid}".upcase
-
               loop do
                 text = HexaPDF::Layout::TextFragment.create(id_string, font:, font_size: base_font_size)
-
-                result = layouter.fit([text], half_width, base_font_size / 0.65)
-
-                break if result.status == :success
-
-                id_string = "#{id_string.delete_suffix('...')[0..-2]}..."
-
-                break if id_string.length < 8
-              end
-
-              string = [id_string, reason_string].join("\n")
-
-              loop do
-                text = HexaPDF::Layout::TextFragment.create(string, font:, font_size: base_font_size)
 
                 result = layouter.fit([text], half_width, area_h)
 
@@ -387,23 +353,15 @@ module Submissions
                 break if base_font_size < 2
               end
 
-              text = HexaPDF::Layout::TextFragment.create(string, font:, font_size: base_font_size)
+              text = HexaPDF::Layout::TextFragment.create(id_string, font:, font_size: base_font_size)
 
               text_x = area_x + half_width
               text_y = height - area_y
 
               layouter.fit([text], half_width, area_h).draw(canvas, text_x + TEXT_LEFT_MARGIN, text_y)
             else
-              reason_text = HexaPDF::Layout::TextFragment.create(reason_string,
-                                                                 font:,
-                                                                 font_size: base_font_size)
-
-              id_string = "ID: #{attachment.uuid}".upcase
-
               loop do
-                text = HexaPDF::Layout::TextFragment.create(id_string,
-                                                            font:,
-                                                            font_size: base_font_size)
+                text = HexaPDF::Layout::TextFragment.create(id_string, font:, font_size: base_font_size)
 
                 result = layouter.fit([text], area_w, base_font_size / 0.65)
 
@@ -414,8 +372,7 @@ module Submissions
                 break if id_string.length < 8
               end
 
-              reason_result = layouter.fit([reason_text], area_w, height)
-              text_height = result.lines.sum(&:height) + reason_result.lines.sum(&:height)
+              text_height = result.lines.sum(&:height)
 
               image_height = area_h - text_height
               image_height = area_h / 2 if image_height < area_h / 2
@@ -427,11 +384,6 @@ module Submissions
               layouter.fit([text], area_w, base_font_size / 0.65)
                       .draw(canvas, area_x + TEXT_LEFT_MARGIN,
                             height - area_y - TEXT_TOP_MARGIN - image_height)
-
-              layouter.fit([reason_text], area_w, reason_result.lines.sum(&:height))
-                      .draw(canvas, area_x + TEXT_LEFT_MARGIN,
-                            height - area_y - TEXT_TOP_MARGIN -
-                            result.lines.sum(&:height) - image_height)
 
               canvas.image(
                 io,
