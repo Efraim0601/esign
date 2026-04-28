@@ -302,6 +302,7 @@ en: &en
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL of the trusted RFC 3161 timeserver to be used to generate timestamp signatures.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Apply multiple PDF digital signatures in the document per each signer
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Remove PDF form fillable fields from the signed PDF (flatten form)
+  display_signer_id_below_signature_and_document_id_in_footer: Display signer ID below the signature and document ID in the page footer
   certificate_has_been_successfully_added: Certificate has been successfully added.
   default_certificate_has_been_selected: Default certificate has been selected.
   certificate_has_been_removed: Certificate has been removed.
@@ -1344,6 +1345,7 @@ es: &es
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL del servidor de tiempo RFC 3161 confiable que se utilizará para generar firmas de sellado de tiempo.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Aplicar múltiples firmas digitales en el PDF por cada firmante
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Eliminar los campos rellenables del formulario PDF firmado (aplanar formulario)
+  display_signer_id_below_signature_and_document_id_in_footer: Mostrar el ID del firmante debajo de la firma y el ID del documento en el pie de página
   certificate_has_been_successfully_added: El certificado ha sido agregado con éxito.
   default_certificate_has_been_selected: El certificado predeterminado ha sido seleccionado.
   certificate_has_been_removed: El certificado ha sido eliminado.
@@ -2381,6 +2383,7 @@ it: &it
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL del server di timestamp RFC 3161 affidabile da utilizzare per generare firme di timestamp.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Applica più firme digitali PDF nel documento per ogni firmatario
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Rimuovere i campi compilabili del modulo PDF firmato (appiattire il modulo)
+  display_signer_id_below_signature_and_document_id_in_footer: Mostrare l'ID del firmatario sotto la firma e l'ID del documento nel piè di pagina
   certificate_has_been_successfully_added: Il certificato è stato aggiunto con successo.
   default_certificate_has_been_selected: Il certificato predefinito è stato selezionato.
   certificate_has_been_removed: Il certificato è stato rimosso.
@@ -3441,6 +3444,7 @@ fr: &fr
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL du serveur d’horodatage RFC 3161 de confiance à utiliser pour générer des signatures horodatées.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Appliquer plusieurs signatures numériques PDF dans le document pour chaque signataire
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Supprimer les champs de formulaire PDF remplissables du PDF signé (aplatir le formulaire)
+  display_signer_id_below_signature_and_document_id_in_footer: Afficher l'ID du signataire sous la signature et l'ID du document en pied de page
   certificate_has_been_successfully_added: Le certificat a été ajouté avec succès.
   default_certificate_has_been_selected: Le certificat par défaut a été sélectionné.
   certificate_has_been_removed: Le certificat a été supprimé.
@@ -4488,6 +4492,7 @@ pt: &pt
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL do servidor de carimbo de tempo RFC 3161 confiável a ser usado para gerar assinaturas de carimbo de tempo.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Aplicar várias assinaturas digitais PDF no documento por cada assinante
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Remover campos preenchíveis do PDF assinado (achatar formulário)
+  display_signer_id_below_signature_and_document_id_in_footer: Exibir o ID do signatário abaixo da assinatura e o ID do documento no rodapé
   certificate_has_been_successfully_added: O certificado foi adicionado com sucesso.
   default_certificate_has_been_selected: O certificado padrão foi selecionado.
   certificate_has_been_removed: O certificado foi removido.
@@ -5519,6 +5524,7 @@ de: &de
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL des vertrauenswürdigen RFC-3161-Zeitstempelservers zur Generierung von Zeitstempelsignaturen.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Mehrere PDF-Digitalsignaturen im Dokument pro Unterzeichner anwenden
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Ausfüllbare PDF-Formularfelder aus dem signierten PDF entfernen (Formular abflachen)
+  display_signer_id_below_signature_and_document_id_in_footer: Unterzeichner-ID unter der Signatur und Dokument-ID in der Fußzeile anzeigen
   certificate_has_been_successfully_added: Das Zertifikat wurde erfolgreich hinzugefügt.
   default_certificate_has_been_selected: Das Standardzertifikat wurde ausgewählt.
   certificate_has_been_removed: Das Zertifikat wurde entfernt.
@@ -6939,6 +6945,7 @@ nl: &nl
   url_of_the_trusted_rfc_3161_timeserver_to_be_used_to_generate_timestamp_signatures: URL van de vertrouwde RFC 3161-tijdserver die wordt gebruikt om tijdstempelhandtekeningen te genereren.
   apply_multiple_pdf_digital_signatures_in_the_document_per_each_signer: Meerdere PDF-digitale handtekeningen in het document toepassen, per ondertekenaar
   remove_pdf_form_fillable_fields_from_the_signed_pdf_flatten_form: Invulbare PDF-formuliervelden verwijderen uit de ondertekende PDF (formulier vlak maken)
+  display_signer_id_below_signature_and_document_id_in_footer: Toon de ID van de ondertekenaar onder de handtekening en de document-ID in de voettekst
   certificate_has_been_successfully_added: Certificaat is succesvol toegevoegd.
   default_certificate_has_been_selected: Standaardcertificaat is geselecteerd.
   certificate_has_been_removed: Certificaat is verwijderd.

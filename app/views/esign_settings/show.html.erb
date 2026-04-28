@@ -168,6 +168,20 @@
             </div>
           <% end %>
         <% end %>
+        <% account_config = AccountConfig.find_or_initialize_by(account: current_account, key: AccountConfig::WITH_SIGNATURE_ID) %>
+        <% if can?(:manage, account_config) %>
+          <%= form_for account_config, url: account_configs_path, method: :post do |f| %>
+            <%= f.hidden_field :key %>
+            <div class="flex items-center justify-between py-2.5">
+              <span>
+                <%= t('display_signer_id_below_signature_and_document_id_in_footer') %>
+              </span>
+              <submit-form data-on="change" class="flex">
+                <%= f.check_box :value, { class: 'toggle', checked: account_config.value != false } %>
+              </submit-form>
+            </div>
+          <% end %>
+        <% end %>
         <% account_config = AccountConfig.find_or_initialize_by(account: current_account, key: AccountConfig::DOCUMENT_FILENAME_FORMAT_KEY) %>
         <% if can?(:manage, account_config) %>
           <%= form_for account_config, url: account_configs_path, method: :post do |f| %>
