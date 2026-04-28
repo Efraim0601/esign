@@ -144,7 +144,7 @@ module Submissions
                                                               AccountConfig::WITH_SUBMITTER_TIMEZONE_KEY,
                                                               AccountConfig::WITH_SIGNATURE_ID_REASON_KEY])
 
-      with_signature_id = configs.find { |c| c.key == AccountConfig::WITH_SIGNATURE_ID }&.value == true
+      with_signature_id = configs.find { |c| c.key == AccountConfig::WITH_SIGNATURE_ID }&.value != false
       is_flatten = configs.find { |c| c.key == AccountConfig::FLATTEN_RESULT_PDF_KEY }&.value != false
       with_timestamp_seconds = configs.find { |c| c.key == AccountConfig::WITH_TIMESTAMP_SECONDS_KEY }&.value == true
       with_submitter_timezone = configs.find { |c| c.key == AccountConfig::WITH_SUBMITTER_TIMEZONE_KEY }&.value == true
