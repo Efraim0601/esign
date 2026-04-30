@@ -161,6 +161,7 @@ module Submissions
           font = pdf.fonts.add(FONT_NAME)
 
           document_id = Digest::MD5.hexdigest(submitter.submission.slug).upcase
+          envelope_id = submitter.submission.id
 
           pdf.trailer.info[:DocumentID] = document_id
           pdf.pages.each do |page|
@@ -170,13 +171,13 @@ module Submissions
             text =
               if submitter.account.testing?
                 if with_signature_id
-                  "#{TESTING_FOOTER} | ID: #{document_id}"
+                  "#{TESTING_FOOTER} | ID: #{envelope_id}"
                 else
                   TESTING_FOOTER
                 end
               else
-                "#{I18n.t('document_id',
-                          locale: submitter.metadata.fetch('lang', submitter.account.locale))}: #{document_id}"
+                "#{I18n.t('envelope_id',
+                          locale: submitter.metadata.fetch('lang', submitter.account.locale))}: #{envelope_id}"
               end
 
             text = HexaPDF::Layout::TextFragment.create(
