@@ -24,7 +24,8 @@ class AccountConfigsController < ApplicationController
     AccountConfig::COMBINE_PDF_RESULT_KEY,
     AccountConfig::REQUIRE_SIGNING_REASON_KEY,
     AccountConfig::DOCUMENT_FILENAME_FORMAT_KEY,
-    AccountConfig::ENABLE_MCP_KEY
+    AccountConfig::ENABLE_MCP_KEY,
+    AccountConfig::REQUIRE_SUBMITTER_EMAIL_2FA_KEY
   ].freeze
 
   InvalidKey = Class.new(StandardError)

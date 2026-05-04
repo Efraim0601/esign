@@ -228,6 +228,8 @@ en: &en
   update: Update
   updating: Updating
   force_2fa_with_authenticator_app: Force 2FA with Authenticator App
+  require_signer_email_verification: Require signer email verification
+  require_signer_email_verification_tooltip: Require every signer to verify their identity with a one-time code sent to their email after clicking the signing link, before they can access and sign the document.
   add_signature_id_to_the_documents: Add signature ID to the documents
   require_signing_reason: Require signing reason
   allow_typed_text_signatures: Allow typed text signatures
@@ -3370,6 +3372,8 @@ fr: &fr
   update: Mettre à jour
   updating: Mise à jour
   force_2fa_with_authenticator_app: Imposer la 2FA avec une application d’authentification
+  require_signer_email_verification: Exiger la vérification par e-mail du signataire
+  require_signer_email_verification_tooltip: Exiger que chaque signataire vérifie son identité à l’aide d’un code unique envoyé par e-mail après avoir cliqué sur le lien de signature, avant de pouvoir accéder au document et le signer.
   add_signature_id_to_the_documents: Ajouter l’ID de signature aux documents
   require_signing_reason: Exiger un motif de signature
   allow_typed_text_signatures: Autoriser les signatures tapées

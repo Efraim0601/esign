@@ -14,7 +14,8 @@ module Submitters
       return false unless submitter
 
       return true if submitter.submission.template&.preferences&.dig('require_email_2fa') != true &&
-                     submitter.preferences['require_email_2fa'] != true
+                     submitter.preferences['require_email_2fa'] != true &&
+                     !account_requires_email_2fa?(submitter)
       return true if request.cookie_jar.encrypted[:email_2fa_slug] == submitter.slug
 
       token = request.params[:two_factor_token].presence || request.headers['x-two-factor-token'].presence
@@ -23,6 +24,12 @@ module Submitters
                      Submitter.signed_id_verifier.verified(token, purpose: :email_two_factor) == submitter.slug
 
       false
+    end
+
+    def account_requires_email_2fa?(submitter)
+      AccountConfig.exists?(account_id: submitter.account_id,
+                            key: AccountConfig::REQUIRE_SUBMITTER_EMAIL_2FA_KEY,
+                            value: true)
     end
 
     def pass_link_2fa?(submitter, current_user, request)
