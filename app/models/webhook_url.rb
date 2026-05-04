@@ -28,6 +28,7 @@ class WebhookUrl < ApplicationRecord
     form.started
     form.completed
     form.declined
+    form.reminded
     submission.created
     submission.completed
     submission.expired

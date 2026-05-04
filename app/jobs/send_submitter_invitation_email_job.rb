@@ -27,5 +27,16 @@ class SendSubmitterInvitationEmailJob
 
     submitter.sent_at ||= Time.current
     submitter.save!
+
+    schedule_reminders(submitter)
+  end
+
+  def schedule_reminders(submitter)
+    AccountConfigs.submitter_reminder_offsets(submitter.account).each do |key, offset|
+      SendSubmitterReminderEmailJob.perform_in(offset, {
+                                                 'submitter_id' => submitter.id,
+                                                 'duration_key' => key
+                                               })
+    end
   end
 end
