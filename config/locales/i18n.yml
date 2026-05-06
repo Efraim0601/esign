@@ -920,6 +920,7 @@ en: &en
   require_email_2fa_to_open: Require email 2FA to open
   verification_required_refresh_the_page_and_pass_2fa: Verification required, refresh the page and pass 2FA.
   the_sender_has_requested_a_two_factor_authentication_via_one_time_password_sent_to_your_email_html: The sender has requested two-factor authentication via a one-time password sent to your <b>%{email}</b> email.
+  the_sender_has_requested_a_two_factor_authentication_via_authenticator_app: The sender has requested two-factor authentication. Please enter the 6-digit code from your authenticator app.
   please_contact_the_requester_to_specify_your_email_for_two_factor_authentication: Please contact the requester to specify your email for two-factor authentication.
   rate_limit_exceeded: Rate limit exceeded
   a_confirmation_email_has_been_sent_to_the_new_email_address: A confirmation email has been sent to the new email address.
@@ -4069,6 +4070,7 @@ fr: &fr
   require_email_2fa_to_open: Exiger la 2FA par e‑mail pour ouvrir
   verification_required_refresh_the_page_and_pass_2fa: Vérification requise, actualisez la page et effectuez l'authentification à deux facteurs.
   the_sender_has_requested_a_two_factor_authentication_via_one_time_password_sent_to_your_email_html: L'expéditeur a demandé l'authentification à deux facteurs par mot de passe à usage unique envoyé à votre adresse e-mail <b>%{email}</b>.
+  the_sender_has_requested_a_two_factor_authentication_via_authenticator_app: L'expéditeur a demandé une authentification à deux facteurs. Veuillez saisir le code à 6 chiffres de votre application d'authentification.
   please_contact_the_requester_to_specify_your_email_for_two_factor_authentication: Veuillez contacter l'expéditeur pour spécifier votre adresse e-mail pour l'authentification à deux facteurs.
   rate_limit_exceeded: Limite de débit dépassée
   a_confirmation_email_has_been_sent_to_the_new_email_address: Un e-mail de confirmation a été envoyé à la nouvelle adresse e-mail.

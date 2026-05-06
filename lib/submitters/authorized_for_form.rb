@@ -32,6 +32,18 @@ module Submitters
                             value: true)
     end
 
+    # Returns the User whose TOTP should challenge this submitter, or nil.
+    # When a signer's email matches a User in the same account that has TOTP enabled,
+    # we challenge with the authenticator app instead of sending a one-time email code.
+    def totp_user_for(submitter)
+      return nil if submitter&.email.blank?
+
+      User.find_by(email: submitter.email.downcase.strip,
+                   account_id: submitter.account_id,
+                   otp_required_for_login: true)
+          &.then { |u| u.otp_secret.present? ? u : nil }
+    end
+
     def pass_link_2fa?(submitter, current_user, request)
       return false unless submitter
 

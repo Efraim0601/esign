@@ -16,7 +16,11 @@ class SubmitFormController < ApplicationController
   def show
     submission = @submitter.submission
 
-    return render :email_2fa unless Submitters::AuthorizedForForm.pass_email_2fa?(@submitter, request)
+    unless Submitters::AuthorizedForForm.pass_email_2fa?(@submitter, request)
+      @totp_user = Submitters::AuthorizedForForm.totp_user_for(@submitter)
+      return render(@totp_user ? :totp_2fa : :email_2fa)
+    end
+
     return redirect_to submit_form_completed_path(@submitter.slug) if @submitter.completed_at?
 
     @form_configs = Submitters::FormConfigs.call(@submitter, CONFIG_KEYS)
