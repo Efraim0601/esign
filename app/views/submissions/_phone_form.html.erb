@@ -27,20 +27,12 @@
                     </submitters-autocomplete>
                   </custom-validation>
                   <% if submitters.size > 1 %>
-                    <submitters-autocomplete data-field="name">
-                      <linked-input data-target-id="<%= "phone_name_#{item['linked_to_uuid']}" if item['linked_to_uuid'].present? %>">
-                        <input type="text" name="submission[1][submitters][][name]" autocomplete="off" class="base-input !h-10 mt-1.5 w-full" placeholder="<%= "#{t('name')} (#{t('optional')})" %>" value="<%= (params[:selfsign] && index.zero?) || item['is_requester'] ? current_user.full_name : '' %>" dir="auto" id="phone_name_<%= item['uuid'] %>">
-                      </linked-input>
-                    </submitters-autocomplete>
+                    <%= render 'phone_name_input', item:, index:, with_top_margin: true %>
                   <% end %>
                 </div>
                 <% if submitters.size == 1 %>
                   <div class="form-control flex">
-                    <submitters-autocomplete data-field="name">
-                      <linked-input data-target-id="<%= "phone_name_#{item['linked_to_uuid']}" if item['linked_to_uuid'].present? %>">
-                        <input type="text" name="submission[1][submitters][][name]" autocomplete="off" class="base-input !h-10 w-full" placeholder="<%= "#{t('name')} (#{t('optional')})" %>" value="<%= (params[:selfsign] && index.zero?) || item['is_requester'] ? current_user.full_name : '' %>" dir="auto" id="phone_name_<%= item['uuid'] %>">
-                      </linked-input>
-                    </submitters-autocomplete>
+                    <%= render 'phone_name_input', item:, index: %>
                   </div>
                 <% end %>
               </submitter-item>

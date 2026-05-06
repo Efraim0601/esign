@@ -219,8 +219,6 @@ const en = {
   fields_selected: '{count} Fields Selected',
   field_added: '{count} Field Added',
   fields_added: '{count} Fields Added',
-  abandon: 'Abandon',
-  confirm_abandon_template: 'Abandon this template? It will be permanently deleted.'
 }
 
 const es = {
@@ -1107,8 +1105,6 @@ const fr = {
   fields_selected: '{count} Champs Sélectionnés',
   field_added: '{count} Champ Ajouté',
   fields_added: '{count} Champs Ajoutés',
-  abandon: 'Abandonner',
-  confirm_abandon_template: 'Abandonner ce modèle ? Il sera supprimé définitivement.'
 }
 
 const de = {

@@ -44,7 +44,6 @@
           :data-tip="t('type_text')"
         >
           <a
-            id="type_text_button"
             href="#"
             class="btn btn-outline btn-sm font-medium inline-flex flex-nowrap type-text-button"
             @click.prevent="[toggleTextInput(), hideQr()]"

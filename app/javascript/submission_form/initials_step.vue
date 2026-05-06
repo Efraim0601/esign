@@ -40,7 +40,6 @@
           :data-tip="t('draw_initials')"
         >
           <a
-            id="type_text_button"
             href="#"
             class="btn btn-outline font-medium btn-sm type-text-button"
             @click.prevent="toggleTextInput"

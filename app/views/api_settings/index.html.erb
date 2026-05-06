@@ -14,12 +14,12 @@
             <% obscured_token = current_user.access_token.token.sub(token[5..], '*' * token[5..].size) %>
             <% if current_account.testing? %>
               <masked-input class="block w-full" data-token="<%= token %>">
-                <input id="api_key" type="text" value="<%= obscured_token %>" class="input font-mono input-bordered w-full" autocomplete="off" readonly>
+                <%= render 'token_input', obscured_token: %>
               </masked-input>
               <%= render 'shared/clipboard_copy', icon: 'copy', text: token, class: 'base-button', icon_class: 'w-6 h-6 text-white', copy_title: t('copy'), copied_title: t('copied') %>
             <% else %>
               <a id="access_token_container" href="<%= settings_reveal_access_token_path %>" data-turbo-frame="modal" class="flex w-full space-x-4">
-                <input id="api_key" type="text" value="<%= obscured_token %>" class="input font-mono input-bordered w-full" autocomplete="off" readonly>
+                <%= render 'token_input', obscured_token: %>
                 <div class="base-button">
                   <%= svg_icon('copy', class: 'w-6 h-6 text-white') %>
                   <span class="hidden md:inline"><%= t('copy') %></span>

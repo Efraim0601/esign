@@ -199,7 +199,7 @@ export default {
       })
     }
 
-    document.querySelectorAll('#decline_button').forEach((button) => {
+    document.querySelectorAll('.decline-button').forEach((button) => {
       button.setAttribute('disabled', 'true')
     })
   },

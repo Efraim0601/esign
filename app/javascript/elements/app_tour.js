@@ -67,7 +67,7 @@ export default class extends HTMLElement {
         }
       },
       {
-        element: '#sign_yourself_button',
+        element: '#sign_yourself_button, .sign-yourself-button',
         popover: {
           title: this.I18n.sign_the_document,
           description: this.I18n.sign_the_document_description,
@@ -306,7 +306,7 @@ export default class extends HTMLElement {
             }
           },
           {
-            element: '#sign_yourself_button',
+            element: '#sign_yourself_button, .sign-yourself-button',
             popover: {
               title: this.I18n.sign_yourself,
               description: this.I18n.sign_yourself_description,

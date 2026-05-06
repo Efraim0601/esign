@@ -18,14 +18,14 @@ export default class extends HTMLElement {
   }
 
   get target () {
-    if (this.dataset.targetId) {
-      const listItem = this.closest('[data-targets="dynamic-list.items"]')
+    if (!this.dataset.targetId) return null
 
-      if (listItem) {
-        return listItem.querySelector(`#${this.dataset.targetId}`)
-      } else {
-        return document.getElementById(this.dataset.targetId)
-      }
+    const listItem = this.closest('[data-targets="dynamic-list.items"]')
+
+    if (listItem) {
+      return listItem.querySelector(`#${this.dataset.targetId}`)
+    } else {
+      return document.getElementById(this.dataset.targetId)
     }
   }
 }

@@ -338,11 +338,12 @@
       {{ t('format') }}
     </label>
   </div>
-  <li
-    v-if="[true, false].includes(withSignatureId) && field.type === 'signature'"
-    class="field-settings-signature-id"
-    @click.stop
-  >
+  <ul class="contents list-none">
+    <li
+      v-if="[true, false].includes(withSignatureId) && field.type === 'signature'"
+      class="field-settings-signature-id"
+      @click.stop
+    >
     <label class="cursor-pointer py-1.5">
       <input
         :checked="field.preferences?.with_signature_id"
@@ -447,10 +448,11 @@
       <span class="label-text">{{ t('prefillable') }}</span>
     </label>
   </li>
-  <hr
+  <li
     v-if="field.type != 'stamp'"
-    class="pb-0.5 mt-0.5"
-  >
+    class="border-t pb-0.5 mt-0.5 list-none"
+    aria-hidden="true"
+  ></li>
   <li
     v-if="['text', 'number', 'date', 'select', 'heading', 'cells'].includes(field.type)"
     class="field-settings-font"
@@ -515,10 +517,11 @@
       </span>
     </label>
   </li>
-  <hr
+  <li
     v-if="(withCopyToAllPages && canCopyToAllPages) || withAreas || withCustomFields"
-    class="pb-0.5 mt-0.5"
-  >
+    class="border-t pb-0.5 mt-0.5 list-none"
+    aria-hidden="true"
+  ></li>
   <template v-if="withAreas">
     <li
       v-for="(area, index) in sortedAreas"
@@ -592,6 +595,7 @@
       {{ t('save_as_custom_field') }}
     </a>
   </li>
+  </ul>
 </template>
 
 <script>
