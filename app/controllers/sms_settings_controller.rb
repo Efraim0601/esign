@@ -5,7 +5,9 @@ class SmsSettingsController < ApplicationController
   authorize_resource :encrypted_config, only: :index
   authorize_resource :encrypted_config, parent: false, except: :index
 
-  def index; end
+  def index
+    # no-op (Rails implicit rendering / stub)
+  end
 
   private
 

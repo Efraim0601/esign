@@ -5,6 +5,7 @@ class SubmitterMailer < ApplicationMailer
   SIGN_TTL = 1.hour + 20.minutes
 
   NO_REPLY_REGEXP = /no-?reply@/i
+  EMAIL_PLUS_TAG_REGEXP = /\+\w+@/
 
   def invitation_email(submitter)
     @current_account = submitter.submission.account
@@ -25,7 +26,7 @@ class SubmitterMailer < ApplicationMailer
                @submitter.template&.preferences&.dig('request_email_subject').presence
 
     @email_config = AccountConfigs.find_for_account(@current_account, AccountConfig::SUBMITTER_INVITATION_EMAIL_KEY)
-    @body ||= fetch_config_email_body(@email_config, @submitter)
+    @body ||= fetch_config_email_body(@email_config)
 
     assign_message_metadata('submitter_invitation', @submitter)
 
@@ -60,7 +61,7 @@ class SubmitterMailer < ApplicationMailer
     @email_config =
       AccountConfigs.find_for_account(@current_account, AccountConfig::SUBMITTER_INVITATION_REMINDER_EMAIL_KEY) ||
       AccountConfigs.find_for_account(@current_account, AccountConfig::SUBMITTER_INVITATION_EMAIL_KEY)
-    @body ||= fetch_config_email_body(@email_config, @submitter)
+    @body ||= fetch_config_email_body(@email_config)
 
     assign_message_metadata('submitter_invitation_reminder', @submitter)
 
@@ -104,7 +105,7 @@ class SubmitterMailer < ApplicationMailer
     @subject ||= @email_config.value['subject'] if @email_config
 
     @body = template_preferences['completed_notification_email_body'].presence
-    @body ||= fetch_config_email_body(@email_config, @submitter)
+    @body ||= fetch_config_email_body(@email_config)
 
     assign_message_metadata('submitter_completed', @submitter)
 
@@ -129,7 +130,7 @@ class SubmitterMailer < ApplicationMailer
 
     I18n.with_locale(@current_account.locale) do
       mail(from: from_address_for_submitter(submitter),
-           to: user.role == 'integration' ? user.friendly_name.sub(/\+\w+@/, '@') : user.friendly_name,
+           to: user.role == 'integration' ? user.friendly_name.sub(EMAIL_PLUS_TAG_REGEXP, '@') : user.friendly_name,
            reply_to: @submitter.friendly_name,
            subject: I18n.t(:name_declined_by_submitter,
                            name: (@submission.name || @submission.template.name).truncate(20),
@@ -160,7 +161,7 @@ class SubmitterMailer < ApplicationMailer
     @subject ||= @email_config.value['subject'] if @email_config
 
     @body = template_preferences['documents_copy_email_body'].presence
-    @body ||= fetch_config_email_body(@email_config, @submitter)
+    @body ||= fetch_config_email_body(@email_config)
 
     assign_message_metadata('submitter_documents_copy', @submitter)
     reply_to = build_submitter_reply_to(submitter, email_config: @email_config, documents_copy_email: true)
@@ -197,7 +198,7 @@ class SubmitterMailer < ApplicationMailer
     reply_to ||= email_config.value['reply_to'].presence if email_config
 
     if reply_to.blank? && (submitter.submission.created_by_user || submitter.template.author)&.email != submitter.email
-      reply_to = (submitter.submission.created_by_user || submitter.template.author)&.friendly_name&.sub(/\+\w+@/, '@')
+      reply_to = (submitter.submission.created_by_user || submitter.template.author)&.friendly_name&.sub(EMAIL_PLUS_TAG_REGEXP, '@')
     end
 
     return nil if reply_to.to_s.match?(NO_REPLY_REGEXP)
@@ -244,7 +245,7 @@ class SubmitterMailer < ApplicationMailer
   end
 
   def normalize_user_email(user)
-    user.role == 'integration' ? user.friendly_name.sub(/\+\w+@/, '@') : user.friendly_name
+    user.role == 'integration' ? user.friendly_name.sub(EMAIL_PLUS_TAG_REGEXP, '@') : user.friendly_name
   end
 
   def build_invite_subject(subject, email_config, submitter)
@@ -293,7 +294,7 @@ class SubmitterMailer < ApplicationMailer
     end
   end
 
-  def fetch_config_email_body(email_config, _submitter = nil)
+  def fetch_config_email_body(email_config)
     email_config ? email_config.value['body'].presence : nil
   end
 

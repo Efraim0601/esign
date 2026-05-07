@@ -3,7 +3,9 @@
 class TemplatesFoldersController < ApplicationController
   load_and_authorize_resource :template
 
-  def edit; end
+  def edit
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update
     name = [params[:parent_name], params[:name]].compact_blank.join(' / ')

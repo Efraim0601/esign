@@ -2,6 +2,7 @@
 
 module LoadIco
   BI_RGB = 0
+  UNABLE_TO_LOAD = 'Unable to load'
 
   module_function
 
@@ -10,14 +11,14 @@ module LoadIco
     io = StringIO.new(ico_bytes)
     _reserved, type, count = io.read(6)&.unpack('S<S<S<')
 
-    raise ArgumentError, 'Unable to load' unless type == 1 && count&.positive?
+    raise ArgumentError, UNABLE_TO_LOAD unless type == 1 && count&.positive?
 
     ico_entries_parsed = []
 
     count.times do
       entry_bytes = io.read(16)
 
-      raise ArgumentError, 'Unable to load' unless entry_bytes && entry_bytes.bytesize == 16
+      raise ArgumentError, UNABLE_TO_LOAD unless entry_bytes && entry_bytes.bytesize == 16
 
       width_byte, height_byte, _num_colors_palette, _rsvd_entry, _planes_icon_entry, bpp_icon_entry,
       img_data_size, img_data_offset = entry_bytes.unpack('CCCCS<S<L<L<')
@@ -35,16 +36,16 @@ module LoadIco
 
     best_entry = ico_entries_parsed.min_by { |e| [-e[:width] * e[:height], -e[:sort_bpp]] }
 
-    raise ArgumentError, 'Unable to load' unless best_entry
+    raise ArgumentError, UNABLE_TO_LOAD unless best_entry
 
     io.seek(best_entry[:offset])
     image_data_bytes = io.read(best_entry[:size])
 
-    raise ArgumentError, 'Unable to load' unless image_data_bytes && image_data_bytes.bytesize == best_entry[:size]
+    raise ArgumentError, UNABLE_TO_LOAD unless image_data_bytes && image_data_bytes.bytesize == best_entry[:size]
 
     image = load_image_entry(image_data_bytes, best_entry[:width], best_entry[:height])
 
-    raise ArgumentError, 'Unable to load' unless image
+    raise ArgumentError, UNABLE_TO_LOAD unless image
 
     image
   end
@@ -182,6 +183,9 @@ module LoadIco
           g = g_p
           b = b_p
           a = a_p
+        else
+          # Unsupported bit depth — keep defaults (transparent black).
+          nil
         end
 
         if has_and_mask && !and_mask_bits_for_row.empty?

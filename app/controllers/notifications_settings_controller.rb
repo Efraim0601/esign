@@ -9,7 +9,9 @@ class NotificationsSettingsController < ApplicationController
   before_action :build_account_config, only: :create
   authorize_resource :account_config, only: :create
 
-  def index; end
+  def index
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     if @account_config.value.present? ? @account_config.save : @account_config.delete

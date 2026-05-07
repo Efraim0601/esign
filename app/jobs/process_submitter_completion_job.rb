@@ -3,6 +3,9 @@
 class ProcessSubmitterCompletionJob
   include Sidekiq::Job
 
+  FORM_COMPLETED_EVENT = 'form.completed'
+  SUBMISSION_COMPLETED_EVENT = 'submission.completed'
+
   def perform(params = {})
     submitter = Submitter.find(params['submitter_id'])
 
@@ -80,21 +83,21 @@ class ProcessSubmitterCompletionJob
   def enqueue_completed_webhooks(submitter, is_all_completed: false)
     event_uuids = {}
 
-    WebhookUrls.for_account_id(submitter.account_id, %w[form.completed submission.completed]).each do |webhook|
-      if webhook.events.include?('form.completed')
-        event_uuids['form.completed'] ||= SecureRandom.uuid
+    WebhookUrls.for_account_id(submitter.account_id, [FORM_COMPLETED_EVENT, SUBMISSION_COMPLETED_EVENT]).each do |webhook|
+      if webhook.events.include?(FORM_COMPLETED_EVENT)
+        event_uuids[FORM_COMPLETED_EVENT] ||= SecureRandom.uuid
 
         SendFormCompletedWebhookRequestJob.perform_async('submitter_id' => submitter.id,
-                                                         'event_uuid' => event_uuids['form.completed'],
+                                                         'event_uuid' => event_uuids[FORM_COMPLETED_EVENT],
                                                          'webhook_url_id' => webhook.id)
       end
 
-      next unless webhook.events.include?('submission.completed') && is_all_completed
+      next unless webhook.events.include?(SUBMISSION_COMPLETED_EVENT) && is_all_completed
 
-      event_uuids['submission.completed'] ||= SecureRandom.uuid
+      event_uuids[SUBMISSION_COMPLETED_EVENT] ||= SecureRandom.uuid
 
       SendSubmissionCompletedWebhookRequestJob.perform_async('submission_id' => submitter.submission_id,
-                                                             'event_uuid' => event_uuids['submission.completed'],
+                                                             'event_uuid' => event_uuids[SUBMISSION_COMPLETED_EVENT],
                                                              'webhook_url_id' => webhook.id)
     end
   end

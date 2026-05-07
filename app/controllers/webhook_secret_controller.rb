@@ -3,7 +3,9 @@
 class WebhookSecretController < ApplicationController
   load_and_authorize_resource :webhook_url, parent: false
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update
     @webhook_url.update!(secret: {

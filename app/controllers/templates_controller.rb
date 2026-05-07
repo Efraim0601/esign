@@ -24,7 +24,9 @@ class TemplatesController < ApplicationController
     redirect_to root_path
   end
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def edit
     ActiveRecord::Associations::Preloader.new(

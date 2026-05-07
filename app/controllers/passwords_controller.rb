@@ -25,7 +25,7 @@ class PasswordsController < Devise::PasswordsController
 
   private
 
-  def after_resetting_password_path_for(_)
+  def after_resetting_password_path_for(*)
     new_session_path(resource_name)
   end
 end

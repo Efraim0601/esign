@@ -21,7 +21,9 @@ class UsersController < ApplicationController
     @pagy, @users = pagy(@users.preload(account: :account_accesses).where(account: current_account).order(id: :desc))
   end
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def edit
     @role_changes =

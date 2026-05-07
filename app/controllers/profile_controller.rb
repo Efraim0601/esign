@@ -5,7 +5,9 @@ class ProfileController < ApplicationController
     authorize!(:update, current_user)
   end
 
-  def index; end
+  def index
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update_contact
     if current_user.update(contact_params)

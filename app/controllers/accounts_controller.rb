@@ -15,7 +15,9 @@ class AccountsController < ApplicationController
   before_action :load_account
   authorize_resource :account
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update
     current_account.update!(account_params)

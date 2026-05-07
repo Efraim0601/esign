@@ -12,6 +12,8 @@ class SubmissionsController < ApplicationController
     authorize!(:create, Submission)
   end
 
+  ERROR_PARTIAL = 'submissions/error'
+
   FIELD_ICONS = {
     'text' => 'text_size', 'signature' => 'writing_sign', 'date' => 'calendar_event',
     'number' => 'square_number_1', 'image' => 'photo', 'initials' => 'letter_case_upper',
@@ -64,19 +66,19 @@ class SubmissionsController < ApplicationController
       redirect_to template_path(@template), notice: I18n.t('new_recipients_have_been_added')
     end
   rescue Submissions::CreateFromSubmitters::BaseError => e
-    render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
+    render turbo_stream: turbo_stream.replace(:submitters_error, partial: ERROR_PARTIAL,
                                                                  locals: { error: e.message }),
            status: :unprocessable_content
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error("Submission creation failed: #{e.message}")
     Rollbar.error(e) if defined?(Rollbar)
-    render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
+    render turbo_stream: turbo_stream.replace(:submitters_error, partial: ERROR_PARTIAL,
                                                                  locals: { error: e.message }),
            status: :unprocessable_content
   rescue StandardError => e
     Rails.logger.error("Unexpected error during submission creation: #{e.message}")
     Rollbar.error(e) if defined?(Rollbar)
-    render turbo_stream: turbo_stream.replace(:submitters_error, partial: 'submissions/error',
+    render turbo_stream: turbo_stream.replace(:submitters_error, partial: ERROR_PARTIAL,
                                                                  locals: { error: 'An unexpected error occurred. Please try again.' }),
            status: :internal_server_error
   end

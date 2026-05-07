@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html data-theme="esign" lang="<%= I18n.locale %>">
   <head>
+    <title><%= content_for(:html_title) || (signed_in? ? 'FirstSign' : 'FirstSign | Open Source Document Signing') %></title>
     <%= render 'layouts/head_tags' %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= csrf_meta_tags %>

@@ -5,7 +5,9 @@ class EmailSmtpSettingsController < ApplicationController
   authorize_resource :encrypted_config, only: :index
   authorize_resource :encrypted_config, parent: false, only: :create
 
-  def index; end
+  def index
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     if @encrypted_config.update(email_configs)

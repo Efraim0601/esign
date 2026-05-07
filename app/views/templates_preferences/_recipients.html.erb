@@ -144,7 +144,7 @@
     <% template.submitters.each_with_index do |submitter, index| %>
       <turbo-stream action="replace" target="order_<%= submitter['uuid'] %>">
         <template>
-          <div id="order_<%= submitter['uuid'] %>">
+          <div id="order_<%= submitter['uuid'] %>"><%# NOSONAR — duplicate id is intentional: Turbo Streams replace the live element with this template's clone %>
             <%= select_tag "template[submitters][#{index}][order]", options_for_select(template.submitters.map.with_index { |_, i| [(i + 1).ordinalize, i] }, submitter['order'].presence || index), class: 'select select-xs text-sm input-bordered bg-white pl-3.5' %>
           </div>
         </template>

@@ -5,7 +5,9 @@ class TemplatesUploadsController < ApplicationController
 
   layout 'plain'
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     url_params = create_file_params_from_url if params[:url].present?

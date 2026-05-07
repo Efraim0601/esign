@@ -16,44 +16,21 @@ module Templates
 
     PageNode = Struct.new(:prev, :next, :elem, :page, :attachment_uuid, keyword_init: true)
 
-    DATE_REGEXP = /
-      (?:
-          date
-        | signed\sat
-        | datum
-      )[:_\s-]*\z
-    /ix
+    LABEL_SUFFIX = ')[:_\s-]*\z' # closing group + optional separator + end-anchor
 
-    NUMBER_REGEXP = /
-      (?:
-          price
-        | \$
-        | €
-        | total
-        | quantity
-        | prix
-        | quantité
-        | preis
-        | summe
-        | gesamt(?:betrag)?
-        | menge
-        | anzahl
-        | stückzahl
-      )[:_\s-]*\z
-    /ix
+    DATE_REGEXP = Regexp.new(
+      '(?:date|signed\sat|datum' + LABEL_SUFFIX, Regexp::IGNORECASE
+    )
 
-    SIGNATURE_REGEXP = /
-      (?:
-          signature
-        | sign\shere
-        | sign
-        | signez\sici
-        | signer\sici
-        | unterschrift
-        | unterschreiben
-        | unterzeichnen
-      )[:_\s-]*\z
-    /ix
+    NUMBER_REGEXP = Regexp.new(
+      '(?:price|\$|€|total|quantity|prix|quantité|preis|summe|gesamt(?:betrag)?|menge|anzahl|stückzahl' + LABEL_SUFFIX,
+      Regexp::IGNORECASE
+    )
+
+    SIGNATURE_REGEXP = Regexp.new(
+      '(?:signature|sign\shere|sign|signez\sici|signer\sici|unterschrift|unterschreiben|unterzeichnen' + LABEL_SUFFIX,
+      Regexp::IGNORECASE
+    )
 
     LINEBREAK = ["\n", "\r"].freeze
     CHECKBOXES = ['☐', '□'].freeze
@@ -235,14 +212,12 @@ module Templates
 
         break unless node
 
-        if node.content.in?(LINEBREAK)
-          next_node = text_nodes[index]
+        if node.content.in?(LINEBREAK) &&
+           (next_node = text_nodes[index]) &&
+           (next_node.endy - node.endy) < y_threshold
+          index += 1
 
-          if next_node && (next_node.endy - node.endy) < y_threshold
-            index += 1
-
-            next
-          end
+          next
         end
 
         loop do
@@ -305,8 +280,8 @@ module Templates
           end
         end
 
-        if node.content != '_' || !tail_node.elem.ends_with?('___')
-          tail_node.elem << node.content unless CHECKBOXES.include?(node.content)
+        if (node.content != '_' || !tail_node.elem.ends_with?('___')) && CHECKBOXES.exclude?(node.content)
+          tail_node.elem << node.content
         end
 
         prev_node = node

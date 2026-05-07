@@ -43,7 +43,7 @@
           palette = icon_palette[idx % icon_palette.size]
           row_target = submission_path(submission)
         %>
-        <tr class="hover cursor-pointer" onclick="if (event.target.closest('a, button, form, label')) return; window.location='<%= row_target %>'">
+        <tr class="hover cursor-pointer" tabindex="0" onclick="if (event.target.closest('a, button, form, label')) return; window.location='<%= row_target %>'" onkeydown="if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button, form, label')) { event.preventDefault(); window.location='<%= row_target %>' }">
           <td>
             <span class="w-8 h-8 rounded-md flex items-center justify-center <%= palette[:bg] %> <%= palette[:fg] %>">
               <%= svg_icon('file_text', class: 'w-4 h-4') %>

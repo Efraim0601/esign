@@ -7,7 +7,8 @@ module Docuseal
   NEWSLETTER_URL = "#{PRODUCT_URL}/newsletters".freeze
   ENQUIRIES_URL = "#{PRODUCT_URL}/enquiries".freeze
   PRODUCT_NAME = 'FirstSign'
-  DEFAULT_APP_URL = ENV.fetch('APP_URL', 'http://localhost:3000')
+  LOCALHOST_URL = 'http://localhost:3000'
+  DEFAULT_APP_URL = ENV.fetch('APP_URL', LOCALHOST_URL)
   GITHUB_URL = 'https://github.com/firstsignco/firstsign'
   DISCORD_URL = 'https://discord.gg/qygYCDGck9'
   TWITTER_URL = 'https://twitter.com/docusealco'
@@ -24,12 +25,12 @@ module Docuseal
                   'https://console.firstsign.com'
                 end
   CLOUD_URL = if Rails.env.development?
-                'http://localhost:3000'
+                LOCALHOST_URL
               else
                 'https://firstsign.com'
               end
   CDN_URL = if Rails.env.development?
-              'http://localhost:3000'
+              LOCALHOST_URL
             elsif ENV['MULTITENANT'] == 'true'
               "https://cdn.#{HOST}"
             else

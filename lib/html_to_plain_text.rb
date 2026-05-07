@@ -40,6 +40,8 @@ module HtmlToPlainText
         next
       when Nokogiri::XML::Element
         result << process_element(child, line_length)
+      else
+        next # ignore other Nokogiri node types (CDATA, ProcessingInstruction, etc.)
       end
     end
 

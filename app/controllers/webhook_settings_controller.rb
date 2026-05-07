@@ -29,7 +29,9 @@ class WebhookSettingsController < ApplicationController
     @pagy, @webhook_events = pagy(:countless, @webhook_events.order(id: :desc))
   end
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     @webhook_url.save!

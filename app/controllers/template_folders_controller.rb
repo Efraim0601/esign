@@ -40,7 +40,9 @@ class TemplateFoldersController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update
     if @template_folder != current_account.default_template_folder &&

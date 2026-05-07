@@ -216,6 +216,9 @@ module LoadBmp
         width.times do |x|
           output << palette[raw_data.getbyte(row_offset + x)]
         end
+      else
+        # Unsupported bpp for paletted decode — caller filtered to 1/4/8 already.
+        nil
       end
     end
 

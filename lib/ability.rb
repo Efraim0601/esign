@@ -137,6 +137,9 @@ class Ability
       can :manage, Submission, account_id: user.account_id
       can :manage, Submitter, account_id: user.account_id
       can :manage, User, account_id: user.account_id
+    else
+      # Unknown role: no extra restrictions applied — falls through to base permissions above.
+      nil
     end
   end
 end

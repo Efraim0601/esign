@@ -93,7 +93,9 @@ class SubmitFormController < ApplicationController
     redirect_to submit_form_path(params[:submit_form_slug])
   end
 
-  def success; end
+  def success
+    # no-op (Rails implicit rendering / stub)
+  end
 
   private
 

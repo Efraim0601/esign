@@ -17,6 +17,8 @@ class WebhookEventsController < ApplicationController
         Templates::SerializeForApi.call(@webhook_event.record)
       when 'submission.archived', 'template.archived'
         @webhook_event.record.as_json(only: %i[id archived_at])
+      else
+        nil
       end
   end
 

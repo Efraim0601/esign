@@ -7,11 +7,17 @@ class MfaSetupController < ApplicationController
 
   before_action :set_provision_url, only: %i[show new]
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 
-  def edit; end
+  def edit
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     if current_user.validate_and_consume_otp!(params[:otp_attempt])

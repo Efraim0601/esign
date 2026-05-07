@@ -60,11 +60,14 @@ class AccountConfig < ApplicationRecord
   ENABLE_MCP_KEY = 'enable_mcp'
   REQUIRE_SUBMITTER_EMAIL_2FA_KEY = 'require_submitter_email_2fa'
 
+  TEMPLATE_NAME_VAR = 'template.name'
+  ACCOUNT_NAME_VAR = 'account.name'
+
   EMAIL_VARIABLES = {
-    SUBMITTER_INVITATION_EMAIL_KEY => %w[template.name submitter.link account.name].freeze,
-    SUBMITTER_COMPLETED_EMAIL_KEY => %w[template.name submission.submitters submission.link].freeze,
-    SUBMITTER_INVITATION_REMINDER_EMAIL_KEY => %w[template.name submitter.link account.name].freeze,
-    SUBMITTER_DOCUMENTS_COPY_EMAIL_KEY => %w[template.name documents.link account.name].freeze
+    SUBMITTER_INVITATION_EMAIL_KEY => [TEMPLATE_NAME_VAR, 'submitter.link', ACCOUNT_NAME_VAR].freeze,
+    SUBMITTER_COMPLETED_EMAIL_KEY => [TEMPLATE_NAME_VAR, 'submission.submitters', 'submission.link'].freeze,
+    SUBMITTER_INVITATION_REMINDER_EMAIL_KEY => [TEMPLATE_NAME_VAR, 'submitter.link', ACCOUNT_NAME_VAR].freeze,
+    SUBMITTER_DOCUMENTS_COPY_EMAIL_KEY => [TEMPLATE_NAME_VAR, 'documents.link', ACCOUNT_NAME_VAR].freeze
   }.freeze
 
   DEFAULT_VALUES = {

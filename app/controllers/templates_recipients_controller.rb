@@ -62,6 +62,9 @@ class TemplatesRecipientsController < ApplicationController
         attrs[:optional_invite_by_uuid] = ::Regexp.last_match(-1)
       when /\Ainvite_by_(.*)\z/
         attrs[:invite_by_uuid] = ::Regexp.last_match(-1)
+      else
+        # Unrecognized option string — leave attrs untouched.
+        nil
       end
     end
 

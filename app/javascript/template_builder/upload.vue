@@ -127,6 +127,7 @@
                 class="border border-base-300 rounded-lg"
                 style="width: 100%; height: 440px; background: white;"
                 src="/template_google_drive"
+                title="Google Drive file picker"
               />
               <div v-if="isLoadingGoogleDrive">
                 <div

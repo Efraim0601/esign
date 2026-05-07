@@ -3,5 +3,7 @@
 class TemplatesCodeModalController < ApplicationController
   load_and_authorize_resource :template
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 end

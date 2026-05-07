@@ -7,6 +7,8 @@ module Api
 
     DEFAULT_LIMIT = 10
     MAX_LIMIT = 100
+    NOT_AUTHORIZED_MSG = 'Not authorized'
+    AUTH_TOKEN_HEADER = 'X-Auth-Token'
 
     impersonates :user, with: ->(uuid) { User.find_by(uuid:) }
 
@@ -40,9 +42,9 @@ module Api
     private
 
     def access_denied_error_message(error)
-      return 'Not authorized' if request.headers['X-Auth-Token'].blank?
-      return 'Not authorized' unless error.subject.is_a?(ActiveRecord::Base)
-      return 'Not authorized' unless error.subject.respond_to?(:account_id)
+      return NOT_AUTHORIZED_MSG if request.headers[AUTH_TOKEN_HEADER].blank?
+      return NOT_AUTHORIZED_MSG unless error.subject.is_a?(ActiveRecord::Base)
+      return NOT_AUTHORIZED_MSG unless error.subject.respond_to?(:account_id)
 
       linked_account_record_exists =
         if current_user.account.testing?
@@ -52,7 +54,7 @@ module Api
           current_user.account.testing_accounts.exists?(id: error.subject.account_id)
         end
 
-      return 'Not authorized' unless linked_account_record_exists
+      return NOT_AUTHORIZED_MSG unless linked_account_record_exists
 
       object_name = error.subject.model_name.human
       id = error.subject.id
@@ -87,8 +89,8 @@ module Api
 
     def current_user
       super || @current_user ||=
-                 if request.headers['X-Auth-Token'].present?
-                   sha256 = Digest::SHA256.hexdigest(request.headers['X-Auth-Token'])
+                 if request.headers[AUTH_TOKEN_HEADER].present?
+                   sha256 = Digest::SHA256.hexdigest(request.headers[AUTH_TOKEN_HEADER])
 
                    User.joins(:access_token).active.find_by(access_token: { sha256: })
                  end

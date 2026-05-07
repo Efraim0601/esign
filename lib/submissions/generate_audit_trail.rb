@@ -519,7 +519,9 @@ module Submissions
       end
     end
 
-    def maybe_add_background(_canvas, _submission, _page_size); end
+    def maybe_add_background(_canvas, _submission, _page_size)
+      # no-op (Rails implicit rendering / stub)
+    end
 
     def show_verify?(submission)
       !submission.source.in?(%w[embed api])

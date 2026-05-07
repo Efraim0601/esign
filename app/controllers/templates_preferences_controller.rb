@@ -12,7 +12,9 @@ class TemplatesPreferencesController < ApplicationController
                                                        completed_notification_email_body]
   }.freeze
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     authorize!(:update, @template)

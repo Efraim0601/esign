@@ -4,7 +4,9 @@ class SsoSettingsController < ApplicationController
   before_action :load_encrypted_config
   authorize_resource :encrypted_config, only: :index
 
-  def index; end
+  def index
+    # no-op (Rails implicit rendering / stub)
+  end
 
   private
 

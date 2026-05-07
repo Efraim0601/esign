@@ -60,7 +60,7 @@ class Pdfium
   end
 
   # rubocop:disable Naming/ClassAndModuleCamelCase
-  class FPDF_LIBRARY_CONFIG < FFI::Struct
+  class FPDF_LIBRARY_CONFIG < FFI::Struct # NOSONAR — mirrors PDFium C struct name verbatim
     layout :version, :int,
            :m_pUserFontPaths, :pointer,
            :m_pIsolate, :pointer,
@@ -135,7 +135,7 @@ class Pdfium
   typedef :pointer, :IPDF_JSPLATFORM
 
   # rubocop:disable Naming/ClassAndModuleCamelCase
-  class FPDF_FORMFILLINFO_V2 < FFI::Struct
+  class FPDF_FORMFILLINFO_V2 < FFI::Struct # NOSONAR — mirrors PDFium C struct name verbatim
     layout :version, :int,
            :Release, :pointer,
            :FFI_Invalidate, :pointer,

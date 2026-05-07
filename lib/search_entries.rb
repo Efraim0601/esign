@@ -46,13 +46,9 @@ module SearchEntries
 
       sql =
         if number.length <= 2
-          <<~SQL.squish
-            ngram @@ (quote_literal(?)::tsquery || quote_literal(?)::tsquery) OR tsvector @@ plainto_tsquery(?)
-          SQL
+          'ngram @@ (quote_literal(?)::tsquery || quote_literal(?)::tsquery) OR tsvector @@ plainto_tsquery(?)'
         else
-          <<~SQL.squish
-            tsvector @@ ((quote_literal(?) || ':*')::tsquery || (quote_literal(?) || ':*')::tsquery || plainto_tsquery(?))
-          SQL
+          "tsvector @@ ((quote_literal(?) || ':*')::tsquery || (quote_literal(?) || ':*')::tsquery || plainto_tsquery(?))"
         end
 
       [sql, number, number.length > 1 ? number.delete_prefix('0') : number, keyword]
@@ -116,13 +112,9 @@ module SearchEntries
 
     sql =
       if keyword.length <= 2
-        <<~SQL.squish
-          ngram @@ (quote_literal(:keyword) || ':' || :weight)::tsquery
-        SQL
+        "ngram @@ (quote_literal(:keyword) || ':' || :weight)::tsquery"
       else
-        <<~SQL.squish
-          tsvector @@ (quote_literal(coalesce((ts_lexize('english_stem', :keyword))[1], :keyword)) || ':*' || :weight)::tsquery
-        SQL
+        "tsvector @@ (quote_literal(coalesce((ts_lexize('english_stem', :keyword))[1], :keyword)) || ':*' || :weight)::tsquery"
       end
 
     [sql, { keyword:, weight: }]

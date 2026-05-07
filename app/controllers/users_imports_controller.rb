@@ -3,7 +3,9 @@
 class UsersImportsController < ApplicationController
   before_action :authorize_import
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def create
     file = params[:file]

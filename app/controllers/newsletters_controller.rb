@@ -3,7 +3,9 @@
 class NewslettersController < ApplicationController
   skip_authorization_check
 
-  def show; end
+  def show
+    # no-op (Rails implicit rendering / stub)
+  end
 
   def update
     Faraday.post(Docuseal::NEWSLETTER_URL, newsletter_params.to_json, 'Content-Type' => 'application/json')

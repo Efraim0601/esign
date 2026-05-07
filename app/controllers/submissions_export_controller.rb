@@ -25,5 +25,7 @@ class SubmissionsExportController < ApplicationController
     end
   end
 
-  def new; end
+  def new
+    # no-op (Rails implicit rendering / stub)
+  end
 end
