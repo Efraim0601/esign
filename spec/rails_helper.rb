@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# SimpleCov must start before any application code is required
+# so that it can instrument every file that gets loaded.
+require 'simplecov' if ENV['COVERAGE']
+
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 ENV['TZ'] ||= 'UTC'
@@ -15,8 +19,6 @@ require 'signing_form_helper'
 Sidekiq::Testing.fake!
 
 WebMock.disable_net_connect!(allow_localhost: true)
-
-require 'simplecov' if ENV['COVERAGE']
 
 Capybara.server = :puma, { Silent: true }
 Capybara.disable_animation = true
