@@ -158,7 +158,7 @@ export default {
 
       const parsedDate = new Date(pasteData)
 
-      if (!isNaN(parsedDate)) {
+      if (!Number.isNaN(parsedDate)) {
         const inputEl = this.$refs.input
 
         inputEl.valueAsDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000)

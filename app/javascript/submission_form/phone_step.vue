@@ -204,7 +204,7 @@ export default {
       return new RegExp(`^\\+(${dialCodes.join('|')})`)
     },
     detectedPhoneValueDialCode () {
-      return (this.phoneValue || '').replace(/[^\d+]/g, '').match(this.dialCodesRegexp)?.[1]
+      return (this.phoneValue || '').replaceAll(/[^\d+]/g, '').match(this.dialCodesRegexp)?.[1]
     },
     fullInternationalPhoneValue () {
       if (this.detectedPhoneValueDialCode) {
@@ -271,7 +271,7 @@ export default {
       }
     },
     startResendCodeCountdown () {
-      this.resendCodeCountdown = 15 - parseInt((Date.now() - this.codeSentAt) / 1000)
+      this.resendCodeCountdown = 15 - Number.parseInt((Date.now() - this.codeSentAt) / 1000)
 
       this.interval = setInterval(() => {
         this.resendCodeCountdown--

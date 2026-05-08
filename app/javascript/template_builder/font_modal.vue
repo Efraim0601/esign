@@ -58,7 +58,7 @@
               <select
                 class="select input-bordered bg-white select-sm text-center pl-2"
                 style="font-size: 16px; line-height: 12px; width: 86px; text-align-last: center;"
-                @change="$event.target.value ? preferences.font_size = parseInt($event.target.value) : delete preferences.font_size"
+                @change="$event.target.value ? preferences.font_size = Number.parseInt($event.target.value) : delete preferences.font_size"
               >
                 <option
                   :selected="!preferences.font_size"
@@ -252,7 +252,7 @@ export default {
       ]
     },
     sizes () {
-      return [...Array(23).keys()].map(i => i + 6)
+      return [...new Array(23).keys()].map(i => i + 6)
     },
     colors () {
       return [

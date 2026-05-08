@@ -7,7 +7,7 @@
         :height="previewImage.metadata.height"
         class="rounded border"
         loading="lazy"
-      >
+ alt=""      >
       <div
         class="group flex justify-end cursor-pointer top-0 bottom-0 left-0 right-0 absolute p-1 hover:bg-black/10 transition-colors rounded"
         @click="$emit('scroll-to', item)"
@@ -259,7 +259,7 @@ export default {
     fieldNames: FieldType.computed.fieldNames,
     fieldLabels: FieldType.computed.fieldLabels,
     previewImage () {
-      return [...this.document.preview_images].sort((a, b) => parseInt(a.filename) - parseInt(b.filename))[0]
+      return [...this.document.preview_images].sort((a, b) => Number.parseInt(a.filename) - Number.parseInt(b.filename))[0]
     },
     modalContainerEl () {
       return this.$el.getRootNode().querySelector('#docuseal_modal_container')

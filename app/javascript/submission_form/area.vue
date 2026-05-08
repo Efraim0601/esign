@@ -54,17 +54,17 @@
       v-if="field.type === 'image' && image"
       class="object-contain mx-auto"
       :src="image.url"
-    >
+ alt=""    >
     <img
       v-else-if="field.type === 'stamp' && stamp"
       class="object-contain mx-auto"
       :src="stamp.url"
-    >
+ alt=""    >
     <img
       v-else-if="field.type === 'kba' && kba"
       class="object-contain mx-auto"
       :src="kba.url"
-    >
+ alt=""    >
     <div
       v-else-if="field.type === 'signature' && signature"
       class="flex justify-between h-full gap-1 overflow-hidden w-full"
@@ -78,7 +78,7 @@
         <img
           class="object-contain mx-auto"
           :src="signature.url"
-        >
+ alt=""        >
       </div>
       <div
         v-if="isShowSignatureId || field.preferences?.reason_field_uuid"
@@ -94,7 +94,7 @@
       v-else-if="field.type === 'initials' && initials"
       class="object-contain mx-auto"
       :src="initials.url"
-    >
+ alt=""    >
     <div
       v-else-if="(field.type === 'file' || field.type === 'payment') && attachments.length"
       class="px-0.5 flex flex-col justify-center"
@@ -543,7 +543,7 @@ export default {
       return { fontSize, lineHeight: `calc(${fontSize} * ${this.lineHeight})` }
     },
     fontSizePx () {
-      return parseInt(this.field?.preferences?.font_size || 11) * this.fontScale
+      return Number.parseInt(this.field?.preferences?.font_size || 11) * this.fontScale
     },
     lineHeight () {
       return 1.3

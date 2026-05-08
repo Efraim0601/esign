@@ -198,7 +198,7 @@ export default {
       return this.editorRef.value
     },
     sectionWidthPx () {
-      const pt = parseFloat(this.section.style.width)
+      const pt = Number.parseFloat(this.section.style.width)
 
       return pt * (96 / 72)
     },

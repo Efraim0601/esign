@@ -5,7 +5,7 @@ export default class extends HTMLElement {
     if (this.dataset.interval) {
       this.interval = setInterval(() => {
         form.requestSubmit()
-      }, parseInt(this.dataset.interval))
+      }, Number.parseInt(this.dataset.interval))
     } else if (this.dataset.on) {
       this.lastElementChild.addEventListener(this.dataset.on, (event) => {
         if (this.dataset.disable === 'true') {

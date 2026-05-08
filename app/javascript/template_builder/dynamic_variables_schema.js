@@ -146,7 +146,7 @@ function mapTagValues (tags) {
 }
 
 function parseTagTypeName (tagString) {
-  const val = tagString.replace(/[[\]]/g, '').trim()
+  const val = tagString.replaceAll(/[[\]]/g, '').trim()
   const parts = val.split(':').map((s) => s.trim())
 
   if (parts.length === 2 && KEYWORDS.includes(parts[0])) {
@@ -213,7 +213,7 @@ function tokenizeCondition (str) {
       tokens.push({ type: 'string', value: m[1] })
       pos += m[0].length
     } else if ((m = rest.match(/^(-?\d+\.?\d*)/))) {
-      tokens.push({ type: 'number', value: m[1].includes('.') ? parseFloat(m[1]) : parseInt(m[1], 10) })
+      tokens.push({ type: 'number', value: m[1].includes('.') ? Number.parseFloat(m[1]) : Number.parseInt(m[1], 10) })
       pos += m[1].length
     } else if ((m = rest.match(/^(true|false)\b/i))) {
       tokens.push({ type: 'boolean', value: m[1].toLowerCase() === 'true' })

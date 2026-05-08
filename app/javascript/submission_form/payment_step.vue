@@ -199,7 +199,7 @@ export default {
   },
   methods: {
     calculateFormula () {
-      const transformedFormula = this.normalizeFormula(this.field.preferences.formula).replace(/{{(.*?)}}/g, (match, uuid) => {
+      const transformedFormula = this.normalizeFormula(this.field.preferences.formula).replaceAll(/{{(.*?)}}/g, (match, uuid) => {
         return this.readonlyValues[uuid] || this.values[uuid] || 0.0
       })
 
@@ -208,7 +208,7 @@ export default {
     normalizeFormula (formula, depth = 0) {
       if (depth > 10) return formula
 
-      return formula.replace(/{{(.*?)}}/g, (match, uuid) => {
+      return formula.replaceAll(/{{(.*?)}}/g, (match, uuid) => {
         if (this.fieldsUuidIndex[uuid]) {
           return `(${this.normalizeFormula(this.fieldsUuidIndex[uuid].preferences.formula, depth + 1)})`
         } else {

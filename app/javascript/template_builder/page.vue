@@ -13,7 +13,7 @@
       :height="height"
       class="rounded"
       @load="onImageLoad"
-    >
+ alt=""    >
     <div
       class="top-0 bottom-0 left-0 right-0 absolute"
       @pointerdown="onStartDraw"

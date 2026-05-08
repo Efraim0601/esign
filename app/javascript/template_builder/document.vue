@@ -164,7 +164,7 @@ export default {
     sortedPreviewImages () {
       const lazyloadMetadata = this.document.preview_images[this.document.preview_images.length - 1]?.metadata || { width: 1400, height: 1812 }
 
-      return [...Array(this.numberOfPages).keys()].map((i) => {
+      return [...new Array(this.numberOfPages).keys()].map((i) => {
         return this.previewImagesIndex[i] || reactive({
           metadata: { ...lazyloadMetadata },
           id: Math.random().toString(),
@@ -174,7 +174,7 @@ export default {
     },
     previewImagesIndex () {
       return this.document.preview_images.reduce((acc, e) => {
-        acc[parseInt(e.filename)] = e
+        acc[Number.parseInt(e.filename)] = e
 
         return acc
       }, {})

@@ -119,7 +119,7 @@ export default {
         if (area) {
           const num = area.w / area.cell_w
 
-          return (num % 1) > 0.2 ? parseInt(num) + 1 : parseInt(num)
+          return (num % 1) > 0.2 ? Number.parseInt(num) + 1 : Number.parseInt(num)
         } else {
           return null
         }

@@ -170,7 +170,7 @@ export default {
       return field.type === 'number' || (['radio', 'select'].includes(field.type) && field.options?.every((o) => String(o.value).match(/^[\d.-]+$/)))
     },
     humanizeFormula (text) {
-      return text.replace(/{{(.*?)}}/g, (match, uuid) => {
+      return text.replaceAll(/{{(.*?)}}/g, (match, uuid) => {
         const foundField = this.template.fields.find((f) => f.uuid === uuid)
 
         if (foundField) {
@@ -181,7 +181,7 @@ export default {
       })
     },
     normalizeFormula (text) {
-      return text.replace(/{{(.*?)}}/g, (match, name) => {
+      return text.replaceAll(/{{(.*?)}}/g, (match, name) => {
         const foundField = this.template.fields.find((f) => {
           return (f.name || this.buildDefaultName(f)).trim() === name.trim()
         })

@@ -383,7 +383,7 @@ export default {
       }, {})
     },
     fontSizePx () {
-      return parseInt(this.field?.preferences?.font_size || 11) * this.fontScale
+      return Number.parseInt(this.field?.preferences?.font_size || 11) * this.fontScale
     },
     lineHeight () {
       return 1.3
@@ -636,10 +636,10 @@ export default {
 
       if (text) {
         if (this.field.type === 'number') {
-          const number = parseFloat(text)
+          const number = Number.parseFloat(text)
 
           if (number || number === 0) {
-            this.field.default_value = parseFloat(text)
+            this.field.default_value = Number.parseFloat(text)
           }
         } else {
           this.field.default_value = text

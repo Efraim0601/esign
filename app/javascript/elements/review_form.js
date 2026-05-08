@@ -2,7 +2,7 @@ export default class extends HTMLElement {
   connectedCallback () {
     this.querySelectorAll('input[type="radio"]').forEach(radio => {
       radio.addEventListener('change', (event) => {
-        const rating = parseInt(event.target.value)
+        const rating = Number.parseInt(event.target.value)
 
         if (rating === 10) {
           window.review_comment.value = ''

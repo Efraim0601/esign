@@ -26,7 +26,7 @@
       <img
         :src="attachmentsIndex[modelValue].url"
         class="h-52 border border-base-300 rounded mx-auto uploaded-image-preview"
-      >
+ alt=""      >
     </div>
     <input
       :value="modelValue"

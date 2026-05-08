@@ -67,8 +67,8 @@ export default class extends HTMLElement {
     if (['equal', 'not_equal', 'greater_than', 'less_than'].includes(action) && this.sourceEl?.getAttribute('type') === 'number') {
       if (this.isEmpty(actual) || this.isEmpty(expected)) return false
 
-      const actualNumber = parseFloat(actual)
-      const expectedNumber = parseFloat(expected)
+      const actualNumber = Number.parseFloat(actual)
+      const expectedNumber = Number.parseFloat(expected)
 
       if (Number.isNaN(actualNumber) || Number.isNaN(expectedNumber)) return false
 

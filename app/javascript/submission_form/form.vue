@@ -989,7 +989,7 @@ export default {
       }
     },
     alwaysMinimize () {
-      return this.minimize || (this.orientation?.includes('landscape') && this.isMobile && parseInt(window.innerHeight) < 550)
+      return this.minimize || (this.orientation?.includes('landscape') && this.isMobile && Number.parseInt(window.innerHeight) < 550)
     },
     hasMultipleDocuments () {
       return Object.keys(
@@ -1304,8 +1304,8 @@ export default {
 
         if (isEmpty(value) || isEmpty(condition.value)) return false
 
-        const actual = parseFloat(value)
-        const expected = parseFloat(condition.value)
+        const actual = Number.parseFloat(value)
+        const expected = Number.parseFloat(condition.value)
 
         if (Number.isNaN(actual) || Number.isNaN(expected)) return false
 
@@ -1560,7 +1560,7 @@ export default {
 
               return Promise.reject(new Error('Required field: ' + data.field_uuid))
             } else if (data.error) {
-              const i18nKey = data.error.replace(/\s+/g, '_').toLowerCase()
+              const i18nKey = data.error.replaceAll(/\s+/g, '_').toLowerCase()
 
               alert(this.t(i18nKey) !== i18nKey ? this.t(i18nKey) : data.error)
             } else {

@@ -121,7 +121,7 @@ export default {
   },
   computed: {
     isEmpty () {
-      return !this.inputValue.replace(/\u200B/g, '').replace(/\u00A0/g, ' ').trim()
+      return !this.inputValue.replaceAll(/\u200B/g, '').replaceAll(/\u00A0/g, ' ').trim()
     }
   },
   watch: {

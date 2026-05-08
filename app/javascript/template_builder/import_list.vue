@@ -79,7 +79,7 @@
                 class="base-select !select-sm !h-10"
                 :class="{ '!text-gray-300': !mapping.column_index && mapping.column_index != 0 }"
                 required
-                @change="mapping.column_index = parseInt($event.target.value)"
+                @change="mapping.column_index = Number.parseInt($event.target.value)"
               >
                 <option
                   disabled
@@ -317,7 +317,7 @@ export default {
 
       const csv = rows.map(item => {
         if (/[",\n]/.test(item)) {
-          return `"${item.replace(/"/g, '""')}"`
+          return `"${item.replaceAll(/"/g, '""')}"`
         } else {
           return item
         }

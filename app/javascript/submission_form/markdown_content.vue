@@ -70,7 +70,7 @@ export default {
         }
       }).join('')
 
-      return new DOMParser().parseFromString(snarkdown(text.replace(/\n/g, '<br>')), 'text/html')
+      return new DOMParser().parseFromString(snarkdown(text.replaceAll(/\n/g, '<br>')), 'text/html')
     }
   },
   methods: {

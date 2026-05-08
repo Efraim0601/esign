@@ -227,7 +227,7 @@ export default actionable(targetable(class extends HTMLElement {
         Underline,
         VariableHighlight
       ],
-      content: (this.textarea.value || '').trim().replace(/ *\n/g, '<br>'),
+      content: (this.textarea.value || '').trim().replaceAll(/ *\n/g, '<br>'),
       contentType: 'markdown',
       editorProps: {
         attributes: {
@@ -262,7 +262,7 @@ export default actionable(targetable(class extends HTMLElement {
         const tip = tooltip.getAttribute('data-tip')
 
         if (tip && tip.includes('Ctrl')) {
-          tooltip.setAttribute('data-tip', tip.replace(/Ctrl/g, '⌘'))
+          tooltip.setAttribute('data-tip', tip.replaceAll(/Ctrl/g, '⌘'))
         }
       })
     }
