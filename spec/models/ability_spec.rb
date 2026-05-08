@@ -3,6 +3,10 @@
 RSpec.describe Ability do
   let(:account) { create(:account) }
 
+  let(:other_author) { create(:user, account:, role: 'editor') }
+  let(:template_owned) { create(:template, account:, author: user) }
+  let(:template_other) { create(:template, account:, author: other_author) }
+
   let(:private_template) { create(:template, account:, author: user, private: true) }
   let(:private_template_other) { create(:template, account:, author: other_author, private: true) }
 

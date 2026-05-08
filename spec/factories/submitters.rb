@@ -5,6 +5,7 @@ FactoryBot.define do
     submission
     email { Faker::Internet.email }
     name { Faker::Name.name }
+    uuid { SecureRandom.uuid }
 
     before(:create) do |submitter, _|
       submitter.account_id = submitter.submission.account_id
