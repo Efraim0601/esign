@@ -17,71 +17,78 @@ module Submitters
 
     module_function
 
-    # rubocop:disable Metrics
     def call(template, values, submitter_name: nil, role_names: nil, for_submitter: nil, throw_errors: false,
              add_fields: false)
-      fields =
-        if role_names.present?
-          fetch_roles_fields(template, roles: role_names)
-        else
-          fetch_fields(template, submitter_name:, for_submitter:)
-        end
+      fields = collect_fields(template, submitter_name:, role_names:, for_submitter:)
+      indexes = { uuid: fields.index_by { |e| e['uuid'] }, name: build_fields_index(fields) }
 
-      fields_uuid_index = fields.index_by { |e| e['uuid'] }
-      fields_name_index = build_fields_index(fields)
-
-      attachments = []
-      new_fields = []
-      recipient_form_fields = nil
+      ctx = { attachments: [], new_fields: [], recipient_form_fields: nil,
+              fields:, template:, add_fields:, throw_errors:, for_submitter: }
 
       normalized_values = values.to_h.each_with_object({}) do |(key, value), acc|
         next if key.blank?
 
-        uuid_field = fields_uuid_index[key]
-
-        value_fields = [uuid_field] if uuid_field
-
-        if value_fields.blank?
-          value_fields = fields_name_index[key].presence || fields_name_index[key.to_s.downcase]
-
-          if value_fields.blank?
-            if add_fields && (recipient_form_fields ||= Accounts.load_recipient_form_fields(template.account))
-              new_field = recipient_form_fields.to_a.find { |e| e['name'] == key }.deep_dup
-
-              if new_field && fields.present?
-                new_field = new_field.except('conditions')
-                                     .merge('uuid' => SecureRandom.uuid,
-                                            'readonly' => true,
-                                            'submitter_uuid' => fields.first['submitter_uuid'])
-
-                new_fields.push(new_field)
-                value_fields = [new_field]
-              end
-            elsif throw_errors
-              raise(UnknownFieldName, "Unknown field: #{key}")
-            end
-          end
-        end
-
+        value_fields = resolve_value_fields(key, indexes, ctx)
         next if value_fields.blank?
 
-        value_fields.each do |field|
-          if field['type'].in?(%w[initials signature image file stamp]) && value.present?
-            new_value, new_attachments =
-              normalize_attachment_value(value, field, template.account, attachments, for_submitter)
-
-            attachments.push(*new_attachments)
-
-            acc[field['uuid']] = normalize_value(field, new_value)
-          else
-            acc[field['uuid']] = normalize_value(field, value)
-          end
-        end
+        assign_value_fields(value_fields, value, acc, ctx)
       end
 
-      [normalized_values, attachments, new_fields]
+      [normalized_values, ctx[:attachments], ctx[:new_fields]]
     end
-    # rubocop:enable Metrics
+
+    def collect_fields(template, submitter_name:, role_names:, for_submitter:)
+      if role_names.present?
+        fetch_roles_fields(template, roles: role_names)
+      else
+        fetch_fields(template, submitter_name:, for_submitter:)
+      end
+    end
+
+    def resolve_value_fields(key, indexes, ctx)
+      uuid_field = indexes[:uuid][key]
+      return [uuid_field] if uuid_field
+
+      direct = indexes[:name][key].presence || indexes[:name][key.to_s.downcase]
+      return direct if direct.present?
+
+      maybe_build_new_field(key, ctx)
+    end
+
+    def maybe_build_new_field(key, ctx)
+      if ctx[:add_fields]
+        ctx[:recipient_form_fields] ||= Accounts.load_recipient_form_fields(ctx[:template].account)
+        new_field = ctx[:recipient_form_fields].to_a.find { |e| e['name'] == key }.deep_dup
+
+        return [] unless new_field && ctx[:fields].present?
+
+        new_field = new_field.except('conditions')
+                             .merge('uuid' => SecureRandom.uuid,
+                                    'readonly' => true,
+                                    'submitter_uuid' => ctx[:fields].first['submitter_uuid'])
+        ctx[:new_fields].push(new_field)
+        [new_field]
+      else
+        raise(UnknownFieldName, "Unknown field: #{key}") if ctx[:throw_errors]
+
+        []
+      end
+    end
+
+    def assign_value_fields(value_fields, value, acc, ctx)
+      value_fields.each do |field|
+        if field['type'].in?(%w[initials signature image file stamp]) && value.present?
+          new_value, new_attachments =
+            normalize_attachment_value(value, field, ctx[:template].account, ctx[:attachments], ctx[:for_submitter])
+
+          ctx[:attachments].push(*new_attachments)
+
+          acc[field['uuid']] = normalize_value(field, new_value)
+        else
+          acc[field['uuid']] = normalize_value(field, value)
+        end
+      end
+    end
 
     def normalize_value(field, value)
       if field['type'] == 'checkbox'

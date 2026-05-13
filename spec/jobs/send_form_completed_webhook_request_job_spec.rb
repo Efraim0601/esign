@@ -36,7 +36,7 @@ RSpec.describe SendFormCompletedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook'
+          'User-Agent' => 'AFB.com Webhook'
         }
       ).once
     end
@@ -54,10 +54,16 @@ RSpec.describe SendFormCompletedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook',
+          'User-Agent' => 'AFB.com Webhook',
           'X-Secret-Header' => 'secret_value'
         }
       ).once
+    end
+
+    it 'returns without sending when submitter does not exist' do
+      described_class.new.perform('submitter_id' => -1, 'webhook_url_id' => webhook_url.id, 'event_uuid' => SecureRandom.uuid)
+
+      expect(WebMock).not_to have_requested(:post, webhook_url.url)
     end
 
     it "doesn't send a webhook request if the event is not in the webhook's events" do

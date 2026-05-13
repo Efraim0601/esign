@@ -33,6 +33,20 @@ describe 'Submitter API' do
       }.to_json))
       expect(response.parsed_body['data']).to eq(JSON.parse(submitters.map { |t| submitter_body(t) }.to_json))
     end
+
+    it 'filters submitters by template_id' do
+      kept = create(:submission, :with_submitters, template: templates[0], created_by_user: author).submitters.first
+      _other = create(:submission, :with_submitters, template: templates[1], created_by_user: author).submitters.first
+
+      get '/api/submitters',
+          headers: { 'x-auth-token': author.access_token.token },
+          params: { template_id: templates[0].id }
+
+      expect(response).to have_http_status(:ok)
+      ids = response.parsed_body.fetch('data', []).map { |row| row['id'] }
+      expect(ids).to include(kept.id)
+      expect(ids.size).to eq(1)
+    end
   end
 
   describe 'GET /api/submitters/:id' do
@@ -109,6 +123,32 @@ describe 'Submitter API' do
 
       expect(submitter.status).to eq('completed')
       expect(submitter.completed_at).not_to be_nil
+    end
+
+    it 'returns error when submitter is already completed' do
+      submitter = create(:submission, :with_submitters, template: templates[0], created_by_user: author)
+                  .submitters.first
+      submitter.update!(completed_at: Time.current)
+
+      put "/api/submitters/#{submitter.id}",
+          headers: { 'x-auth-token': author.access_token.token },
+          params: { email: 'new@example.com' }.to_json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).to include('already completed')
+    end
+
+    it 'returns error when submitter already declined' do
+      submitter = create(:submission, :with_submitters, template: templates[0], created_by_user: author)
+                  .submitters.first
+      submitter.update!(declined_at: Time.current)
+
+      put "/api/submitters/#{submitter.id}",
+          headers: { 'x-auth-token': author.access_token.token },
+          params: { email: 'new@example.com' }.to_json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).to include('already declined')
     end
   end
 

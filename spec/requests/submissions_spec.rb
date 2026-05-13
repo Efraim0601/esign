@@ -34,6 +34,19 @@ describe 'Submission API' do
       }.to_json))
       expect(response.parsed_body['data']).to eq(JSON.parse(submissions.map { |t| index_submission_body(t) }.to_json))
     end
+
+    it 'filters archived submissions when archived=true' do
+      active_submission = create(:submission, :with_submitters, template: templates[0], created_by_user: author)
+      archived_submission = create(:submission, :with_submitters, template: templates[1], created_by_user: author,
+                                                                archived_at: 1.hour.ago)
+
+      get '/api/submissions', headers: { 'x-auth-token': author.access_token.token }, params: { archived: true }
+
+      expect(response).to have_http_status(:ok)
+      ids = response.parsed_body.fetch('data', []).map { |row| row['id'] }
+      expect(ids).to include(archived_submission.id)
+      expect(ids).not_to include(active_submission.id)
+    end
   end
 
   describe 'GET /api/submissions/:id' do
@@ -85,6 +98,30 @@ describe 'Submission API' do
       submission = Submission.last
 
       expect(response.parsed_body).to eq(JSON.parse(create_submission_body(submission).to_json))
+    end
+
+    it 'returns a compact init payload for /api/submissions/init' do
+      post '/api/submissions/init',
+           headers: { 'x-auth-token': author.access_token.token },
+           params: {
+             template_id: templates[0].id,
+             submitters: [{ role: 'First Party', email: 'john.doe@example.com' }]
+           }.to_json
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to include('id', 'submitters')
+      expect(response.parsed_body['submitters']).to be_an(Array)
+    end
+
+    it 'returns template not found when template_id is invalid' do
+      expect do
+        post '/api/submissions',
+             headers: { 'x-auth-token': author.access_token.token },
+             params: {
+               template_id: -999,
+               submitters: [{ role: 'First Party', email: 'john.doe@example.com' }]
+             }.to_json
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'creates a submission when the message is empty' do
@@ -257,6 +294,7 @@ describe 'Submission API' do
         archived_at: submission.archived_at
       }.to_json))
     end
+
   end
 
   describe 'POST /templates/:template_id/submissions' do

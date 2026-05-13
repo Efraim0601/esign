@@ -76,29 +76,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update(attrs.except(*(current_user == @user ? %i[password otp_required_for_login role] : %i[password])))
-      if @user.saved_change_to_role?
-        old_role = @user.role_before_last_save
-        new_role = @user.role
-
-        RoleChangeLog.create!(
-          changed_by: current_user.id,
-          user_id: @user.id,
-          old_role:,
-          new_role:,
-          changed_at: Time.current
-        )
-
-        begin
-          UserMailer.role_changed(@user, old_role, new_role, current_user.id).deliver_later
-        rescue StandardError => e
-          Rails.logger.error("[UserRoleChange] Unable to enqueue role_changed email: #{e.class}: #{e.message}")
-        end
-
-        @user.increment!(:permission_version)
-
-        # Devise :rememberable uses remember_created_at; clearing it tightens remembered sessions.
-        @user.forget_me!
-      end
+      handle_role_change_side_effects if @user.saved_change_to_role?
 
       if @user.try(:pending_reconfirmation?) && @user.previous_changes.key?(:unconfirmed_email)
         SendConfirmationInstructionsJob.perform_async('user_id' => @user.id)
@@ -130,6 +108,30 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def handle_role_change_side_effects
+    old_role = @user.role_before_last_save
+    new_role = @user.role
+
+    RoleChangeLog.create!(
+      changed_by: current_user.id,
+      user_id: @user.id,
+      old_role:,
+      new_role:,
+      changed_at: Time.current
+    )
+
+    begin
+      UserMailer.role_changed(@user, old_role, new_role, current_user.id).deliver_later
+    rescue StandardError => e
+      Rails.logger.error("[UserRoleChange] Unable to enqueue role_changed email: #{e.class}: #{e.message}")
+    end
+
+    @user.increment!(:permission_version)
+
+    # Devise :rememberable uses remember_created_at; clearing it tightens remembered sessions.
+    @user.forget_me!
+  end
 
   def role_valid?(role)
     User::ROLES.include?(role)

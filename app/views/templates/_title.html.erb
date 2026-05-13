@@ -7,7 +7,7 @@
             <%= svg_icon('arrow_left', class: 'w-6 h-6 stroke-2') %>
           <% end %>
         </history-back>
-        <h1 class="text-3xl md:text-[2em] font-semibold" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;" <%= 'contenteditable="true"' if can?(:update, template) %>>
+        <h1 class="text-3xl md:text-[2em] font-semibold" style="overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;" contenteditable="<%= can?(:update, template) %>">
           <% template.name.split(/(_)/).each do |item| %><%= item %><wbr><% end %>
           <% if template.archived_at? %>
             <span class="ml-1 badge badge-outline badge-lg align-middle"><%= t('archived') %></span>

@@ -37,14 +37,13 @@
           class="dropdown dropdown-end dropdown-top inline h-full"
           style="width: 33px"
         >
-          <label
-            tabindex="0"
+          <button
+            type="button"
             class="flex items-center h-full cursor-pointer"
           >
             <IconChevronDown class="w-5 h-5 flex-shrink-0" />
-          </label>
+          </button>
           <ul
-            tabindex="0"
             :style="{ backgroundColor }"
             class="dropdown-content p-2 mt-2 shadow menu text-base mb-1 rounded-box text-right !text-base-content"
           >
@@ -94,7 +93,6 @@
                 type="hidden"
                 name="authenticity_token"
                 :value="authenticityToken"
-                autocomplete="off"
               >
               <button
                 id="gdrive_oauth_button"
@@ -215,7 +213,7 @@ export default {
       return 'el' + Math.random().toString(32).split('.')[1]
     },
     queryParams () {
-      return new URLSearchParams(window.location.search)
+      return new URLSearchParams(globalThis.location.search)
     },
     uploadUrl () {
       return `/templates/${this.templateId}/documents`
@@ -243,16 +241,16 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('message', this.messageHandler)
+    globalThis.addEventListener('message', this.messageHandler)
 
     if (this.queryParams.get('google_drive_open') === '1') {
       this.openGoogleDriveModal()
 
-      window.history.replaceState({}, document.title, window.location.pathname)
+      globalThis.history.replaceState({}, document.title, globalThis.location.pathname)
     }
   },
   beforeUnmount () {
-    window.removeEventListener('message', this.messageHandler)
+    globalThis.removeEventListener('message', this.messageHandler)
   },
   methods: {
     openGoogleDriveModal () {

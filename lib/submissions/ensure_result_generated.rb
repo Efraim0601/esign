@@ -41,6 +41,8 @@ module Submissions
       total_wait_time += WAIT_FOR_RETRY
 
       total_wait_time > CHECK_COMPLETE_TIMEOUT ? raise : retry
+    rescue NotCompletedYet
+      raise
     rescue StandardError => e
       Rollbar.error(e) if defined?(Rollbar)
       Rails.logger.error(e)

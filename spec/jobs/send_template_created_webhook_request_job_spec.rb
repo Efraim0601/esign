@@ -32,7 +32,7 @@ RSpec.describe SendTemplateCreatedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook'
+          'User-Agent' => 'AFB.com Webhook'
         }
       ).once
     end
@@ -50,7 +50,7 @@ RSpec.describe SendTemplateCreatedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook',
+          'User-Agent' => 'AFB.com Webhook',
           'X-Secret-Header' => 'secret_value'
         }
       ).once
@@ -60,6 +60,13 @@ RSpec.describe SendTemplateCreatedWebhookRequestJob do
       webhook_url.update!(events: ['template.updated'])
 
       described_class.new.perform('template_id' => template.id, 'webhook_url_id' => webhook_url.id,
+                                  'event_uuid' => SecureRandom.uuid)
+
+      expect(WebMock).not_to have_requested(:post, webhook_url.url)
+    end
+
+    it 'returns early when template does not exist' do
+      described_class.new.perform('template_id' => -1, 'webhook_url_id' => webhook_url.id,
                                   'event_uuid' => SecureRandom.uuid)
 
       expect(WebMock).not_to have_requested(:post, webhook_url.url)

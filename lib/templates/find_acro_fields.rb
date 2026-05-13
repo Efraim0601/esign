@@ -31,90 +31,95 @@ module Templates
 
     module_function
 
-    # rubocop:disable Metrics
     def call(pdf, attachment, data)
       return [] if pdf.acro_form.blank? && data.exclude?('/Form')
 
       fields, annots_index = build_fields_with_pages(pdf)
 
-      fields.filter_map do |field|
-        areas = Array.wrap(field[:Kids] || field).filter_map do |child_field|
-          page = annots_index[child_field.hash]
-
-          next unless page
-
-          media_box = page[:CropBox] || page[:MediaBox]
-          crop_box = page[:CropBox] || media_box
-
-          media_box_start = [media_box[0], media_box[1]]
-          crop_shift = [crop_box[0] - media_box[0], crop_box[1] - media_box[1]]
-
-          next unless child_field[:Rect]
-
-          x0, y0, x1, y1 = child_field[:Rect]
-
-          x0, y0 = correct_coordinates(x0, y0, crop_shift, media_box_start)
-          x1, y1 = correct_coordinates(x1, y1, crop_shift, media_box_start)
-
-          page_width = media_box[2] - media_box[0]
-          page_height = media_box[3] - media_box[1]
-
-          x = x0
-          y = y0
-          w = x1 - x0
-          h = y1 - y0
-
-          transformed_y = page_height - y - h
-
-          attrs = {
-            page: page.index,
-            x: x / page_width.to_f,
-            y: transformed_y / page_height.to_f,
-            w: w / page_width.to_f,
-            h: h / page_height.to_f,
-            attachment_uuid: attachment.uuid
-          }
-
-          next if attrs[:w].zero? || attrs[:h].zero?
-
-          if child_field[:MaxLen] && child_field.try(:concrete_field_type) == :comb_text_field
-            attrs[:cell_w] = w / page_width.to_f / child_field[:MaxLen].to_f
-          end
-
-          attrs
-        end
-
-        next if areas.blank?
-
-        field_properties = build_field_properties(field)
-
-        next if field_properties.blank?
-        next if field_properties[:default_value].present?
-
-        if field_properties[:type].in?(%w[radio multiple])
-          if areas.size != field_properties[:options].size
-            field_properties[:options] = build_options(Array.new(areas.size, ''))
-          end
-
-          areas.each_with_index do |area, index|
-            area[:option_uuid] = field_properties[:options][index][:uuid]
-          end
-        end
-
-        {
-          uuid: SecureRandom.uuid,
-          required: field.flags.include?(:required),
-          preferences: {},
-          areas:,
-          **field_properties
-        }
-      end
+      fields.filter_map { |field| build_field_payload(field, annots_index, attachment) }
     rescue StandardError => e
       raise if Rails.env.local?
 
       Rollbar.error(e) if defined?(Rollbar)
 
       []
+    end
+
+    def build_field_payload(field, annots_index, attachment)
+      areas = Array.wrap(field[:Kids] || field).filter_map do |child_field|
+        build_area(child_field, annots_index, attachment)
+      end
+
+      return if areas.blank?
+
+      field_properties = build_field_properties(field)
+      return if field_properties.blank?
+      return if field_properties[:default_value].present?
+
+      maybe_assign_option_uuids(field_properties, areas)
+
+      {
+        uuid: SecureRandom.uuid,
+        required: field.flags.include?(:required),
+        preferences: {},
+        areas:,
+        **field_properties
+      }
+    end
+
+    def build_area(child_field, annots_index, attachment)
+      page = annots_index[child_field.hash]
+      return unless page
+      return unless child_field[:Rect]
+
+      attrs = compute_area_geometry(child_field, page, attachment)
+      return if attrs.nil? || attrs[:w].zero? || attrs[:h].zero?
+
+      attrs
+    end
+
+    def compute_area_geometry(child_field, page, attachment)
+      media_box = page[:CropBox] || page[:MediaBox]
+      crop_box = page[:CropBox] || media_box
+
+      media_box_start = [media_box[0], media_box[1]]
+      crop_shift = [crop_box[0] - media_box[0], crop_box[1] - media_box[1]]
+
+      x0, y0, x1, y1 = child_field[:Rect]
+      x0, y0 = correct_coordinates(x0, y0, crop_shift, media_box_start)
+      x1, y1 = correct_coordinates(x1, y1, crop_shift, media_box_start)
+
+      page_width = media_box[2] - media_box[0]
+      page_height = media_box[3] - media_box[1]
+      w = x1 - x0
+      h = y1 - y0
+
+      attrs = {
+        page: page.index,
+        x: x0 / page_width.to_f,
+        y: (page_height - y0 - h) / page_height.to_f,
+        w: w / page_width.to_f,
+        h: h / page_height.to_f,
+        attachment_uuid: attachment.uuid
+      }
+
+      if child_field[:MaxLen] && child_field.try(:concrete_field_type) == :comb_text_field
+        attrs[:cell_w] = w / page_width.to_f / child_field[:MaxLen].to_f
+      end
+
+      attrs
+    end
+
+    def maybe_assign_option_uuids(field_properties, areas)
+      return unless field_properties[:type].in?(%w[radio multiple])
+
+      if areas.size != field_properties[:options].size
+        field_properties[:options] = build_options(Array.new(areas.size, ''))
+      end
+
+      areas.each_with_index do |area, index|
+        area[:option_uuid] = field_properties[:options][index][:uuid]
+      end
     end
 
     def correct_coordinates(x_coord, y_coord, shift, media_box_start)
@@ -124,6 +129,7 @@ module Templates
       [corrected_x, corrected_y]
     end
 
+    # rubocop:disable Metrics
     def build_field_properties(field)
       field_name = field.full_field_name if field.full_field_name.to_s.match?(FIELD_NAME_REGEXP)
 

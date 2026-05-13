@@ -3,8 +3,8 @@
     class="dropdown dropdown-end field-settings-dropdown"
     :class="{ 'dropdown-open': withForceOpen && ((!field.preferences?.price && !field.preferences?.formula && !field.preferences?.price_id && !field.preferences?.payment_link_id) || !isConnected) && !isLoading }"
   >
-    <label
-      tabindex="0"
+    <button
+      type="button"
       :title="t('settings')"
       class="cursor-pointer text-transparent group-hover:text-base-content"
     >
@@ -12,9 +12,8 @@
         :width="18"
         :stroke-width="1.6"
       />
-    </label>
+    </button>
     <ul
-      tabindex="0"
       class="mt-1.5 dropdown-content menu menu-xs p-2 shadow bg-base-100 rounded-box w-52 z-10"
       draggable="true"
       @dragstart.prevent.stop
@@ -26,6 +25,7 @@
         @click.stop
       >
         <select
+          :id="`currency-${field.uuid}`"
           v-model="field.preferences.currency"
           :placeholder="t('price')"
           class="select select-bordered select-xs font-normal w-full max-w-xs !h-7 !outline-0"
@@ -40,6 +40,7 @@
           </option>
         </select>
         <label
+          :for="`currency-${field.uuid}`"
           :style="{ backgroundColor: backgroundColor }"
           class="absolute -top-1 left-2.5 px-1 h-4"
           style="font-size: 8px"
@@ -53,6 +54,7 @@
       >
         <input
           v-if="'payment_link_id' in field.preferences"
+          :id="`price-${field.uuid}`"
           v-model="field.preferences.payment_link_id"
           placeholder="plink_XXXXX"
           class="input input-bordered input-xs w-full max-w-xs h-7 !outline-0"
@@ -60,6 +62,7 @@
         >
         <input
           v-else-if="'price_id' in field.preferences"
+          :id="`price-${field.uuid}`"
           v-model="field.preferences.price_id"
           placeholder="Price ID: price_XXXXX"
           class="input input-bordered input-xs w-full max-w-xs h-7 !outline-0"
@@ -67,6 +70,7 @@
         >
         <input
           v-else-if="field.preferences.formula"
+          :id="`price-${field.uuid}`"
           type="number"
           :placeholder="t('price')"
           disabled="true"
@@ -75,6 +79,7 @@
         >
         <input
           v-else
+          :id="`price-${field.uuid}`"
           v-model="field.preferences.price"
           type="number"
           :placeholder="t('price')"
@@ -83,6 +88,7 @@
         >
         <label
           v-if="(field.preferences.price || field.preferences.price_id || field.preferences.payment_link_id) && (!field.preferences.formula || ('price_id' in field.preferences) || ('payment_link_id' in field.preferences))"
+          :for="`price-${field.uuid}`"
           :style="{ backgroundColor: backgroundColor }"
           class="absolute -top-1 left-2.5 px-1 h-4"
           style="font-size: 8px"
@@ -145,25 +151,21 @@
             type="hidden"
             name="state"
             :value="oauthState"
-            autocomplete="off"
           >
           <input
             type="hidden"
             name="redirect_uri"
             :value="redirectUri"
-            autocomplete="off"
           >
           <input
             type="hidden"
             name="scope"
             value="read_write"
-            autocomplete="off"
           >
           <input
             type="hidden"
             name="authenticity_token"
             :value="authenticityToken"
-            autocomplete="off"
           >
           <button
             type="submit"
@@ -205,7 +207,8 @@
       <li
         class="field-settings-formula mb-1"
       >
-        <label
+        <button
+          type="button"
           class="label-text cursor-pointer text-center w-full flex items-center"
           @click="$emit('click-formula')"
         >
@@ -215,11 +218,12 @@
           <span class="text-sm">
             {{ 'payment_link_id' in field.preferences ? t('quantity') : t('formula') }}
           </span>
-        </label>
+        </button>
       </li>
       <hr>
       <li class="field-settings-description">
-        <label
+        <button
+          type="button"
           class="label-text cursor-pointer text-center w-full flex items-center"
           @click="$emit('click-description')"
         >
@@ -229,13 +233,14 @@
           <span class="text-sm">
             {{ t('description') }}
           </span>
-        </label>
+        </button>
       </li>
       <li
         v-if="withCondition"
         class="field-settings-condition mt-1"
       >
-        <label
+        <button
+          type="button"
           class="label-text cursor-pointer text-center w-full flex items-center"
           @click="$emit('click-condition')"
         >
@@ -245,7 +250,7 @@
           <span class="text-sm">
             {{ t('condition') }}
           </span>
-        </label>
+        </button>
       </li>
       <hr
         v-if="withCustomFields"

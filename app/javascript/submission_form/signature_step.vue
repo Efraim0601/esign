@@ -422,7 +422,7 @@ export default {
       isUsePreviousValue: true,
       isTouchAttachment: false,
       isTextSignature: this.field.preferences?.format === 'typed' || this.field.preferences?.format === 'typed_or_upload',
-      uploadImageInputKey: Math.random().toString()
+      uploadImageInputKey: this.generateId()
     }
   },
   computed: {
@@ -702,7 +702,21 @@ export default {
 
       this.drawOnCanvas(event.target.files[0], this.$refs.canvas)
 
-      this.uploadImageInputKey = Math.random().toString()
+      this.uploadImageInputKey = this.generateId()
+    },
+    generateId () {
+      if (globalThis.crypto?.randomUUID) {
+        return globalThis.crypto.randomUUID()
+      }
+
+      if (globalThis.crypto?.getRandomValues) {
+        const bytes = new Uint8Array(16)
+        globalThis.crypto.getRandomValues(bytes)
+
+        return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
+      }
+
+      return `${Date.now()}-${performance.now()}`
     },
     drawOnCanvas (file, canvas) {
       if (file && file.type.match('image.*')) {
@@ -815,7 +829,7 @@ export default {
             reader.readAsDataURL(file)
 
             reader.onloadend = () => {
-              const attachment = { url: reader.result, uuid: Math.random().toString() }
+              const attachment = { url: reader.result, uuid: this.generateId() }
 
               this.$emit('attached', attachment)
               this.$emit('update:model-value', attachment.uuid)

@@ -7,6 +7,11 @@ SimpleCov::Formatter::LcovFormatter.config do |c|
 end
 
 SimpleCov.start 'rails' do
+  # SonarQube considère souvent les fichiers absents du report comme "0%".
+  # En trackant explicitement app/ et lib/, on a une baseline stable, même si
+  # certains fichiers ne sont pas chargés par les specs.
+  track_files '{app,lib}/**/*.rb'
+
   formatter SimpleCov::Formatter::MultiFormatter.new([
     SimpleCov::Formatter::HTMLFormatter,
     SimpleCov::Formatter::LcovFormatter,

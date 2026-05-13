@@ -39,33 +39,15 @@ class StartFormController < ApplicationController
   def update
     @submitter = find_or_initialize_submitter(@template, submitter_params)
 
-    if @submitter.completed_at?
-      redirect_to start_form_completed_path(@template.slug, submitter_params.compact_blank)
-    else
-      if filter_undefined_submitters(@template).size > 1 && @submitter.new_record?
-        @error_message = multiple_submitters_error_message
+    return redirect_to(start_form_completed_path(@template.slug, submitter_params.compact_blank)) if @submitter.completed_at?
+    return render_multiple_submitters_error if multiple_submitters_new_record_conflict?(@submitter)
 
-        return render :show, status: :unprocessable_content
-      end
+    is_new_record = @submitter.new_record?
+    prepare_submitter_for_update(@submitter, is_new_record)
 
-      if (is_new_record = @submitter.new_record?)
-        assign_submission_attributes(@submitter, @template)
+    return handle_require_2fa(@submitter, is_new_record:) if @template.preferences['shared_link_2fa'] == true
 
-        Submissions::AssignDefinedSubmitters.call(@submitter.submission)
-      else
-        @submitter.assign_attributes(ip: request.remote_ip, ua: request.user_agent)
-      end
-
-      if @template.preferences['shared_link_2fa'] == true
-        handle_require_2fa(@submitter, is_new_record:)
-      elsif @submitter.errors.blank? && @submitter.save
-        enqueue_new_submitter_jobs(@submitter) if is_new_record
-
-        redirect_to submit_form_path(@submitter.slug)
-      else
-        render :show, status: :unprocessable_content
-      end
-    end
+    save_submitter_or_render_error(@submitter, is_new_record)
   end
 
   def completed
@@ -106,6 +88,36 @@ class StartFormController < ApplicationController
     return unless submitter.submission.expire_at?
 
     ProcessSubmissionExpiredJob.perform_at(submitter.submission.expire_at, 'submission_id' => submitter.submission_id)
+  end
+
+  def multiple_submitters_new_record_conflict?(submitter)
+    filter_undefined_submitters(@template).size > 1 && submitter.new_record?
+  end
+
+  def render_multiple_submitters_error
+    @error_message = multiple_submitters_error_message
+
+    render :show, status: :unprocessable_content
+  end
+
+  def prepare_submitter_for_update(submitter, is_new_record)
+    if is_new_record
+      assign_submission_attributes(submitter, @template)
+
+      Submissions::AssignDefinedSubmitters.call(submitter.submission)
+    else
+      submitter.assign_attributes(ip: request.remote_ip, ua: request.user_agent)
+    end
+  end
+
+  def save_submitter_or_render_error(submitter, is_new_record)
+    if submitter.errors.blank? && submitter.save
+      enqueue_new_submitter_jobs(submitter) if is_new_record
+
+      redirect_to submit_form_path(submitter.slug)
+    else
+      render :show, status: :unprocessable_content
+    end
   end
 
   def load_resubmit_submitter

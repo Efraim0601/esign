@@ -33,7 +33,7 @@ RSpec.describe SendSubmissionCreatedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook'
+          'User-Agent' => 'AFB.com Webhook'
         }
       ).once
     end
@@ -51,7 +51,7 @@ RSpec.describe SendSubmissionCreatedWebhookRequestJob do
         },
         headers: {
           'Content-Type' => 'application/json',
-          'User-Agent' => 'DocuSeal.com Webhook',
+          'User-Agent' => 'AFB.com Webhook',
           'X-Secret-Header' => 'secret_value'
         }
       ).once
@@ -61,6 +61,13 @@ RSpec.describe SendSubmissionCreatedWebhookRequestJob do
       webhook_url.update!(events: ['submission.completed'])
 
       described_class.new.perform('submission_id' => submission.id, 'webhook_url_id' => webhook_url.id,
+                                  'event_uuid' => SecureRandom.uuid)
+
+      expect(WebMock).not_to have_requested(:post, webhook_url.url)
+    end
+
+    it 'returns early when submission does not exist' do
+      described_class.new.perform('submission_id' => -1, 'webhook_url_id' => webhook_url.id,
                                   'event_uuid' => SecureRandom.uuid)
 
       expect(WebMock).not_to have_requested(:post, webhook_url.url)
