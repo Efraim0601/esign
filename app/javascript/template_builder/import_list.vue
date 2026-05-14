@@ -317,7 +317,7 @@ export default {
 
       const csv = rows.map(item => {
         if (/[",\n]/.test(item)) {
-          return `"${item.replaceAll(/"/g, '""')}"`
+          return `"${item.replaceAll('"', '""')}"`
         } else {
           return item
         }
@@ -399,17 +399,7 @@ export default {
       this.submitters.forEach((submitter) => {
         const fields = this.selectFieldsForSubmitter(submitter)
 
-        fields.forEach((field) => {
-          const columnIndex = this.columns.findIndex((column, index) => {
-            return column &&
-              column.toString().toLowerCase().includes(field.name?.toLowerCase()) &&
-              this.mappings.every((m) => m.column_index !== index)
-          })
-
-          if (columnIndex !== -1 && this.rows.some((row) => row[columnIndex])) {
-            this.mappings.push({ uuid: v4(), field_name: field.name, column_index: columnIndex, submitter_uuid: submitter.uuid })
-          }
-        })
+        fields.forEach((field) => this.mapFieldToColumn(field, submitter))
 
         if (!this.mappings.some((m) => m.field_name.toLowerCase() === 'name' && m.submitter_uuid === submitter.uuid)) {
           this.mappings.unshift({ uuid: v4(), field_name: 'Name', submitter_uuid: submitter.uuid })
@@ -448,6 +438,16 @@ export default {
       }).finally(() => {
         this.isLoading = false
       })
+    },
+    mapFieldToColumn (field, submitter) {
+      const columnIndex = this.columns.findIndex((column, index) =>
+        column &&
+        column.toString().toLowerCase().includes(field.name?.toLowerCase()) &&
+        this.mappings.every((m) => m.column_index !== index))
+
+      if (columnIndex !== -1 && this.rows.some((row) => row[columnIndex])) {
+        this.mappings.push({ uuid: v4(), field_name: field.name, column_index: columnIndex, submitter_uuid: submitter.uuid })
+      }
     }
   }
 }

@@ -365,12 +365,10 @@ export default {
         } else {
           fontSize = `${this.fontSizePx / 10}cqmin`
         }
+      } else if (this.textOverflowChars) {
+        fontSize = `clamp(1pt, ${this.fontSizePx / 1.5 / 10}vw, ${this.fontSizePx / 1.5}px)`
       } else {
-        if (this.textOverflowChars) {
-          fontSize = `clamp(1pt, ${this.fontSizePx / 1.5 / 10}vw, ${this.fontSizePx / 1.5}px)`
-        } else {
-          fontSize = `clamp(1pt, ${this.fontSizePx / 10}vw, ${this.fontSizePx}px)`
-        }
+        fontSize = `clamp(1pt, ${this.fontSizePx / 10}vw, ${this.fontSizePx}px)`
       }
 
       return { fontSize, lineHeight: `calc(${fontSize} * ${this.lineHeight})` }
@@ -526,7 +524,11 @@ export default {
         this.focusValueInput()
       } else if (this.field.type === 'date') {
         this.field.readonly = !this.field.readonly
-        this.field.default_value === '{{date}}' ? delete this.field.default_value : this.field.default_value = '{{date}}'
+        if (this.field.default_value === '{{date}}') {
+          delete this.field.default_value
+        } else {
+          this.field.default_value = '{{date}}'
+        }
 
         this.save()
       } else {
@@ -535,14 +537,22 @@ export default {
     },
     maybeToggleCheckboxValue () {
       if (this.field.type === 'checkbox') {
-        this.field.default_value === true ? delete this.field.default_value : this.field.default_value = true
+        if (this.field.default_value === true) {
+          delete this.field.default_value
+        } else {
+          this.field.default_value = true
+        }
         this.field.readonly = this.field.default_value === true
 
         this.save()
       } else if (this.field.type === 'radio' && this.area.option_uuid) {
         const value = this.buildAreaOptionValue(this.area)
 
-        this.field.default_value === value ? delete this.field.default_value : this.field.default_value = value
+        if (this.field.default_value === value) {
+          delete this.field.default_value
+        } else {
+          this.field.default_value = value
+        }
 
         this.field.readonly = !!this.field.default_value?.length
 
@@ -554,8 +564,10 @@ export default {
           this.field.default_value.splice(this.field.default_value.indexOf(value), 1)
 
           if (!this.field.default_value?.length) delete this.field.default_value
+        } else if (Array.isArray(this.field.default_value)) {
+          this.field.default_value.push(value)
         } else {
-          Array.isArray(this.field.default_value) ? this.field.default_value.push(value) : this.field.default_value = [value]
+          this.field.default_value = [value]
         }
 
         this.field.readonly = !!this.field.default_value?.length

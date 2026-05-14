@@ -1,5 +1,5 @@
 <div id="<%= dom_id(webhook_event) %>" class="group relative hover:cursor-pointer hover:bg-base-200">
-  <a href="<%= settings_webhook_event_path(webhook_url.id, webhook_event.uuid) %>" data-turbo-frame="drawer" class="top-0 bottom-0 left-0 right-0 absolute"></a>
+  <a href="<%= settings_webhook_event_path(webhook_url.id, webhook_event.uuid) %>" data-turbo-frame="drawer" aria-label="<%= webhook_event.event_type %>" class="top-0 bottom-0 left-0 right-0 absolute"></a>
   <div class="min-h-12 flex flex-col md:flex-row md:items-center md:justify-between gap-2 px-3 py-2">
     <div class="flex items-center gap-4">
       <% if webhook_event.status == 'success' %>

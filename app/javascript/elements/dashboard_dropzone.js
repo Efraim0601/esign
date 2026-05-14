@@ -74,7 +74,7 @@ export default targetable(class extends HTMLElement {
 
       e.dataTransfer.setDragImage(dragPreview, rect.width / 2, height / 2)
 
-      setTimeout(() => document.body.removeChild(dragPreview), 0)
+      setTimeout(() => dragPreview.remove(), 0)
     }
   }
 

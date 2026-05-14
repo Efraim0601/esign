@@ -185,27 +185,28 @@ export default {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
 
-        reader.onload = function (event) {
-          const img = new Image()
-
-          img.onload = function () {
-            const canvas = document.createElement('canvas')
-            const ctx = canvas.getContext('2d')
-
-            canvas.width = img.width
-            canvas.height = img.height
-            ctx.drawImage(img, 0, 0)
-            canvas.toBlob(function (blob) {
-              const newFile = new File([blob], bmpFile.name.replace(/\.\w+$/, '.png'), { type: 'image/png' })
-              resolve(newFile)
-            }, 'image/png')
-          }
-
-          img.src = event.target.result
-        }
+        reader.onload = (event) => this.bmpReaderOnLoad(event, bmpFile, resolve)
         reader.onerror = reject
         reader.readAsDataURL(bmpFile)
       })
+    },
+    bmpReaderOnLoad (event, bmpFile, resolve) {
+      const img = new Image()
+
+      img.onload = () => this.bmpImageOnLoad(img, bmpFile, resolve)
+      img.src = event.target.result
+    },
+    bmpImageOnLoad (img, bmpFile, resolve) {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+
+      canvas.width = img.width
+      canvas.height = img.height
+      ctx.drawImage(img, 0, 0)
+      canvas.toBlob((blob) => {
+        const newFile = new File([blob], bmpFile.name.replace(/\.\w+$/, '.png'), { type: 'image/png' })
+        resolve(newFile)
+      }, 'image/png')
     }
   }
 }

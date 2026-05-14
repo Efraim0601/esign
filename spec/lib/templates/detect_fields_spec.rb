@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Templates::DetectFields do
+
   Node = Struct.new(:content, :x, :y, :w, :h, keyword_init: true) do
     def endx
       x + w

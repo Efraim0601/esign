@@ -7,10 +7,8 @@ export default class extends HTMLElement {
 
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text)
-      } else {
-        if (e.target.tagName !== 'INPUT') {
-          alert(`Clipboard not available. Make sure you're using https://\nCopy text: ${text}`)
-        }
+      } else if (e.target.tagName !== 'INPUT') {
+        alert(`Clipboard not available. Make sure you're using https://\nCopy text: ${text}`)
       }
     })
   }

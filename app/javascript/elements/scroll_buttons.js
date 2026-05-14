@@ -40,7 +40,7 @@ export default class extends HTMLElement {
     return rect.bottom <= 0 || rect.top >= window.innerHeight
   }
 
-  showButtons ({ animate } = { animate: true }) {
+  showButtons ({ animate = true } = {}) {
     if (animate) {
       this.classList.add('transition-transform', 'duration-300')
     }

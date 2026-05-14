@@ -14,7 +14,7 @@ function isValidSignatureCanvas (data) {
     const A = last.y - first.y
     const B = first.x - last.x
     const C = last.x * first.y - first.x * last.y
-    const lineLength = Math.sqrt(A * A + B * B)
+    const lineLength = Math.hypot(A, B)
 
     const totalDeviation = points.reduce((sum, p) => {
       const distanceToLine = Math.abs(A * p.x + B * p.y + C) / lineLength
@@ -50,7 +50,7 @@ function isCanvasBlocked () {
     const pixel = ctx.getImageData(0, 0, 1, 1).data
 
     return pixel[0] !== 255 || pixel[1] !== 0 || pixel[2] !== 0 || pixel[3] !== 255
-  } catch (e) {
+  } catch {
     return true
   }
 }

@@ -201,7 +201,7 @@ export default {
     dialCodesRegexp () {
       const dialCodes = this.countries.map((country) => country.dial).sort((a, b) => b.length - a.length)
 
-      return new RegExp(`^\\+(${dialCodes.join('|')})`)
+      return new RegExp(String.raw`^\+(${dialCodes.join('|')})`)
     },
     detectedPhoneValueDialCode () {
       return (this.phoneValue || '').replaceAll(/[^\d+]/g, '').match(this.dialCodesRegexp)?.[1]

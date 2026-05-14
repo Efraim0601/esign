@@ -1,4 +1,4 @@
-const KEYWORDS = ['if', 'else', 'for', 'end']
+const KEYWORDS = new Set(['if', 'else', 'for', 'end'])
 const TYPE_PRIORITY = { string: 3, number: 2, boolean: 1 }
 const AND_OR_REGEXP = /\s+(AND|OR)\s+/i
 const COMPARISON_OPERATORS_REGEXP = />=|<=|!=|==|>|<|=/
@@ -149,9 +149,9 @@ function parseTagTypeName (tagString) {
   const val = tagString.replaceAll(/[[\]]/g, '').trim()
   const parts = val.split(':').map((s) => s.trim())
 
-  if (parts.length === 2 && KEYWORDS.includes(parts[0])) {
+  if (parts.length === 2 && KEYWORDS.has(parts[0])) {
     return [parts[0], parts[1]]
-  } else if (KEYWORDS.includes(val)) {
+  } else if (KEYWORDS.has(val)) {
     return [val, null]
   } else {
     return ['var', val]
@@ -396,8 +396,8 @@ function buildOperators (tags) {
         if (type === 'if') {
           try {
             operator.condition = parseCondition(variableName)
-          } catch (e) {
-            // ignore parse errors
+          } catch (parseError) {
+            console.warn('Dynamic variable condition parse error:', parseError.message)
           }
         }
 

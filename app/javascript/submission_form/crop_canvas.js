@@ -1,4 +1,4 @@
-function cropCanvasAndExportToPNG (canvas, { errorOnTooSmall } = { errorOnTooSmall: false }) {
+function cropCanvasAndExportToPNG (canvas, { errorOnTooSmall = false } = {}) {
   const ctx = canvas.getContext('2d')
 
   const width = canvas.width

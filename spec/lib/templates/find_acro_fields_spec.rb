@@ -1,6 +1,41 @@
 # frozen_string_literal: true
 
 RSpec.describe Templates::FindAcroFields do
+  describe '.call (integration with real PDF)' do
+    let(:pdf_data) { Rails.root.join('spec/fixtures/sample-document.pdf').binread }
+    let(:pdf) { HexaPDF::Document.new(io: StringIO.new(pdf_data)) }
+    let(:attachment) { double('attachment', uuid: 'att-real-1') }
+
+    it 'returns an empty array when the PDF has no AcroForm and no /Form ref' do
+      expect(described_class.call(pdf, attachment, '')).to eq([])
+    end
+
+    it 'returns parsed fields for a real PDF with /Form descriptors' do
+      result = described_class.call(pdf, attachment, '/Form')
+
+      expect(result).to be_an(Array)
+    end
+
+    it 'recovers from internal exceptions and returns [] in non-local env' do
+      allow(Rails.env).to receive(:local?).and_return(false)
+      allow(described_class).to receive(:build_fields_with_pages).and_raise(StandardError.new('boom'))
+
+      expect(described_class.call(pdf, attachment, '/Form')).to eq([])
+    end
+  end
+
+  describe '.build_fields_with_pages (integration)' do
+    let(:pdf_data) { Rails.root.join('spec/fixtures/sample-document.pdf').binread }
+    let(:pdf) { HexaPDF::Document.new(io: StringIO.new(pdf_data)) }
+
+    it 'returns fields and an annots index from a real PDF' do
+      fields, annots_index = described_class.build_fields_with_pages(pdf)
+
+      expect(fields).to be_an(Array)
+      expect(annots_index).to be_a(Hash)
+    end
+  end
+
   FieldStub = Struct.new(:attrs, :full_field_name, :field_type, :concrete_field_type, :field_value,
                          :allowed_values, :field_name_hint, keyword_init: true) do
     def [](key)

@@ -3,6 +3,128 @@
 require 'rails_helper'
 
 RSpec.describe Submissions::GenerateResultAttachments do
+  describe '.call (integration with real PDF)' do
+    let(:account) { create(:account) }
+    let(:author) { create(:user, account:) }
+    let(:template) do
+      create(:template, account:, author:,
+                        only_field_types: %w[text date checkbox number],
+                        attachment_count: 1)
+    end
+    let(:submission) { create(:submission, template:, created_by_user: author) }
+    let(:submitter) do
+      submission.submitters.create!(
+        account_id: submission.account_id,
+        uuid: template.submitters.first['uuid'],
+        email: 'result@example.test',
+        name: 'Result Tester',
+        completed_at: Time.current,
+        ip: '127.0.0.1',
+        ua: 'TestUA/1.0',
+        values: template.fields.each_with_object({}) do |field, acc|
+          acc[field['uuid']] =
+            case field['type']
+            when 'text' then 'Sample value'
+            when 'date' then '2026-05-13'
+            when 'checkbox' then true
+            when 'number' then 7
+            end
+        end.compact
+      )
+    end
+
+    before do
+      allow(Accounts).to receive(:load_signing_pkcs).and_return(nil)
+      allow(Accounts).to receive(:load_timeserver_url).and_return(nil)
+    end
+
+    it 'generates filled-result PDFs by calling the full pipeline with a real submission' do
+      submitter
+      allow(submitter).to receive(:documents).and_return([])
+
+      result = described_class.call(submitter)
+
+      expect(result).to be_an(Array)
+    end
+
+    it 'builds a pdfs_index keyed by attachment_uuid for the submission' do
+      submitter
+
+      pdfs_index = described_class.build_pdfs_index(submission)
+
+      expect(pdfs_index).to be_a(Hash)
+      expect(pdfs_index.keys).to all(be_a(String))
+    end
+  end
+
+  describe '.fill_submitter_fields (integration)' do
+    let(:account) { create(:account) }
+    let(:author) { create(:user, account:) }
+    let(:template) do
+      create(:template, account:, author:,
+                        only_field_types: %w[text date checkbox number],
+                        attachment_count: 1)
+    end
+    let(:submission) { create(:submission, template:, created_by_user: author) }
+    let(:submitter) do
+      submission.submitters.create!(
+        account_id: submission.account_id,
+        uuid: template.submitters.first['uuid'],
+        email: 'fill@example.test',
+        name: 'Fill Tester',
+        completed_at: Time.current,
+        ip: '127.0.0.1',
+        ua: 'TestUA',
+        values: template.fields.each_with_object({}) do |field, acc|
+          acc[field['uuid']] =
+            case field['type']
+            when 'text' then 'Filled'
+            when 'date' then '2026-05-13'
+            when 'checkbox' then true
+            when 'number' then 12
+            end
+        end.compact
+      )
+    end
+
+    before do
+      allow(Accounts).to receive(:load_signing_pkcs).and_return(nil)
+      allow(Accounts).to receive(:load_timeserver_url).and_return(nil)
+    end
+
+    it 'fills submitter field values on a real PDF without raising' do
+      submitter
+      pdfs_index = described_class.build_pdfs_index(submission)
+
+      expect do
+        described_class.fill_submitter_fields(submitter, account, pdfs_index,
+                                              with_signature_id: false,
+                                              is_flatten: false,
+                                              with_headings: true,
+                                              with_submitter_timezone: false,
+                                              with_file_links: false,
+                                              with_signature_id_reason: false,
+                                              with_timestamp_seconds: false)
+      end.not_to raise_error
+    end
+
+    it 'fills fields with signature_id and submitter timezone variations' do
+      submitter
+      pdfs_index = described_class.build_pdfs_index(submission)
+
+      expect do
+        described_class.fill_submitter_fields(submitter, account, pdfs_index,
+                                              with_signature_id: true,
+                                              is_flatten: true,
+                                              with_headings: false,
+                                              with_submitter_timezone: true,
+                                              with_file_links: true,
+                                              with_signature_id_reason: true,
+                                              with_timestamp_seconds: true)
+      end.not_to raise_error
+    end
+  end
+
   describe '.build_signing_params' do
     it 'builds signing params without timestamp handler when tsa is missing' do
       pkcs = double('pkcs', certificate: 'cert', key: 'key', ca_certs: ['ca'])

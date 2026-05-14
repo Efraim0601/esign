@@ -96,8 +96,8 @@ dynamic-variable {
 function collectDomAttrs (dom) {
   const attrs = {}
 
-  for (let i = 0; i < dom.attributes.length; i++) {
-    attrs[dom.attributes[i].name] = dom.attributes[i].value
+  for (const attr of dom.attributes) {
+    attrs[attr.name] = attr.value
   }
 
   return { htmlAttrs: attrs }

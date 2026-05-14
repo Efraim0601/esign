@@ -487,7 +487,7 @@ export default {
 
         this.isExpandOptions = true
 
-        const lines = text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l)
+        const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
 
         if (lines.length > 0) {
           const currentOption = this.field.options[index]

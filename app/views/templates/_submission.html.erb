@@ -220,6 +220,6 @@
         <% end %>
       </div>
     <% end %>
-    <a href="<%= submission_path(submission) %>" class="top-0 bottom-0 left-0 right-0 absolute"></a>
+    <a href="<%= submission_path(submission) %>" aria-label="<%= submission.name.presence || submission.template&.name || t('open_submission') %>" class="top-0 bottom-0 left-0 right-0 absolute"></a>
   </div>
 </div>

@@ -92,7 +92,7 @@ document.addEventListener('turbo:submit-end', async (event) => {
 
   link.click()
 
-  document.body.removeChild(link)
+  link.remove()
 
   URL.revokeObjectURL(url)
 })

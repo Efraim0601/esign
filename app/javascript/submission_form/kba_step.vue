@@ -480,7 +480,7 @@ export default {
         const payload = { ...this.form, submitter_slug: this.submitterSlug }
 
         if (payload.dob) {
-          payload.dob = payload.dob.replaceAll(/-/g, '')
+          payload.dob = payload.dob.replaceAll('-', '')
         }
 
         if (payload.ssn) {

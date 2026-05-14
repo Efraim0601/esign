@@ -66,5 +66,69 @@ RSpec.describe Params::SubmissionCreateValidator do
         described_class.call(params)
       end.to raise_error(Params::BaseValidator::InvalidParameterError, /submitters is required/)
     end
+
+    it 'rejects invalid email format in emails-creation payload' do
+      params = { template_id: 1, emails: 'not-an-email' }
+
+      expect do
+        described_class.call(params)
+      end.to raise_error(Params::BaseValidator::InvalidParameterError, /emails/)
+    end
+
+
+    it 'accepts message hash with subject + body on submission creation' do
+      params = {
+        template_id: 1,
+        submission: { submitters: [{ email: 'a@example.com' }] },
+        message: { subject: 'Hi', body: 'Welcome' }
+      }
+
+      expect(described_class.call(params)).to be(true)
+    end
+
+    it 'accepts submissions array shape' do
+      params = {
+        template_id: 1,
+        submissions: [{ submitters: [{ email: 'a@example.com' }] }]
+      }
+
+      expect(described_class.call(params)).to be(true)
+    end
+
+    it 'rejects invalid reply_to email in submitter' do
+      params = {
+        template_id: 1,
+        submitters: [
+          { email: 'a@example.com', name: 'A', reply_to: 'not-an-email' }
+        ]
+      }
+
+      expect do
+        described_class.call(params)
+      end.to raise_error(Params::BaseValidator::InvalidParameterError, /reply_to/)
+    end
+
+    it 'rejects invalid bcc_completed email at submission level' do
+      params = {
+        template_id: 1,
+        submitters: [{ email: 'a@example.com' }],
+        bcc_completed: 'not-an-email'
+      }
+
+      expect do
+        described_class.call(params)
+      end.to raise_error(Params::BaseValidator::InvalidParameterError, /bcc_completed/)
+    end
+
+    it 'validates per-submitter field params and accepts complete ones' do
+      params = {
+        template_id: 1,
+        submitters: [
+          { email: 'a@example.com', fields: [{ name: 'Email', uuid: 'f1' }] }
+        ]
+      }
+
+      expect(described_class.call(params)).to be(true)
+    end
   end
 end

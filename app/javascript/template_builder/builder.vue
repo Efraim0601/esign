@@ -93,19 +93,16 @@
               type="hidden"
               name="_method"
               value="put"
-              autocomplete="off"
             >
             <input
               type="hidden"
               name="authenticity_token"
               :value="authenticityToken"
-              autocomplete="off"
             >
             <input
               type="hidden"
               name="selfsign"
               value="true"
-              autocomplete="off"
             >
             <button
               class="btn btn-primary btn-ghost text-base hidden md:flex"
@@ -1403,12 +1400,10 @@ export default {
         } else {
           sortedFields = fields.concat(itemFields)
         }
+      } else if (fields.length && itemFields.length && this.template.fields.indexOf(fields[0]) > this.template.fields.indexOf(itemFields[0])) {
+        sortedFields = itemFields.concat(fields)
       } else {
-        if (fields.length && itemFields.length && this.template.fields.indexOf(fields[0]) > this.template.fields.indexOf(itemFields[0])) {
-          sortedFields = itemFields.concat(fields)
-        } else {
-          sortedFields = fields.concat(itemFields)
-        }
+        sortedFields = fields.concat(itemFields)
       }
 
       if (this.template.fields.length === sortedFields.length) {
@@ -1458,11 +1453,9 @@ export default {
                 closestBeforeIndex = index
                 closestBeforeArea = a
               }
-            } else {
-              if (!closestAfterArea || (compareAreas(a, closestAfterArea) < 0 && closestAfterIndex > index)) {
-                closestAfterIndex = index
-                closestAfterArea = a
-              }
+            } else if (!closestAfterArea || (compareAreas(a, closestAfterArea) < 0 && closestAfterIndex > index)) {
+              closestAfterIndex = index
+              closestAfterArea = a
             }
           })
         }
@@ -2416,37 +2409,35 @@ export default {
         baseArea = this.lastSelectedArea
       } else if (previousField?.areas?.length) {
         baseArea = previousField.areas[previousField.areas.length - 1]
+      } else if (['checkbox', 'radio', 'multiple'].includes(fieldType)) {
+        baseArea = {
+          w: area.maskW / 30 / area.maskW,
+          h: area.maskW / 30 / area.maskW * (area.maskW / area.maskH)
+        }
+      } else if (fieldType === 'image') {
+        baseArea = {
+          w: area.maskW / 5 / area.maskW,
+          h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH)
+        }
+      } else if (fieldType === 'signature' || fieldType === 'stamp' || fieldType === 'verification' || fieldType === 'kba') {
+        baseArea = {
+          w: area.maskW / 5 / area.maskW,
+          h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH) / 2
+        }
+      } else if (fieldType === 'initials') {
+        baseArea = {
+          w: area.maskW / 10 / area.maskW,
+          h: area.maskW / 35 / area.maskW
+        }
+      } else if (fieldType === 'strikethrough') {
+        baseArea = {
+          w: area.maskW / 5 / area.maskW,
+          h: area.maskW / 70 / area.maskW
+        }
       } else {
-        if (['checkbox', 'radio', 'multiple'].includes(fieldType)) {
-          baseArea = {
-            w: area.maskW / 30 / area.maskW,
-            h: area.maskW / 30 / area.maskW * (area.maskW / area.maskH)
-          }
-        } else if (fieldType === 'image') {
-          baseArea = {
-            w: area.maskW / 5 / area.maskW,
-            h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH)
-          }
-        } else if (fieldType === 'signature' || fieldType === 'stamp' || fieldType === 'verification' || fieldType === 'kba') {
-          baseArea = {
-            w: area.maskW / 5 / area.maskW,
-            h: (area.maskW / 5 / area.maskW) * (area.maskW / area.maskH) / 2
-          }
-        } else if (fieldType === 'initials') {
-          baseArea = {
-            w: area.maskW / 10 / area.maskW,
-            h: area.maskW / 35 / area.maskW
-          }
-        } else if (fieldType === 'strikethrough') {
-          baseArea = {
-            w: area.maskW / 5 / area.maskW,
-            h: area.maskW / 70 / area.maskW
-          }
-        } else {
-          baseArea = {
-            w: area.maskW / 5 / area.maskW,
-            h: area.maskW / 35 / area.maskW
-          }
+        baseArea = {
+          w: area.maskW / 5 / area.maskW,
+          h: area.maskW / 35 / area.maskW
         }
       }
 
@@ -2972,7 +2963,7 @@ export default {
         }, 1000)
       })
     },
-    save ({ force, publish } = { force: false, publish: false }) {
+    save ({ force = false, publish = false } = {}) {
       this.pendingFieldAttachmentUuids = []
 
       if (this.onChange) {

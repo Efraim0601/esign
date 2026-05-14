@@ -169,7 +169,7 @@ export default {
     setCurrentDate () {
       const inputEl = this.$refs.input
 
-      inputEl.valueAsDate = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+      inputEl.valueAsDate = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
 
       inputEl.dispatchEvent(new Event('input', { bubbles: true }))
     }

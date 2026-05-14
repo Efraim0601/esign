@@ -73,4 +73,113 @@ describe 'SubmitFormController' do
       end.to raise_error(ActionController::RoutingError)
     end
   end
+
+  describe 'GET /s/:slug renders email_2fa when 2fa is required' do
+    it 'renders email_2fa partial when pass_email_2fa? is false and no TOTP user' do
+      allow(Submitters::AuthorizedForForm).to receive(:pass_email_2fa?).and_return(false)
+      allow(Submitters::AuthorizedForForm).to receive(:totp_user_for).and_return(nil)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to be_blank
+    end
+
+    it 'renders totp_2fa when a TOTP user matches the submitter' do
+      allow(Submitters::AuthorizedForForm).to receive(:pass_email_2fa?).and_return(false)
+      allow(Submitters::AuthorizedForForm).to receive(:totp_user_for).and_return(author)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET /s/:slug locked states' do
+    it 'renders archived page when template is archived' do
+      template.update!(archived_at: Time.current)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'renders declined page when submitter has declined' do
+      submitter.update!(declined_at: Time.current)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'renders expired page when submission has expired' do
+      submission.update!(expire_at: 1.day.ago)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'renders awaiting page when enforce_signing_order is set and not current submitter' do
+      allow(Submitters::FormConfigs).to receive(:call).and_return({ enforce_signing_order: true })
+      allow(Submitters).to receive(:current_submitter_order?).and_return(false)
+
+      get "/s/#{submitter.slug}"
+
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'PATCH /s/:slug error paths' do
+    it 'returns error when submitter already completed' do
+      submitter.update!(completed_at: Time.current)
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).not_to be_blank
+    end
+
+    it 'returns error when submission template is archived' do
+      template.update!(archived_at: Time.current)
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it 'returns error when submission has expired' do
+      allow_any_instance_of(Submission).to receive(:expired?).and_return(true)
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it 'returns error when submitter has declined' do
+      submitter.update!(declined_at: Time.current)
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it 'returns 200 OK when SubmitValues succeeds' do
+      allow(Submitters::SubmitValues).to receive(:call)
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns validation error message on ValidationError' do
+      allow(Submitters::SubmitValues).to receive(:call)
+        .and_raise(Submitters::SubmitValues::ValidationError.new('Bad value'))
+
+      patch "/s/#{submitter.slug}", params: { values: {} }, as: :json
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.parsed_body['error']).to eq('Bad value')
+    end
+  end
 end

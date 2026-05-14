@@ -532,12 +532,10 @@ export default {
         } else {
           fontSize = `${this.fontSizePx / 10}cqmin`
         }
+      } else if (this.textOverflowChars) {
+        fontSize = `clamp(1pt, ${this.fontSizePx / 1.5 / 10}vw, ${this.fontSizePx / 1.5}px)`
       } else {
-        if (this.textOverflowChars) {
-          fontSize = `clamp(1pt, ${this.fontSizePx / 1.5 / 10}vw, ${this.fontSizePx / 1.5}px)`
-        } else {
-          fontSize = `clamp(1pt, ${this.fontSizePx / 10}vw, ${this.fontSizePx}px)`
-        }
+        fontSize = `clamp(1pt, ${this.fontSizePx / 10}vw, ${this.fontSizePx}px)`
       }
 
       return { fontSize, lineHeight: `calc(${fontSize} * ${this.lineHeight})` }

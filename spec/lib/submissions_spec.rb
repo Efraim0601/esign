@@ -318,6 +318,69 @@ RSpec.describe Submissions do
     end
   end
 
+  describe '.regenerate_documents' do
+    it 'destroys existing documents and regenerates result and combined attachments' do
+      submission = double('submission')
+      completed_submitter = double('s1', documents: [double('doc', destroy!: true)])
+      submitters_rel = double('rel')
+      allow(submitters_rel).to receive(:preload).with(:documents_attachments).and_return([completed_submitter])
+
+      not_nil_rel = double('not_nil_rel', order: [completed_submitter])
+      where_not_rel = double('where_not_rel', preload: [completed_submitter], order: [completed_submitter])
+      base = double('base')
+      allow(base).to receive(:not).with(completed_at: nil).and_return(where_not_rel)
+      submitters_assoc = double('submitters_assoc')
+      allow(submitters_assoc).to receive(:where).and_return(base)
+      completed_assoc = double('completed_assoc')
+      allow(submitters_assoc).to receive(:completed).and_return(completed_assoc)
+      allow(completed_assoc).to receive(:order).with(:completed_at).and_return(completed_assoc)
+      allow(completed_assoc).to receive(:last).and_return(completed_submitter)
+
+      allow(submission).to receive(:submitters).and_return(submitters_assoc)
+      combined_attachment = double('combined', destroy!: true)
+      allow(submission).to receive(:combined_document_attachment).and_return(combined_attachment)
+      allow(Submissions::GenerateResultAttachments).to receive(:call)
+      allow(Submissions::GenerateCombinedAttachment).to receive(:call)
+
+      described_class.regenerate_documents(submission)
+
+      expect(Submissions::GenerateResultAttachments).to have_received(:call).with(completed_submitter)
+      expect(combined_attachment).to have_received(:destroy!)
+    end
+
+    it 'skips combined attachment regeneration when none exists' do
+      submission = double('submission')
+      completed_submitter = double('s1', documents: [])
+      where_not_rel = double('where_not_rel', preload: [completed_submitter], order: [completed_submitter])
+      base = double('base')
+      allow(base).to receive(:not).with(completed_at: nil).and_return(where_not_rel)
+      submitters_assoc = double('submitters_assoc')
+      allow(submitters_assoc).to receive(:where).and_return(base)
+      allow(submission).to receive(:submitters).and_return(submitters_assoc)
+      allow(submission).to receive(:combined_document_attachment).and_return(nil)
+      allow(Submissions::GenerateResultAttachments).to receive(:call)
+      allow(Submissions::GenerateCombinedAttachment).to receive(:call)
+
+      described_class.regenerate_documents(submission)
+
+      expect(Submissions::GenerateCombinedAttachment).not_to have_received(:call)
+    end
+  end
+
+  describe '.fulltext_search with search_template branch' do
+    it 'augments query with template search when search_template is true' do
+      account = create(:account)
+      user = create(:user, account:)
+      submissions = Submission.all
+      allow(SearchEntries).to receive(:build_tsquery).and_return([Arel.sql("'1'='1'"), {}])
+
+      result = described_class.fulltext_search(user, submissions, 'foo', search_template: true)
+
+      expect(result).to be_a(ActiveRecord::Relation)
+      expect(result.to_sql).to include('UNION')
+    end
+  end
+
   describe '.send_signature_requests order-preserved branch' do
     it 'sends only to the first remaining ordered submitter when order is preserved' do
       s1 = double('s1', uuid: 'u1', completed_at?: false)

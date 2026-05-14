@@ -262,7 +262,7 @@ export default actionable(targetable(class extends HTMLElement {
         const tip = tooltip.getAttribute('data-tip')
 
         if (tip && tip.includes('Ctrl')) {
-          tooltip.setAttribute('data-tip', tip.replaceAll(/Ctrl/g, '⌘'))
+          tooltip.setAttribute('data-tip', tip.replaceAll('Ctrl', '⌘'))
         }
       })
     }

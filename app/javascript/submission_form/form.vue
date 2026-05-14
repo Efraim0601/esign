@@ -564,6 +564,7 @@
             <a
               v-if="!onlyRequiredFields || step.some((f) => f.required)"
               href="#"
+              :aria-label="`${t('step')} ${index + 1}`"
               class="inline border border-base-300 h-3 w-3 rounded-full mx-1 mt-1"
               :class="{ 'bg-base-300 steps-progress-current': index === currentStep, 'bg-base-content': (index < currentStep && stepFields[index].every((f) => !f.required || ![null, undefined, ''].includes(values[f.uuid]))) || isCompleted, 'bg-white': index > currentStep }"
               @click.prevent="isCompleted ? '' : [saveStep(), goToStep(index, true)]"
@@ -970,20 +971,14 @@ export default {
       })
     },
     submitButtonText () {
+      const isLastStep =
+        (!this.onlyRequiredFields && this.stepFields.length === this.currentStep + 1) ||
+        (this.onlyRequiredFields && !this.findNextStep(this.currentStep))
+
       if (this.alwaysMinimize) {
         return this.t('submit')
-      } else if (!this.onlyRequiredFields && this.stepFields.length === this.currentStep + 1) {
-        if (this.currentField.type === 'signature') {
-          return this.t('sign_and_complete')
-        } else {
-          return this.t('complete')
-        }
-      } else if (this.onlyRequiredFields && !this.findNextStep(this.currentStep)) {
-        if (this.currentField.type === 'signature') {
-          return this.t('sign_and_complete')
-        } else {
-          return this.t('complete')
-        }
+      } else if (isLastStep) {
+        return this.currentField.type === 'signature' ? this.t('sign_and_complete') : this.t('complete')
       } else {
         return this.t('next')
       }

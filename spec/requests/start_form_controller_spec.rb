@@ -87,5 +87,53 @@ describe 'StartFormController' do
 
       expect(response).to redirect_to("/d/#{template.slug}")
     end
+
+    it 'sends email 2FA verification code when shared_link_2fa is enabled' do
+      template = create(:template, account:, author:, shared_link: true,
+                                   preferences: { 'shared_link_2fa' => true })
+      allow(Submitters).to receive(:send_shared_link_email_verification_code)
+      allow(Submitters).to receive(:verify_link_otp!).and_return(false)
+
+      patch "/d/#{template.slug}", params: { submitter: { email: 'shared@example.test', name: 'Shared' } }
+
+      expect(Submitters).to have_received(:send_shared_link_email_verification_code)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'redirects to submit form when shared_link_2fa cookie is set' do
+      template = create(:template, account:, author:, shared_link: true,
+                                   preferences: { 'shared_link_2fa' => true })
+      submitter = create(:submitter, submission: create(:submission, template:, created_by_user: author),
+                                     email: 'cookie@example.test')
+      allow(Submitters).to receive(:verify_link_otp!).and_return(true)
+
+      patch "/d/#{template.slug}", params: { submitter: { email: 'cookie@example.test', name: 'Cookie' },
+                                             one_time_code: '123456' }
+
+      _ = submitter # keep created
+      expect(response).to be_redirect
+    end
+
+    it 'redirects with rate limit alert when OTP send fails' do
+      template = create(:template, account:, author:, shared_link: true,
+                                   preferences: { 'shared_link_2fa' => true })
+      allow(Submitters).to receive(:verify_link_otp!).and_return(false)
+      allow(Submitters).to receive(:send_shared_link_email_verification_code)
+        .and_raise(RateLimit::LimitApproached)
+
+      patch "/d/#{template.slug}", params: { submitter: { email: 'rl@example.test', name: 'RL' } }
+
+      expect(response).to be_redirect
+    end
+
+    it 'self-signs using current_user data when selfsign param is set' do
+      template = create(:template, account:, author:, shared_link: true, preferences: {})
+      sign_in author
+
+      patch "/d/#{template.slug}", params: { selfsign: '1' }
+
+      expect(response).to be_redirect
+    end
   end
+
 end

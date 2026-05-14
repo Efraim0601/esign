@@ -107,6 +107,60 @@ RSpec.describe SubmitterMailer do
     end
   end
 
+  describe '#add_completed_email_attachments!' do
+    let(:audit_trail_blob) { double('audit_blob', filename: double(to_s: 'audit.pdf'), download: 'AUDIT-DATA') }
+    let(:audit_trail) { double('audit', present?: true, download: 'AUDIT-DATA', blob: audit_trail_blob) }
+    let(:submitter) do
+      double('submitter',
+             account_id: 1,
+             submission: double('submission', audit_trail: audit_trail,
+                                              template_fields: []),
+             attachments: double('atts', where: []),
+             values: {})
+    end
+
+    it 'attaches audit trail and documents respecting size limit' do
+      allow(Submitters).to receive(:select_attachments_for_download).and_return([])
+      allow(AccountConfig).to receive(:find_or_initialize_by).and_return(double(value: '{document.name}'))
+      allow(Submitters).to receive(:build_document_filename).and_return('audit-log.pdf')
+
+      mailer.send(:add_completed_email_attachments!, submitter)
+
+      expect(mailer.attachments['audit-log.pdf']).not_to be_nil
+    end
+
+    it 'skips audit trail when documents.first is the combined_document' do
+      combined = double('combined', byte_size: 100, blob: double, download: 'COMBINED', name: 'combined_document')
+      allow(Submitters).to receive(:select_attachments_for_download).and_return([combined])
+      allow(AccountConfig).to receive(:find_or_initialize_by).and_return(double(value: nil))
+      allow(Submitters).to receive(:build_document_filename).and_return('combined.pdf')
+
+      mailer.send(:add_completed_email_attachments!, submitter)
+
+      expect(mailer.attachments['audit-log.pdf']).to be_nil
+    end
+
+    it 'attaches stored file/payment field values from submitter when single-submitter template' do
+      stored = double('stored', byte_size: 200, blob: double, download: 'FILE-DATA')
+      allow(stored).to receive(:blob).and_return(double)
+      allow(Submitters).to receive(:select_attachments_for_download).and_return([])
+      allow(AccountConfig).to receive(:find_or_initialize_by).and_return(double(value: nil))
+      allow(Submitters).to receive(:build_document_filename).and_return('audit-log.pdf', 'attached.pdf')
+      template_fields = [{ 'uuid' => 'fid', 'type' => 'file', 'submitter_uuid' => 's1' }]
+      attachments_relation = double('atts_relation')
+      allow(attachments_relation).to receive(:where).with(uuid: ['att-1']).and_return([stored])
+      submitter_with_files = double('submitter',
+                                    account_id: 1,
+                                    submission: double('submission', audit_trail: audit_trail, template_fields: template_fields),
+                                    attachments: attachments_relation,
+                                    values: { 'fid' => 'att-1' })
+
+      mailer.send(:add_completed_email_attachments!, submitter_with_files)
+
+      expect(mailer.attachments['attached.pdf']).not_to be_nil
+    end
+  end
+
   describe '#add_attachments_with_size_limit' do
     it 'adds attachments until size threshold is reached' do
       submitter = double('submitter')

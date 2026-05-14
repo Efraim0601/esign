@@ -71,7 +71,7 @@ function mouseoverListener (event) {
     }
   }
 
-  requestCache.set(absoluteUrl, { request: fetch(absoluteUrl, requestOptions), ttl: new Date(new Date().getTime() + cacheTtl) })
+  requestCache.set(absoluteUrl, { request: fetch(absoluteUrl, requestOptions), ttl: new Date(Date.now() + cacheTtl) })
 }
 
 function turboBeforeFetchRequest (event) {
