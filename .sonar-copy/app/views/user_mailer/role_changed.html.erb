@@ -1,0 +1,21 @@
+<%
+  role_labels = {
+    'viewer' => 'Observateur',
+    'agent' => 'Agent',
+    'member' => 'Membre',
+    'editor' => 'Éditeur',
+    'admin' => 'Administrateur'
+  }
+%>
+
+<p>Bonjour <%= @user.first_name.presence || @user.friendly_name %>,</p>
+
+<p>Vos droits d'accès ont été modifiés.</p>
+
+<ul>
+  <li>Ancien rôle : <%= role_labels[@old_role] || @old_role %></li>
+  <li>Nouveau rôle : <%= role_labels[@new_role] || @new_role %></li>
+  <li>Date du changement : <%= @timestamp.strftime('%d/%m/%Y %H:%M') %></li>
+  <li>Modifié par : <%= @changed_by_user&.friendly_name || @changed_by %></li>
+</ul>
+

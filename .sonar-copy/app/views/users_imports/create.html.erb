@@ -1,0 +1,127 @@
+<div class="flex-wrap space-y-4 md:flex md:flex-nowrap md:space-y-0 md:space-x-10">
+  <%= render 'shared/settings_nav' %>
+  <div class="md:flex-grow">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-3xl font-bold">Résultat de l'import</h1>
+      <div class="flex gap-2">
+        <%= link_to settings_users_path, class: 'btn btn-outline' do %>
+          <%= svg_icon('arrow_left', class: 'w-5 h-5') %>
+          <span>Retour aux utilisateurs</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="stats stats-vertical md:stats-horizontal shadow mb-6 w-full">
+      <div class="stat">
+        <div class="stat-title">Total traité</div>
+        <div class="stat-value"><%= @result.total_rows %></div>
+      </div>
+      <div class="stat">
+        <div class="stat-title text-success">Créés</div>
+        <div class="stat-value text-success"><%= @result.created.size %></div>
+      </div>
+      <div class="stat">
+        <div class="stat-title text-warning">Ignorés</div>
+        <div class="stat-value text-warning"><%= @result.skipped.size %></div>
+      </div>
+      <div class="stat">
+        <div class="stat-title text-error">Erreurs</div>
+        <div class="stat-value text-error"><%= @result.errors.size %></div>
+      </div>
+    </div>
+
+    <% if @result.created.any? %>
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+          <%= svg_icon('circle_check', class: 'w-6 h-6 text-success') %>
+          Utilisateurs créés (<%= @result.created.size %>)
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Ligne</th>
+                <th>Email</th>
+                <th>Rôle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @result.created.each do |r| %>
+                <tr>
+                  <td><%= r[:line] %></td>
+                  <td><%= r[:email] %></td>
+                  <td><%= render 'shared/role_badge', role: r[:role] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @result.skipped.any? %>
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+          <%= svg_icon('info_circle', class: 'w-6 h-6 text-warning') %>
+          Lignes ignorées (<%= @result.skipped.size %>)
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Ligne</th>
+                <th>Email</th>
+                <th>Raison</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @result.skipped.each do |r| %>
+                <tr>
+                  <td><%= r[:line] %></td>
+                  <td><%= r[:email] %></td>
+                  <td><%= r[:reason] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @result.errors.any? %>
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+          <%= svg_icon('x_circle', class: 'w-6 h-6 text-error') %>
+          Erreurs (<%= @result.errors.size %>)
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th>Ligne</th>
+                <th>Email</th>
+                <th>Raison</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @result.errors.each do |r| %>
+                <tr>
+                  <td><%= r[:line] %></td>
+                  <td><%= r[:email] %></td>
+                  <td><%= r[:reason] %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @result.total_rows.zero? %>
+      <div class="alert alert-warning">
+        <%= svg_icon('info_circle', class: 'w-6 h-6') %>
+        <span>Aucune ligne exploitable dans le fichier.</span>
+      </div>
+    <% end %>
+  </div>
+</div>

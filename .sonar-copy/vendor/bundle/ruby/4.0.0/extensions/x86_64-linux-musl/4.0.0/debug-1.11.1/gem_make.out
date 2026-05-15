@@ -1,0 +1,19 @@
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+/usr/local/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-tjn437 sitelibdir\=./.gem.20260512-1-tjn437 clean
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-tjn437 sitelibdir\=./.gem.20260512-1-tjn437
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-tjn437 sitelibdir\=./.gem.20260512-1-tjn437 install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20260512-1-tjn437/debug
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260512-1-tjn437 sitelibdir\=./.gem.20260512-1-tjn437 clean

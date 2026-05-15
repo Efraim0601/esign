@@ -1,0 +1,35 @@
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby
+/usr/local/bin/ruby extconf.rb
+checking for whether -I /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby/inc is accepted as CFLAGS... yes
+checking for whether -std=gnu99 is accepted as CFLAGS... yes
+checking for whether -fvisibility=hidden is accepted as CFLAGS... yes
+checking for CRYPTO_malloc() in -lcrypto... yes
+checking for SSL_new() in -lssl... yes
+checking for rb_interned_str() in ruby.h... yes
+checking for rb_ractor_local_storage_value_newkey() in ruby.h... yes
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260509-4049-mqdpvu sitelibdir\=./.gem.20260509-4049-mqdpvu clean
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260509-4049-mqdpvu sitelibdir\=./.gem.20260509-4049-mqdpvu
+compiling trilogy.c
+compiling cext.c
+compiling cast.c
+cext.c: In function ‘handle_trilogy_error’:
+cext.c:274:5: warning: function ‘handle_trilogy_error’ might be a candidate for ‘gnu_printf’ format attribute [-Wsuggest-attribute=format]
+  274 |     VALUE rbmsg = rb_vsprintf(msg, args);
+      |     ^~~~~
+At top level:
+cc1: note: unrecognized command-line option ‘-Wno-self-assign’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-parentheses-equality’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-constant-logical-operand’ may have been intended to silence earlier diagnostics
+linking shared-object trilogy/cext.so
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260509-4049-mqdpvu sitelibdir\=./.gem.20260509-4049-mqdpvu install
+/usr/bin/install -c -m 0755 cext.so ./.gem.20260509-4049-mqdpvu/trilogy
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/trilogy-2.10.0/ext/trilogy-ruby
+make DESTDIR\= sitearchdir\=./.gem.20260509-4049-mqdpvu sitelibdir\=./.gem.20260509-4049-mqdpvu clean

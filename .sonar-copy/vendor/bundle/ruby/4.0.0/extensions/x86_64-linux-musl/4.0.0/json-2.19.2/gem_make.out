@@ -1,0 +1,25 @@
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/json-2.19.2/ext/json/ext/parser
+/usr/local/bin/ruby extconf.rb
+checking for rb_enc_interned_str() in ruby/encoding.h... yes
+checking for rb_str_to_interned_str() in ruby.h... yes
+checking for rb_hash_new_capa() in ruby.h... yes
+checking for rb_hash_bulk_insert() in ruby.h... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+checking for x86intrin.h... yes
+checking for cpuid.h... yes
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/json-2.19.2/ext/json/ext/parser
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-59t7vi sitelibdir\=./.gem.20260512-1-59t7vi clean
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/json-2.19.2/ext/json/ext/parser
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-59t7vi sitelibdir\=./.gem.20260512-1-59t7vi
+compiling parser.c
+linking shared-object json/ext/parser.so
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/json-2.19.2/ext/json/ext/parser
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260512-1-59t7vi sitelibdir\=./.gem.20260512-1-59t7vi install
+/usr/bin/install -c -m 0755 parser.so ./.gem.20260512-1-59t7vi/json/ext
+
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/json-2.19.2/ext/json/ext/parser
+make DESTDIR\= sitearchdir\=./.gem.20260512-1-59t7vi sitelibdir\=./.gem.20260512-1-59t7vi clean

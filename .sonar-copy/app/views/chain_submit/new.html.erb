@@ -1,0 +1,33 @@
+<% content_for(:page_title) { t('chain_submit_title') } %>
+<div class="flex items-center justify-center min-h-screen px-4 bg-base-200">
+  <div class="w-full max-w-md bg-base-100 rounded-2xl shadow-xl p-8">
+    <h1 class="text-xl font-semibold mb-2"><%= t('chain_submit_title') %></h1>
+    <p class="text-sm text-base-content/70 mb-6"><%= t('chain_submit_description') %></p>
+
+    <% if @error_message.present? %>
+      <div class="alert alert-error mb-4 text-sm">
+        <%= @error_message %>
+      </div>
+    <% end %>
+
+    <%= form_with url: chain_submit_resolve_path(slug: @submission.slug), method: :post, local: true do |f| %>
+      <label class="form-control w-full">
+        <span class="label-text mb-1"><%= t('email') %></span>
+        <%= f.email_field :email,
+                          required: true,
+                          autofocus: true,
+                          autocomplete: 'email',
+                          placeholder: 'exemple@afrilandfirstbank.com',
+                          class: 'input input-bordered w-full' %>
+      </label>
+
+      <button type="submit" class="btn btn-primary w-full mt-6">
+        <%= t('continue') %>
+      </button>
+    <% end %>
+
+    <p class="text-xs text-base-content/60 mt-6 text-center">
+      <%= t('chain_submit_footer_note') %>
+    </p>
+  </div>
+</div>

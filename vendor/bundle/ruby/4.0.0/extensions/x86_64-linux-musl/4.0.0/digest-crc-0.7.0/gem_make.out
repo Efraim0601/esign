@@ -1,0 +1,62 @@
+current directory: /app/vendor/bundle/ruby/4.0.0/gems/digest-crc-0.7.0/ext/digest
+/usr/local/bin/ruby -rrubygems /app/vendor/bundle/ruby/4.0.0/gems/rake-13.3.1/exe/rake RUBYARCHDIR\=/app/vendor/bundle/ruby/4.0.0/extensions/x86_64-linux-musl/4.0.0/digest-crc-0.7.0 RUBYLIBDIR\=/app/vendor/bundle/ruby/4.0.0/extensions/x86_64-linux-musl/4.0.0/digest-crc-0.7.0
+Ignoring bcrypt-3.1.22 because its extensions are not built. Try: gem pristine bcrypt --version 3.1.22
+Ignoring better_html-2.2.0 because its extensions are not built. Try: gem pristine better_html --version 2.2.0
+Ignoring bigdecimal-4.0.1 because its extensions are not built. Try: gem pristine bigdecimal --version 4.0.1
+Ignoring bindex-0.8.1 because its extensions are not built. Try: gem pristine bindex --version 0.8.1
+Ignoring bootsnap-1.21.1 because its extensions are not built. Try: gem pristine bootsnap --version 1.21.1
+Ignoring cgi-0.5.1 because its extensions are not built. Try: gem pristine cgi --version 0.5.1
+Ignoring date-3.5.1 because its extensions are not built. Try: gem pristine date --version 3.5.1
+Ignoring debug-1.11.1 because its extensions are not built. Try: gem pristine debug --version 1.11.1
+Ignoring digest-crc-0.7.0 because its extensions are not built. Try: gem pristine digest-crc --version 0.7.0
+Ignoring erb-6.0.2 because its extensions are not built. Try: gem pristine erb --version 6.0.2
+Ignoring io-console-0.8.2 because its extensions are not built. Try: gem pristine io-console --version 0.8.2
+Ignoring json-2.19.2 because its extensions are not built. Try: gem pristine json --version 2.19.2
+Ignoring msgpack-1.8.0 because its extensions are not built. Try: gem pristine msgpack --version 1.8.0
+Ignoring nio4r-2.7.5 because its extensions are not built. Try: gem pristine nio4r --version 2.7.5
+Ignoring numo-narray-alt-0.10.3 because its extensions are not built. Try: gem pristine numo-narray-alt --version 0.10.3
+Ignoring oj-3.16.13 because its extensions are not built. Try: gem pristine oj --version 3.16.13
+Ignoring openssl-4.0.0 because its extensions are not built. Try: gem pristine openssl --version 4.0.0
+Ignoring prism-1.9.0 because its extensions are not built. Try: gem pristine prism --version 1.9.0
+Ignoring psych-5.3.1 because its extensions are not built. Try: gem pristine psych --version 5.3.1
+Ignoring puma-7.2.0 because its extensions are not built. Try: gem pristine puma --version 7.2.0
+Ignoring racc-1.8.1 because its extensions are not built. Try: gem pristine racc --version 1.8.1
+/usr/local/bin/ruby -S extconf.rb
+checking for stdint.h... *** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include=${opt-dir}/include
+	--without-opt-include
+	--with-opt-lib=${opt-dir}/lib
+	--without-opt-lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=/usr/local/bin/$(RUBY_BASE_NAME)
+	--with-stdint-dir
+	--without-stdint-dir
+	--with-stdint-include=${stdint-dir}/include
+	--without-stdint-include
+	--with-stdint-lib=${stdint-dir}/lib
+	--without-stdint-lib
+/usr/local/lib/ruby/4.0.0/mkmf.rb:528:in 'MakeMakefile#try_do': The compiler failed to generate an executable file. (RuntimeError)
+You have to install development tools first.
+
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:655:in 'MakeMakefile#try_compile'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:1242:in 'block in MakeMakefile#have_header'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:1070:in 'block in MakeMakefile#checking_for'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:370:in 'block (2 levels) in MakeMakefile::Logging.postpone'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:340:in 'MakeMakefile::Logging.open'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:370:in 'block in MakeMakefile::Logging.postpone'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:340:in 'MakeMakefile::Logging.open'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:366:in 'MakeMakefile::Logging.postpone'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:1069:in 'MakeMakefile#checking_for'
+	from /usr/local/lib/ruby/4.0.0/mkmf.rb:1241:in 'MakeMakefile#have_header'
+	from extconf.rb:3:in '<main>'
+extconf.rb failed. Failing gracefully ...
