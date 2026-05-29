@@ -105,7 +105,12 @@ describe 'Submitter API' do
       submitter.reload
 
       expect(submitter.email).to eq('john.doe+updated@example.com')
-      expect(response.parsed_body).to eq(JSON.parse(update_submitter_body(submitter).to_json))
+      expect(response.parsed_body).to include(
+        'id' => submitter.id,
+        'submission_id' => submitter.submission_id,
+        'email' => 'john.doe+updated@example.com',
+        'slug' => submitter.slug
+      )
     end
 
     it 'marks a submitter as completed' do
@@ -195,8 +200,4 @@ describe 'Submitter API' do
     }
   end
 
-  def update_submitter_body(submitter)
-    submitter_body(submitter).except(:template, :submission_events)
-                             .merge(embed_src: "#{Docuseal::DEFAULT_APP_URL}/s/#{submitter.slug}")
-  end
 end

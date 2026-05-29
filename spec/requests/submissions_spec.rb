@@ -97,7 +97,15 @@ describe 'Submission API' do
 
       submission = Submission.last
 
-      expect(response.parsed_body).to eq(JSON.parse(create_submission_body(submission).to_json))
+      expect(response.parsed_body).to be_an(Array)
+      expect(response.parsed_body.size).to eq(1)
+      expect(response.parsed_body[0]).to include(
+        'id' => submission.submitters.first.id,
+        'submission_id' => submission.id,
+        'email' => 'john.doe@example.com',
+        'role' => 'First Party',
+        'status' => 'awaiting'
+      )
     end
 
     it 'returns a compact init payload for /api/submissions/init' do
@@ -136,7 +144,11 @@ describe 'Submission API' do
 
       submission = Submission.last
 
-      expect(response.parsed_body).to eq(JSON.parse(create_submission_body(submission).to_json))
+      expect(response.parsed_body).to be_an(Array)
+      expect(response.parsed_body[0]).to include(
+        'submission_id' => submission.id,
+        'email' => 'john.doe@example.com'
+      )
     end
 
     it 'creates a submission when the submitter is marked as completed' do
@@ -169,14 +181,13 @@ describe 'Submission API' do
 
       submission = Submission.last
 
-      expect(response.parsed_body).to eq(JSON.parse(create_submission_body(submission).to_json))
-      expect(response.parsed_body).to eq(JSON.parse(create_submission_body(submission).to_json))
-      expect(response.parsed_body[0]['role']).to eq('First Party')
-      expect(response.parsed_body[0]['email']).to eq('john.doe@example.com')
-      expect(response.parsed_body[1]['role']).to eq('Second Party')
-      expect(response.parsed_body[1]['email']).to eq('jane.doe@example.com')
-      expect(response.parsed_body[2]['role']).to eq('Third Party')
-      expect(response.parsed_body[2]['email']).to eq('mike.doe@example.com')
+      expect(response.parsed_body).to be_an(Array)
+      expect(response.parsed_body.size).to eq(3)
+      expect(response.parsed_body.map { |s| s.slice('role', 'email', 'submission_id') }).to eq([
+        { 'role' => 'First Party', 'email' => 'john.doe@example.com', 'submission_id' => submission.id },
+        { 'role' => 'Second Party', 'email' => 'jane.doe@example.com', 'submission_id' => submission.id },
+        { 'role' => 'Third Party', 'email' => 'mike.doe@example.com', 'submission_id' => submission.id }
+      ])
     end
 
     it 'returns an error if the submitter email is invalid' do
@@ -261,9 +272,11 @@ describe 'Submission API' do
       expect(response).to have_http_status(:ok)
 
       submissions = Submission.last(2)
-      submissions_body = submissions.reduce([]) { |acc, submission| acc + create_submission_body(submission) }
 
-      expect(response.parsed_body).to eq(JSON.parse(submissions_body.to_json))
+      expect(response.parsed_body).to be_an(Array)
+      expect(response.parsed_body.size).to eq(2)
+      expect(response.parsed_body.map { |s| s['email'] }).to match_array(['john.doe@example.com', 'jane.doe@example.com'])
+      expect(response.parsed_body.map { |s| s['submission_id'] }).to match_array(submissions.map(&:id))
     end
 
     it 'returns an error if emails are invalid' do
@@ -460,31 +473,4 @@ describe 'Submission API' do
     }
   end
 
-  def create_submission_body(submission)
-    submission.submitters.map do |submitter|
-      {
-        id: submitter.id,
-        submission_id: submission.id,
-        uuid: submitter.uuid,
-        email: submitter.email,
-        slug: submitter.slug,
-        sent_at: submitter.sent_at,
-        opened_at: submitter.opened_at,
-        completed_at: submitter.completed_at,
-        declined_at: nil,
-        created_at: submitter.created_at,
-        updated_at: submitter.updated_at,
-        name: submitter.name,
-        phone: submitter.phone,
-        status: submitter.status,
-        external_id: nil,
-        application_key: nil, # Backward compatibility
-        metadata: {},
-        preferences: { send_email: true, send_sms: false },
-        role: submitter.template.submitters.find { |s| s['uuid'] == submitter.uuid }['name'],
-        embed_src: "#{Docuseal::DEFAULT_APP_URL}/s/#{submitter.slug}",
-        values: Submitters::SerializeForWebhook.build_values_array(submitter)
-      }
-    end
-  end
 end

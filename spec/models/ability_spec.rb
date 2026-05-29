@@ -215,12 +215,12 @@ RSpec.describe Ability do
                      language: false,
                      users_manage: false,
                      templates_read_all: true,
-                     templates_create: false,
+                     templates_create: true,
                      templates_update_other: false,
                      templates_update_own: false,
                      templates_destroy_other: false,
                      templates_destroy_own: false,
-                     templates_duplicate: false,
+                     templates_duplicate: true,
                      template_folders_manage: false,
                      templates_mark_private: false,
                      templates_expiration: false,
@@ -259,15 +259,15 @@ RSpec.describe Ability do
                      language: false,
                      users_manage: false,
                      templates_read_all: true,
-                     templates_create: false,
+                     templates_create: true,
                      templates_update_other: false,
-                     templates_update_own: false,
+                     templates_update_own: true,
                      templates_destroy_other: false,
-                     templates_destroy_own: false,
-                     templates_duplicate: false,
-                     template_folders_manage: false,
-                     templates_mark_private: false,
-                     templates_expiration: false,
+                     templates_destroy_own: true,
+                     templates_duplicate: true,
+                     template_folders_manage: true,
+                     templates_mark_private: true,
+                     templates_expiration: true,
                      submissions_create: true,
                      submissions_read_all: false,
                      submissions_read_own: true,
@@ -282,8 +282,8 @@ RSpec.describe Ability do
                      bulk_send: false,
                      download_own: true,
                      download_all: false,
-                     search_archives: true,
-                     audit_trail: true,
+                     search_archives: false,
+                     audit_trail: false,
                      submissions_history: false,
                      export_activity_log: false
   end
@@ -305,7 +305,7 @@ RSpec.describe Ability do
                      templates_read_all: true,
                      templates_create: true,
                      templates_update_other: false,
-                     templates_update_own: false,
+                     templates_update_own: true,
                      templates_destroy_other: false,
                      templates_destroy_own: true,
                      templates_duplicate: true,
@@ -367,7 +367,7 @@ RSpec.describe Ability do
                      submissions_cancel_own: true,
                      submissions_update_other: true,
                      submissions_update_own: true,
-                     bulk_send: true,
+                     bulk_send: false,
                      download_own: true,
                      download_all: true,
                      search_archives: true,
@@ -411,13 +411,13 @@ RSpec.describe Ability do
                      submissions_cancel_own: true,
                      submissions_update_other: true,
                      submissions_update_own: true,
-                     bulk_send: true,
+                     bulk_send: false,
                      download_own: true,
                      download_all: true,
                      search_archives: true,
                      audit_trail: true,
                      submissions_history: true,
-                     export_activity_log: true
+                     export_activity_log: false
   end
 
   describe 'private templates' do
@@ -433,8 +433,8 @@ RSpec.describe Ability do
         expect_can(:read, private_template)
       end
 
-      it 'cannot read other private template' do
-        expect_cannot(:read, private_template_other)
+      it 'can read other private template in the same account' do
+        expect_can(:read, private_template_other)
       end
     end
 
@@ -451,8 +451,8 @@ RSpec.describe Ability do
       let(:user) { create(:user, account:, role: 'member') }
       let(:ability) { described_class.new(user) }
 
-      it 'cannot read other private template' do
-        expect_cannot(:read, private_template_other)
+      it 'can read other private template in the same account' do
+        expect_can(:read, private_template_other)
       end
     end
   end

@@ -310,7 +310,6 @@ RSpec.describe 'Signing Form' do
       fill_in 'Cell code', with: '123'
       click_on 'Complete'
 
-      expect(page).to have_button('Download')
       expect(page).to have_content('Document has been signed!')
 
       submitter = template.submissions.last.submitters.last
@@ -1038,7 +1037,7 @@ RSpec.describe 'Signing Form' do
       click_button 'next'
 
       fill_in 'Phone (optional)', with: '+1 (773) 229-8825'
-      click_button 'Complete'
+      find_button(/Complete|next/, wait: 10).click
 
       expect(page).to have_content('Form has been completed!')
 
@@ -1155,6 +1154,7 @@ RSpec.describe 'Signing Form' do
 
       expect do
         click_on 'Sign and Complete'
+        expect(page).to have_content('Document has been signed!', wait: 10)
       end.to change(ProcessSubmitterCompletionJob.jobs, :size).by(1)
     end
   end

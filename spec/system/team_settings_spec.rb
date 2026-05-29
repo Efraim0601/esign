@@ -25,8 +25,8 @@ RSpec.describe 'Team Settings' do
           expect(page).to have_link('Edit', href: edit_user_path(user))
         end
 
-        expect(page).to have_button('Remove')
-        expect(page).to have_no_button('Unarchive')
+        expect(page).to have_button('Deactivate')
+        expect(page).to have_no_button('Reactivate')
 
         expect(page).to have_no_content(other_user.full_name)
         expect(page).to have_no_content(other_user.email)
@@ -130,7 +130,7 @@ RSpec.describe 'Team Settings' do
     it 'removes a user' do
       expect do
         accept_confirm('Are you sure?') do
-          first(:button, 'Remove').click
+          first(:button, 'Deactivate').click
         end
       end.to change { User.active.count }.by(-1)
 
@@ -190,8 +190,8 @@ RSpec.describe 'Team Settings' do
           expect(page).to have_no_link('Edit', href: edit_user_path(user))
         end
 
-        expect(page).to have_button('Unarchive')
-        expect(page).to have_no_button('Remove')
+        expect(page).to have_button('Reactivate')
+        expect(page).to have_no_button('Deactivate')
 
         expect(page).to have_no_content(other_user.full_name)
         expect(page).to have_no_content(other_user.email)

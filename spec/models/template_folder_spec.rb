@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe TemplateFolder do
   describe '#full_name' do
     it 'joins parent and child names when parent exists' do
-      parent = double('parent', name: 'Parent')
-      folder = described_class.new(name: 'Child', parent_folder: parent)
-      allow(folder).to receive(:parent_folder_id?).and_return(true)
+      parent = instance_double(described_class, name: 'Parent')
+      folder = described_class.new(name: 'Child')
+      allow(folder).to receive_messages(parent_folder_id?: true, parent_folder: parent)
 
       expect(folder.full_name).to eq('Parent / Child')
     end

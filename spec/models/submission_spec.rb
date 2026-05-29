@@ -9,7 +9,7 @@ RSpec.describe Submission do
     end
 
     it 'is false when expire_at is nil' do
-      expect(described_class.new(expire_at: nil).expired?).to be(false)
+      expect(described_class.new(expire_at: nil).expired?).to be_falsy
     end
   end
 
