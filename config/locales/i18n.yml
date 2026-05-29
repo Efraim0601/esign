@@ -298,6 +298,8 @@ en: &en
   removing: Removing
   delete: Delete
   default: Default
+  deactivate: Deactivate
+  reactivate: Reactivate
   are_you_sure_: Are you sure?
   timestamp_server: Timestamp Server
   timeserver_url: Timeserver URL
