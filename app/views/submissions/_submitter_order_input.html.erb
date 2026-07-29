@@ -1,0 +1,5 @@
+<div class="form-control" id="order_wrapper_<%= item['uuid'] %>" style="display: none">
+  <label class="label pt-0 pb-1"><span class="label-text text-xs"><%= t('step') %></span></label>
+  <input type="number" min="1" name="submission[1][submitters][][order]" value="<%= index + 1 %>" class="base-input !h-10 w-20" id="order_input_<%= item['uuid'] %>">
+</div>
+<field-condition data-target-id="order_wrapper_<%= item['uuid'] %>" data-field-id="submitters_order_mode_<%= template.id %>" data-action="equal" data-value="mixed"></field-condition>

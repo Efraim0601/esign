@@ -139,7 +139,7 @@ class UsersController < ApplicationController
 
   def user_params
     if params.key?(:user)
-      permitted_params = %i[email first_name last_name password archived_at otp_required_for_login]
+      permitted_params = %i[email first_name last_name password archived_at otp_required_for_login direction]
 
       permitted_params << :role if role_valid?(params.dig(:user, :role))
 

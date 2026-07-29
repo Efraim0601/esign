@@ -79,6 +79,8 @@ class TemplatesController < ApplicationController
     WebhookUrls.enqueue_events(@template, 'template.updated')
 
     head :ok
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { error: e.record.errors.full_messages.join(', ') }, status: :unprocessable_content
   end
 
   def destroy

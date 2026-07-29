@@ -31,6 +31,8 @@ module Submissions
 
         template_submitters = template.submitters.deep_dup
 
+        min_order = attrs[:submitters].each_with_index.map { |s, i| s['order'].presence&.to_i || i }.min
+
         attrs[:submitters].each_with_index do |submitter_attrs, index|
           if submitter_attrs[:roles].present? && submitter_attrs[:roles].size > 1
             template_submitter, template_submitters, submission.template_fields =
@@ -59,12 +61,12 @@ module Submissions
           template_submitter = template_submitter.except('optional_invite_by_uuid', 'invite_by_uuid',
                                                          'invite_via_field_uuid')
 
-          template_submitter['order'] = submitter_attrs['order'] if submitter_attrs['order'].present?
+          template_submitter['order'] = submitter_attrs['order'].to_i if submitter_attrs['order'].present?
 
           submission.template_submitters << template_submitter
 
           is_order_sent = submitters_order == 'random' ||
-                          (template_submitter['order'] || submitter_attrs[:index] || index).zero?
+                          (template_submitter['order'] || submitter_attrs[:index] || index) == min_order
 
           build_submitter(submission:, attrs: submitter_attrs,
                           uuid:, is_order_sent:, user:, params:,

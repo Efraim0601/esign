@@ -1,13 +1,18 @@
 <% if template.preferences['submitters_order'] == 'preserved' || template.submitters.any? { |s| s['order'] } %>
-  <%= f.hidden_field :preserve_order, value: '1' %>
+  <%= f.hidden_field :order_mode, value: 'preserved' %>
 <% elsif template.submitters.size > 1 %>
+  <% select_id = "submitters_order_mode_#{template.id}" %>
   <div class="form-control">
-    <%= f.label :preserve_order, for: uuid = SecureRandom.uuid, class: 'flex items-center cursor-pointer' do %>
-      <%= f.check_box :preserve_order, id: uuid, class: 'base-checkbox', checked: template.submissions.last&.submitters_order.in?(['preserved', nil]) %>
-      <span class="label"><%= t('preserve_order') %></span>
-      <span class="tooltip" data-tip="<%= t('when_checked_notifications_will_be_sent_to_the_second_party_once_the_form_is_completed_by_the_previous_party_uncheck_this_option_to_send_notifications_to_all_parties_simultaneously_right_away') %>">
+    <label class="label pt-0 pb-1">
+      <span class="label-text"><%= t('signing_order') %></span>
+      <span class="tooltip" data-tip="<%= t('mixed_order_hint') %>">
         <%= svg_icon('info_circle', class: 'w-4 h-4') %>
       </span>
-    <% end %>
+    </label>
+    <%= select_tag :order_mode,
+          options_for_select(
+            [[t('parallel_all_at_once'), 'random'], [t('sequential_one_by_one'), 'preserved'], [t('custom_mixed_steps'), 'mixed']],
+            template.submissions.last&.submitters_order.in?(['preserved', nil]) ? 'preserved' : 'random'
+          ), id: select_id, class: 'select select-bordered w-full max-w-xs' %>
   </div>
 <% end %>

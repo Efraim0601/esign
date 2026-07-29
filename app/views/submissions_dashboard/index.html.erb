@@ -1,6 +1,9 @@
 <% filter_params = params.permit(Submissions::Filter::ALLOWED_PARAMS).compact_blank %>
 <% is_show_tabs = (@pagy.count.nil? || @pagy.count >= 5) || params[:status].present? || filter_params.present? %>
 <% if Docuseal.demo? %><%= render 'shared/demo_alert' %><% end %>
+<% if @dashboard_stats.present? %>
+  <%= render 'dashboard_stats', dashboard_stats: @dashboard_stats %>
+<% end %>
 <div class="flex justify-between items-center w-full mb-4">
   <div class="flex items-center flex-grow min-w-0">
     <% if @pagy.count.nil? || @pagy.count > 0 || params[:q].present? || filter_params.present? || params[:status].present? %>

@@ -109,7 +109,7 @@ class SubmissionsController < ApplicationController
     Submissions.create_from_submitters(template: template,
                                        user: current_user,
                                        source: :invite,
-                                       submitters_order: params[:preserve_order] == '1' ? 'preserved' : 'random',
+                                       submitters_order: params[:order_mode].in?(%w[preserved mixed]) ? 'preserved' : 'random',
                                        submissions_attrs:,
                                        new_fields:,
                                        params: params.merge('send_completed_email' => true))
@@ -123,7 +123,7 @@ class SubmissionsController < ApplicationController
   end
 
   def submissions_params
-    params.permit(submission: { submitters: [:uuid, :email, :phone, :name, { values: {} }] })
+    params.permit(submission: { submitters: [:uuid, :email, :phone, :name, :order, { values: {} }] })
   end
 
   def load_template
