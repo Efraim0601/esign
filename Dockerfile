@@ -3,14 +3,15 @@ FROM ruby:4.0.1-alpine AS download
 WORKDIR /fonts
 
 RUN apk --no-cache add fontforge wget && \
-    wget https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Regular.ttf && \
-    wget https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Bold.ttf && \
-    wget https://github.com/impallari/DancingScript/raw/master/fonts/DancingScript-Regular.otf && \
-    wget https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSymbols2/hinted/ttf/NotoSansSymbols2-Regular.ttf && \
-    wget https://github.com/Maxattax97/gnu-freefont/raw/master/ttf/FreeSans.ttf && \
-    wget https://github.com/impallari/DancingScript/raw/master/OFL.txt && \
-    wget -O /model.onnx "https://github.com/docusealco/fields-detection/releases/download/2.0.0/model_704_int8.onnx" && \
-    wget -O pdfium-linux.tgz "https://github.com/docusealco/pdfium-binaries/releases/latest/download/pdfium-linux-$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/').tgz" && \
+    export WGET_OPTS="--tries=5 --timeout=20 --waitretry=5 --retry-connrefused" && \
+    wget $WGET_OPTS https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Regular.ttf && \
+    wget $WGET_OPTS https://github.com/satbyy/go-noto-universal/releases/download/v7.0/GoNotoKurrent-Bold.ttf && \
+    wget $WGET_OPTS https://github.com/impallari/DancingScript/raw/master/fonts/DancingScript-Regular.otf && \
+    wget $WGET_OPTS https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSansSymbols2/hinted/ttf/NotoSansSymbols2-Regular.ttf && \
+    wget $WGET_OPTS https://github.com/Maxattax97/gnu-freefont/raw/master/ttf/FreeSans.ttf && \
+    wget $WGET_OPTS https://github.com/impallari/DancingScript/raw/master/OFL.txt && \
+    wget $WGET_OPTS -O /model.onnx "https://github.com/docusealco/fields-detection/releases/download/2.0.0/model_704_int8.onnx" && \
+    wget $WGET_OPTS -O pdfium-linux.tgz "https://github.com/bblanchon/pdfium-binaries/releases/download/chromium/7947/pdfium-linux-$(uname -m | sed 's/x86_64/x64/;s/aarch64/arm64/').tgz" && \
     mkdir -p /pdfium-linux && \
     tar -xzf pdfium-linux.tgz -C /pdfium-linux
 

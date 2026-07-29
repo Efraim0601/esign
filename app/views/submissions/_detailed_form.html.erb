@@ -21,6 +21,9 @@
                   </label>
                 <% end %>
                 <input type="hidden" name="submission[1][submitters][][uuid]" value="<%= item['uuid'] %>">
+                <% if submitters.size > 1 && Accounts.can_send_emails?(current_account) %>
+                  <%= render 'submitter_order_input', item:, index:, template: %>
+                <% end %>
                 <% if prefillable_fields.blank? %>
                   <submitters-autocomplete data-field="name">
                     <linked-input data-target-id="<%= "detailed_name_#{item['linked_to_uuid']}" if item['linked_to_uuid'].present? %>">

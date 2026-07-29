@@ -1,4 +1,5 @@
 const en = {
+  something_went_wrong: 'Something went wrong. Please try again.',
   fixed: 'Fixed',
   default: 'Default',
   save_as_custom_field: 'Save as custom field',
@@ -222,6 +223,7 @@ const en = {
 }
 
 const es = {
+  something_went_wrong: 'Algo salió mal. Inténtalo de nuevo.',
   fixed: 'Fijo',
   default: 'Predeterminado',
   save_as_custom_field: 'Guardar como personalizado',
@@ -443,6 +445,7 @@ const es = {
 }
 
 const it = {
+  something_went_wrong: 'Qualcosa è andato storto. Riprova.',
   fixed: 'Fisso',
   default: 'Predefinito',
   save_as_custom_field: 'Salva come personalizzato',
@@ -664,6 +667,7 @@ const it = {
 }
 
 const pt = {
+  something_went_wrong: 'Algo deu errado. Tente novamente.',
   fixed: 'Fixo',
   default: 'Padrão',
   save_as_custom_field: 'Salvar como personalizado',
@@ -885,6 +889,7 @@ const pt = {
 }
 
 const fr = {
+  something_went_wrong: "Une erreur est survenue. Merci de réessayer.",
   fixed: 'Fixe',
   default: 'Par défaut',
   save_as_custom_field: 'Enregistrer comme personnalisé',
@@ -1108,6 +1113,7 @@ const fr = {
 }
 
 const de = {
+  something_went_wrong: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
   fixed: 'Fest',
   default: 'Standard',
   save_as_custom_field: 'Als benutzerdefiniert speichern',
@@ -1329,6 +1335,7 @@ const de = {
 }
 
 const nl = {
+  something_went_wrong: 'Er is iets misgegaan. Probeer het opnieuw.',
   fixed: 'Vast',
   default: 'Standaard',
   save_as_custom_field: 'Opslaan als aangepast',

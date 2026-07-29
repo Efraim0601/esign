@@ -1,1 +1,7 @@
 *.html linguist-detectable=false
+
+# bin/* scripts have Unix shebangs (#!/usr/bin/env ruby|bash|sh); with
+# core.autocrlf=true on Windows they get checked out as CRLF, which breaks the
+# shebang ("env: can't execute 'ruby': No such file or directory" in the
+# Docker build) since the interpreter name ends up literally "ruby\r".
+bin/* text eol=lf

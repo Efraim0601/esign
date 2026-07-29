@@ -1,0 +1,56 @@
+<div class="mb-6 space-y-4">
+  <div class="stats stats-vertical md:stats-horizontal shadow w-full">
+    <div class="stat">
+      <div class="stat-title"><%= t('avg_signing_delay') %></div>
+      <div class="stat-value text-2xl">
+        <% if dashboard_stats[:avg_completion_hours].nil? %>
+          &mdash;
+        <% elsif dashboard_stats[:avg_completion_hours] < 24 %>
+          <%= t('hours_value', value: dashboard_stats[:avg_completion_hours]) %>
+        <% else %>
+          <%= t('days_value', value: (dashboard_stats[:avg_completion_hours] / 24.0).round(1)) %>
+        <% end %>
+      </div>
+      <div class="stat-desc"><%= t('from_send_to_completion') %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-title"><%= t('residual_manual_reminders') %></div>
+      <div class="stat-value text-2xl"><%= dashboard_stats[:pending_reminders_count] %></div>
+      <div class="stat-desc"><%= t('submitters_reminded_but_not_yet_signed') %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-title"><%= t('paper_volume_saved') %></div>
+      <div class="stat-value text-2xl"><%= number_with_delimiter(dashboard_stats[:pages_saved]) %></div>
+      <div class="stat-desc"><%= t('pages') %></div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bg-base-200 rounded-2xl p-4">
+      <div class="font-semibold mb-2"><%= t('signed_documents_per_month') %></div>
+      <bar-chart
+        data-labels="<%= dashboard_stats[:monthly_completions].map { |month, _| l(month, format: '%b %Y') }.to_json %>"
+        data-datasets="<%= [{ label: t('signed_documents'), data: dashboard_stats[:monthly_completions].map { |_, count| count }, backgroundColor: '#C8102E' }].to_json %>"
+      >
+        <canvas height="180"></canvas>
+      </bar-chart>
+    </div>
+    <div class="bg-base-200 rounded-2xl p-4">
+      <div class="font-semibold mb-2"><%= t('adoption_rate_by_direction') %></div>
+      <% if dashboard_stats[:adoption_by_direction].present? %>
+        <table class="table table-sm">
+          <tbody>
+            <% dashboard_stats[:adoption_by_direction].each do |direction, data| %>
+              <tr>
+                <td><%= direction %></td>
+                <td class="text-right"><%= data[:count] %></td>
+                <td class="text-right text-base-content/60"><%= data[:percent] %>%</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="text-base-content/60 text-sm"><%= t('no_data_yet') %></div>
+      <% end %>
+    </div>
+  </div>
+</div>

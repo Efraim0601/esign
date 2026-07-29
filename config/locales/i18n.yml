@@ -212,6 +212,21 @@ en: &en
   already_have_an_account: Already have an account?
   first_name: First name
   last_name: Last name
+  direction: Direction / Department
+  e_g_dsi_dei_agences_ouest: e.g. DSI, DEI, West Agencies
+  unspecified: Unspecified
+  avg_signing_delay: Average signing delay
+  hours_value: "%{value} h"
+  days_value: "%{value} d"
+  from_send_to_completion: From send to completion
+  residual_manual_reminders: Residual manual reminders
+  submitters_reminded_but_not_yet_signed: Submitters reminded but not yet signed
+  paper_volume_saved: Paper volume saved
+  pages: pages
+  signed_documents_per_month: Signed documents per month
+  signed_documents: Signed documents
+  adoption_rate_by_direction: Adoption rate by direction
+  no_data_yet: No data yet
   sign_up: Sign up
   signing_up: Signing up
   profile_details: Profile Details
@@ -450,6 +465,12 @@ en: &en
   send_sms: Send SMS
   preserve_order: Preserve order
   when_checked_notifications_will_be_sent_to_the_second_party_once_the_form_is_completed_by_the_previous_party_uncheck_this_option_to_send_notifications_to_all_parties_simultaneously_right_away: When checked, notifications will be sent to the second party once the form is completed by the previous party. Uncheck this option to send notifications to all parties simultaneously right away.
+  signing_order: Signing order
+  parallel_all_at_once: Parallel (all at once)
+  sequential_one_by_one: Sequential (one by one)
+  custom_mixed_steps: Custom (mixed steps)
+  mixed_order_hint: Choose "Custom" to assign a step number to each signer. Signers sharing the same step number are notified simultaneously; the next step is notified once everyone in the previous step has signed.
+  step: Step
   upgrade_to_send_unlimited_signature_requests: Upgrade to send unlimited signature requests
   add_without_sending: Add without sending
   upgade_now: Upgrade Now
@@ -3357,6 +3378,21 @@ fr: &fr
   already_have_an_account: Vous avez déjà un compte ?
   first_name: Prénom
   last_name: Nom
+  direction: Direction / Service
+  e_g_dsi_dei_agences_ouest: ex. DSI, DEI, Agences Ouest
+  unspecified: Non renseigné
+  avg_signing_delay: Délai moyen de signature
+  hours_value: "%{value} h"
+  days_value: "%{value} j"
+  from_send_to_completion: De l'envoi à la complétion
+  residual_manual_reminders: Relances manuelles résiduelles
+  submitters_reminded_but_not_yet_signed: Signataires relancés mais pas encore signés
+  paper_volume_saved: Volume de papier économisé
+  pages: pages
+  signed_documents_per_month: Documents signés par mois
+  signed_documents: Documents signés
+  adoption_rate_by_direction: Taux d'adoption par direction
+  no_data_yet: Pas encore de données
   sign_up: S’inscrire
   signing_up: Inscription en cours
   profile_details: Détails du profil
@@ -3595,6 +3631,12 @@ fr: &fr
   send_sms: Envoyer le SMS
   preserve_order: Préserver l’ordre
   when_checked_notifications_will_be_sent_to_the_second_party_once_the_form_is_completed_by_the_previous_party_uncheck_this_option_to_send_notifications_to_all_parties_simultaneously_right_away: Coché, les notifications seront envoyées à la seconde partie une fois le formulaire complété par la partie précédente. Décochez pour envoyer les notifications à toutes les parties simultanément.
+  signing_order: Ordre de signature
+  parallel_all_at_once: Parallèle (tous en même temps)
+  sequential_one_by_one: Séquentiel (l'un après l'autre)
+  custom_mixed_steps: Personnalisé (étapes mixtes)
+  mixed_order_hint: Choisissez « Personnalisé » pour attribuer un numéro d'étape à chaque signataire. Les signataires partageant le même numéro sont notifiés simultanément ; l'étape suivante n'est notifiée qu'une fois tous les signataires de l'étape précédente ont signé.
+  step: Étape
   upgrade_to_send_unlimited_signature_requests: Passez à la version Pro pour envoyer un nombre illimité de demandes de signature
   add_without_sending: Ajouter sans envoyer
   upgade_now: Mettre à niveau maintenant

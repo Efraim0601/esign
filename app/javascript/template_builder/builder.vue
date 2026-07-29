@@ -2757,7 +2757,7 @@ export default {
 
           Promise.all([this.save({ publish: true }), ...dynamicDocumentSaves]).then(() => {
             window.Turbo.visit(`/templates/${this.template.id}`)
-          }).finally(() => {
+          }).catch(() => {}).finally(() => {
             this.isSaving = false
           })
         }
@@ -3004,7 +3004,15 @@ export default {
           publish: publish ? true : undefined
         }),
         headers: { 'Content-Type': 'application/json' }
-      }).then(() => {
+      }).then((response) => {
+        if (!response.ok || response.redirected) {
+          return response.json().catch(() => ({})).then((data) => {
+            alert(data.error || this.t('something_went_wrong'))
+
+            throw new Error(data.error || 'save_failed')
+          })
+        }
+
         if (this.onSave) {
           this.onSave(this.template)
         }
