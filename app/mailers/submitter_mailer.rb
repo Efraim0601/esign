@@ -137,6 +137,21 @@ class SubmitterMailer < ApplicationMailer
     end
   end
 
+  def expired_email(submission, user)
+    @current_account = submission.account
+    @submission = submission
+    @user = user
+
+    assign_message_metadata('submission_expired', submission)
+
+    I18n.with_locale(@current_account.locale) do
+      mail(from: from_address_for_submission(submission),
+           to: user.role == 'integration' ? user.friendly_name.sub(/\+\w+@/, '@') : user.friendly_name,
+           subject: I18n.t(:name_has_expired,
+                           name: (@submission.name || @submission.template&.name).to_s.truncate(20)))
+    end
+  end
+
   def documents_copy_email(submitter, to: nil, sig: false)
     @current_account = submitter.submission.account
     @submitter = submitter
@@ -274,6 +289,23 @@ class SubmitterMailer < ApplicationMailer
     end
 
     total_size
+  end
+
+  def from_address_for_submission(submission)
+    if submission.source.in?(%w[api embed]) &&
+       (from_email = AccountConfig.find_by(account: submission.account, key: 'integration_from_email')&.value.presence)
+      user = submission.account.users.find_by(email: from_email)
+
+      put_metadata('from_user_id' => user.id)
+
+      from_email
+    else
+      user = submission.created_by_user || submission.template&.author
+
+      put_metadata('from_user_id' => user.id)
+
+      user.friendly_name
+    end
   end
 
   def from_address_for_submitter(submitter)

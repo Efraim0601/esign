@@ -1034,7 +1034,7 @@ export default {
       }
     },
     isAnonymousChecboxes () {
-      return this.currentField.type === 'checkbox' && this.currentStepFields.every((e) => !e.name && !e.required) && this.currentStepFields.length > 4
+      return this.currentField?.type === 'checkbox' && this.currentStepFields.every((e) => !e.name && !e.required) && this.currentStepFields.length > 4
     },
     isButtonDisabled () {
       if (this.recalculateButtonDisabledKey) {
@@ -1558,7 +1558,10 @@ export default {
                 }
               }
 
-              return Promise.reject(new Error('Required field: ' + data.field_uuid))
+              const handledError = new Error('Required field: ' + data.field_uuid)
+              handledError.isHandled = true
+
+              return Promise.reject(handledError)
             } else if (data.error) {
               const i18nKey = data.error.replace(/\s+/g, '_').toLowerCase()
 
@@ -1567,7 +1570,10 @@ export default {
               alert(this.t('value_is_invalid'))
             }
 
-            return Promise.reject(new Error(data.error))
+            const handledError = new Error(data.error)
+            handledError.isHandled = true
+
+            return Promise.reject(handledError)
           }
 
           const nextStep = (isLastStep && emptyRequiredField) || (forceComplete ? null : this.findNextStep(submitStepIndex))
@@ -1589,12 +1595,20 @@ export default {
           }
         }).catch(error => {
           console.error(error)
+
+          if (!error.isHandled) {
+            alert(this.t('a_network_error_occurred_please_check_your_connection_and_try_again'))
+          }
         }).finally(() => {
           this.isSubmitting = false
           this.isSubmittingComplete = false
         })
       }).catch(error => {
         console.log(error)
+
+        if (!error?.isHandled) {
+          alert(this.t('a_network_error_occurred_please_check_your_connection_and_try_again'))
+        }
       }).finally(() => {
         this.isSubmitting = false
         this.isSubmittingComplete = false

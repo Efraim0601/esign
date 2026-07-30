@@ -14,5 +14,9 @@ class ProcessSubmissionExpiredJob
     return unless submission.submitters.exists?(completed_at: nil)
 
     WebhookUrls.enqueue_events(submission, 'submission.expired')
+
+    user = submission.created_by_user || submission.template&.author
+
+    SubmitterMailer.expired_email(submission, user).deliver_later! if user
   end
 end

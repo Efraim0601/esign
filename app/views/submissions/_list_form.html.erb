@@ -1,1 +1,19 @@
-<%= render 'submissions/bulk_send_placeholder' %>
+<% if can?(:manage, :bulk_send) %>
+  <div class="alert bg-base-200">
+    <div>
+      <p class="font-bold mb-2">
+        <%= t('bulk_send_from_excel_xlsx_or_csv') %>
+      </p>
+      <%= link_to t('bulk_send_from_excel_xlsx_or_csv'), new_template_bulk_send_path(template), class: 'btn btn-neutral text-white btn-sm', data: { turbo_frame: :modal } %>
+    </div>
+  </div>
+<% else %>
+  <div class="alert">
+    <%= svg_icon('info_circle', class: 'w-6 h-6') %>
+    <div>
+      <p class="font-bold">
+        <%= t('bulk_send_from_excel_xlsx_or_csv') %>
+      </p>
+    </div>
+  </div>
+<% end %>

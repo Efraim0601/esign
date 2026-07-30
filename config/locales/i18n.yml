@@ -125,6 +125,7 @@ en: &en
   chain_email_not_found: No signer matches this email address. Please check the email you use.
   chain_awaiting_message: "Thanks! A previous signer must complete before it is your turn. You will be notified by email."
   chain_link_enabled_label: Share a single signing link for all signers (auto-detect by email)
+  chain_link_button_label: Shared signing link
   chain_link_enabled_notice: Chain link enabled. Anyone invited can now use the shared link.
   chain_link_disabled_notice: Chain link disabled.
   copy_chain_link: Copy chain link
@@ -201,6 +202,8 @@ en: &en
   form_has_been_declined_on_html: 'Form has been declined on <span class="font-semibold">%{time}</span>'
   name_declined_by_submitter: '"%{name}" declined by %{submitter}'
   name_declined_by_submitter_with_the_following_reason: '"%{name}" has been declined by %{submitter} with the following reason:'
+  name_has_expired: '"%{name}" has expired'
+  the_document_name_has_expired_without_being_signed_by_all_parties: 'The document "%{name}" has expired before all signers completed it.'
   completed_successfully: Completed Successfully
   password: Password
   sign_in: Sign In
@@ -451,6 +454,7 @@ en: &en
   add_new: Add New
   add_recipients: Add Recipients
   add_new_recipients: Add New Recipients
+  send_button_label: Send
   add_recipients_html: <span>Add <span class="hidden md:inline">Recipients</span></span>
   type_emails_here: Type emails here
   or_embed_on_your_website: Or embed on your website
@@ -3292,6 +3296,7 @@ fr: &fr
   chain_email_not_found: Aucun signataire ne correspond à cette adresse. Vérifiez l'e-mail utilisé.
   chain_awaiting_message: "Merci ! Un précédent signataire doit valider avant que ce soit votre tour. Vous serez prévenu par e-mail."
   chain_link_enabled_label: Partager un lien unique de signature pour tous les signataires (détection automatique par e-mail)
+  chain_link_button_label: Lien de signature partagé
   chain_link_enabled_notice: Lien unique activé. Toutes les personnes invitées peuvent désormais utiliser le lien partagé.
   chain_link_disabled_notice: Lien unique désactivé.
   copy_chain_link: Copier le lien unique
@@ -3367,6 +3372,8 @@ fr: &fr
   form_has_been_declined_on_html: Le formulaire a été refusé le <span class="font-semibold">%{time}</span>
   name_declined_by_submitter: '"%{name}" refusé par %{submitter}'
   name_declined_by_submitter_with_the_following_reason: '"%{name}" a été refusé par %{submitter} pour le motif suivant :'
+  name_has_expired: '"%{name}" a expiré'
+  the_document_name_has_expired_without_being_signed_by_all_parties: 'Le document "%{name}" a expiré avant que tous les signataires ne le complètent.'
   completed_successfully: Terminé avec succès
   password: Mot de passe
   sign_in: Se connecter
@@ -3617,6 +3624,7 @@ fr: &fr
   add_new: Ajouter
   add_recipients: Ajouter des destinataires
   add_new_recipients: Ajouter de nouveaux destinataires
+  send_button_label: Envoyer
   add_recipients_html: Destinataires
   type_emails_here: Saisissez les e‑mails ici
   or_embed_on_your_website: Ou intégrez sur votre site web

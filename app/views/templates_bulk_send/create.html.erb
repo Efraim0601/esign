@@ -1,0 +1,120 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-3xl font-bold">Résultat de l'envoi en masse</h1>
+    <%= link_to template_path(@template), class: 'btn btn-outline' do %>
+      <%= svg_icon('arrow_left', class: 'w-5 h-5') %>
+      <span>Retour au modèle</span>
+    <% end %>
+  </div>
+
+  <div class="stats stats-vertical md:stats-horizontal shadow mb-6 w-full">
+    <div class="stat">
+      <div class="stat-title">Total traité</div>
+      <div class="stat-value"><%= @result.total_rows %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-title text-success">Soumissions créées</div>
+      <div class="stat-value text-success"><%= @result.created.size %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-title text-warning">Ignorées</div>
+      <div class="stat-value text-warning"><%= @result.skipped.size %></div>
+    </div>
+    <div class="stat">
+      <div class="stat-title text-error">Erreurs</div>
+      <div class="stat-value text-error"><%= @result.errors.size %></div>
+    </div>
+  </div>
+
+  <% if @result.created.any? %>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <%= svg_icon('circle_check', class: 'w-6 h-6 text-success') %>
+        Soumissions créées (<%= @result.created.size %>)
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Ligne</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @result.created.each do |r| %>
+              <tr>
+                <td><%= r[:line] %></td>
+                <td><%= r[:email] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @result.skipped.any? %>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <%= svg_icon('info_circle', class: 'w-6 h-6 text-warning') %>
+        Lignes ignorées (<%= @result.skipped.size %>)
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Ligne</th>
+              <th>Email</th>
+              <th>Raison</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @result.skipped.each do |r| %>
+              <tr>
+                <td><%= r[:line] %></td>
+                <td><%= r[:email] %></td>
+                <td><%= r[:reason] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @result.errors.any? %>
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <%= svg_icon('x_circle', class: 'w-6 h-6 text-error') %>
+        Erreurs (<%= @result.errors.size %>)
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Ligne</th>
+              <th>Email</th>
+              <th>Raison</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @result.errors.each do |r| %>
+              <tr>
+                <td><%= r[:line] %></td>
+                <td><%= r[:email] %></td>
+                <td><%= r[:reason] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @result.total_rows.zero? %>
+    <div class="alert alert-warning">
+      <%= svg_icon('info_circle', class: 'w-6 h-6') %>
+      <span>Aucune ligne exploitable dans le fichier.</span>
+    </div>
+  <% end %>
+</div>
