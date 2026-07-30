@@ -24,6 +24,7 @@ module Submissions
     arel = arel_table[:email].lower.matches(term)
                              .or(arel_table[:phone].matches(term))
                              .or(arel_table[:name].lower.matches(term))
+                             .or(Submission.arel_table[:name].lower.matches(term))
 
     arel = arel.or(Arel::Table.new(:submitters)[:values].matches(term)) if search_values
 

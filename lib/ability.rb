@@ -115,6 +115,8 @@ class Ability
       can :manage, Submission, account_id: user.account_id
       # Submitter: manage all
       can :manage, Submitter, account_id: user.account_id
+      # Bulk send: editor and above only
+      can :manage, :bulk_send
       # User: read own, no manage others
       can :read, User, account_id: user.account_id
       can :update, User, id: user.id
@@ -137,6 +139,7 @@ class Ability
       can :manage, Submission, account_id: user.account_id
       can :manage, Submitter, account_id: user.account_id
       can :manage, User, account_id: user.account_id
+      can :manage, :bulk_send
     end
   end
 end

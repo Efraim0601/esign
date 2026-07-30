@@ -1,0 +1,78 @@
+<%= render 'shared/turbo_modal', title: t('bulk_send_from_excel_xlsx_or_csv') do %>
+  <% if flash[:alert].present? %>
+    <div class="alert alert-error mb-4">
+      <%= svg_icon('x_circle', class: 'w-6 h-6') %>
+      <span><%= flash[:alert] %></span>
+    </div>
+  <% end %>
+
+  <% if @template.submitters.size != 1 %>
+    <div class="alert alert-warning">
+      <%= svg_icon('info_circle', class: 'w-6 h-6') %>
+      <span>L'envoi en masse ne fonctionne que pour un modèle à un seul signataire (ce modèle en a <%= @template.submitters.size %>).</span>
+    </div>
+  <% else %>
+    <% fields = Submissions::BulkSend.mappable_fields(@template) %>
+    <%= form_with url: template_bulk_send_path(@template), method: :post, multipart: true, local: true, data: { turbo: false }, class: 'space-y-4' do %>
+      <div>
+        <label class="label" for="bulk_send_file">
+          <span class="label-text font-semibold">Fichier Excel (.xlsx) ou CSV</span>
+        </label>
+        <input id="bulk_send_file" type="file" name="file" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required class="file-input file-input-bordered w-full">
+      </div>
+
+      <div class="alert bg-base-200">
+        <div class="text-sm">
+          <p class="font-semibold mb-2">Format attendu — la première ligne doit contenir les en-têtes :</p>
+          <div class="overflow-x-auto">
+            <table class="table table-xs">
+              <thead>
+                <tr>
+                  <th>email</th>
+                  <th>name</th>
+                  <th>phone</th>
+                  <% fields.each do |field| %>
+                    <th><%= field['name'] %></th>
+                  <% end %>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>jean.dupont@afrilandfirstbank.com</td>
+                  <td>Jean Dupont</td>
+                  <td>+237699111111</td>
+                  <% fields.each do %>
+                    <td>...</td>
+                  <% end %>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-2">
+            <span class="font-semibold">email</span> est obligatoire. <span class="font-semibold">name</span> et <span class="font-semibold">phone</span> sont facultatifs.
+          </p>
+          <% if fields.any? %>
+            <p class="mt-2">
+              Les colonnes supplémentaires correspondant exactement au nom d'un champ du modèle
+              (<%= fields.map { |f| f['name'] }.join(', ') %>) préremplissent automatiquement ce champ pour chaque destinataire.
+            </p>
+          <% end %>
+          <p class="mt-2 text-xs opacity-75">
+            Encodage UTF-8 recommandé pour les caractères accentués. Un email d'invitation personnalisé est envoyé à chaque destinataire.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2">
+        <button type="submit" class="btn btn-primary">
+          <%= svg_icon('upload', class: 'w-5 h-5') %>
+          <span>Envoyer</span>
+        </button>
+      </div>
+
+      <p class="text-xs text-center opacity-70">
+        L'envoi peut prendre du temps pour un grand nombre de lignes. Ne fermez pas la page.
+      </p>
+    <% end %>
+  <% end %>
+<% end %>

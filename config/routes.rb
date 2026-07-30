@@ -50,7 +50,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :verify_pdf_signature, only: %i[create]
+  resources :verify_pdf_signature, only: %i[new create]
   resource :mfa_setup, only: %i[show new edit create destroy], controller: 'mfa_setup'
   resources :account_configs, only: %i[create destroy]
   resources :account_custom_fields, only: %i[create]
@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     resources :recipients, only: %i[create], controller: 'templates_recipients'
     resources :prefillable_fields, only: %i[create], controller: 'templates_prefillable_fields'
     resources :submissions_export, only: %i[index new]
+    resource :bulk_send, only: %i[new create], controller: 'templates_bulk_send'
   end
   resources :preview_document_page, only: %i[show], path: '/preview/:signed_key'
   resource :blobs_proxy, only: %i[show], path: '/file/:signed_uuid/*filename',

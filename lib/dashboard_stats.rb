@@ -70,7 +70,7 @@ module DashboardStats
 
   def pages_saved(scope)
     scope.completed
-         .preload(schema_documents: :blob, submitters: [])
+         .preload(:submitters)
          .sum do |submission|
       pages = submission.schema_documents.sum { |doc| doc.metadata.dig('pdf', 'number_of_pages').to_i }
 

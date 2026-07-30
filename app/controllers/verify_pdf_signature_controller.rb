@@ -3,6 +3,8 @@
 class VerifyPdfSignatureController < ApplicationController
   skip_authorization_check
 
+  def new; end
+
   def create
     if params[:files].blank?
       return render turbo_stream: turbo_stream.replace('result',

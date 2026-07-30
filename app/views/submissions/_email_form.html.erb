@@ -24,7 +24,7 @@
   <% elsif submitters.size == 1 %>
     <% item = submitters.first %>
     <submitter-item class="form-control space-y-2">
-      <emails-textarea data-bulk-enabled="<%= Docuseal.demo? || !Docuseal.multitenant? || can?(:manage, :bulk_send) %>" data-limit="<%= Docuseal.multitenant? ? (can?(:manage, :bulk_send) ? 40 : 1) : nil %>">
+      <emails-textarea data-bulk-enabled="<%= Docuseal.demo? || can?(:manage, :bulk_send) %>" data-limit="<%= can?(:manage, :bulk_send) ? 40 : 1 %>">
         <submitters-autocomplete data-field="email" class="block relative">
           <autoresize-textarea>
             <%= f.text_area :emails, required: true, class: 'base-textarea w-full !text-lg', placeholder: "#{t('type_emails_here')}...", rows: 2 %>
@@ -87,7 +87,7 @@
   </div>
   <div class="form-control">
     <%= content_for(:submit_button) || capture do %>
-      <%= f.button button_title(title: t('add_recipients')), class: 'base-button' %>
+      <%= f.button button_title(title: t('send_button_label')), class: 'base-button' %>
     <% end %>
   </div>
 <% end %>

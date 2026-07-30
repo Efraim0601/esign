@@ -88,9 +88,9 @@
             <%= svg_icon('x', class: 'w-5 h-5') %>
           <% end %>
         <% else %>
-          <%= button_to submission_chain_link_path(@submission), class: 'white-button' do %>
+          <%= button_to submission_chain_link_path(@submission), class: 'white-button', title: t('chain_link_enabled_label') do %>
             <%= svg_icon('link', class: 'w-6 h-6') %>
-            <span class="hidden md:inline"><%= t('chain_link_enabled_label') %></span>
+            <span class="hidden md:inline whitespace-nowrap"><%= t('chain_link_button_label') %></span>
           <% end %>
         <% end %>
       <% end %>
